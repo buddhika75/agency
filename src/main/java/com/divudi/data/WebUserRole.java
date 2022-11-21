@@ -19,6 +19,26 @@ public enum WebUserRole {
     Customer_User,
     Customer_Administrator;
 
+    public WebUserRoleGroup getGroup(){
+        switch(this){
+            case Agency_Administrator:
+            case Agency_User:
+                return WebUserRoleGroup.Agency;
+            case Company_Administrator:
+            case Company_User:
+                return WebUserRoleGroup.Company;
+            case Customer_Administrator:
+            case Customer_User:
+                return WebUserRoleGroup.Customer;
+            case Distributor_Administrator:
+            case Distributor_User:
+                return WebUserRoleGroup.Distributor;
+            case System_Administrator:
+                return WebUserRoleGroup.Administrator;
+        }
+        return null;
+    }
+    
     public String getLabel() {
         switch (this) {
             case Agency_Administrator:

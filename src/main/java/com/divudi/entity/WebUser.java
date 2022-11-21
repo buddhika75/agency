@@ -7,9 +7,12 @@
  */
 package com.divudi.entity;
 
+import com.divudi.data.WebUserRole;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -70,7 +73,7 @@ public class WebUser implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     Date activatedAt;
     String activateComments;
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
     WebUserRole role;
     String primeTheme;
     String defLocale;
