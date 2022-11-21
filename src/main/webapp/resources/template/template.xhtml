@@ -11,10 +11,8 @@
         <ui:insert name="title">
             <title>
                 <h:panelGroup rendered="#{sessionController.logged}" >
-                    <h:outputText value="#{sessionController.loggedUser.institution.name}" ></h:outputText>
-                    <h:outputText value=" - " ></h:outputText>
                     <h:outputText value="#{sessionController.loggedUser.department.name} " ></h:outputText>
-                    <h:outputText value="- " ></h:outputText>
+                    <h:outputText value=" - " ></h:outputText>
                     <h:outputText value="#{sessionController.loggedUser.webUserPerson.name}" ></h:outputText>
                 </h:panelGroup>
                 <h:panelGroup rendered="#{!sessionController.logged}" >
@@ -47,6 +45,7 @@
 
     <h:body>
         <p:growl id="publicGrowl"/>
+        
         <h:panelGroup rendered ="#{not sessionController.logged}"  >
             <h:panelGroup rendered="#{applicationController.hasAwebsiteAsFrontEnd}" >
                 <ez:webindex rendered="#{not sessionController.websiteUserGoingToLog}"/> 
