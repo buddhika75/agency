@@ -62,7 +62,7 @@
             </h:panelGroup>
             <ez:footer/>
         </h:panelGroup>
-        <h:panelGroup rendered ="#{sessionController.firstLogin}"  >
+        <h:panelGroup rendered ="#{sessionController.firstLogin and false}"  >
             <ez:menu_first_login ></ez:menu_first_login>
             <ui:insert name="content">
             </ui:insert>
