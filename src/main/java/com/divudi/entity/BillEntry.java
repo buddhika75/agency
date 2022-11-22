@@ -30,8 +30,6 @@ public class BillEntry implements Serializable {
     @Transient
     List<BillFee> lstBillFees;
     @Transient
-    List<BillSession> lstBillSessions;
-    @Transient
     List<BillItem> lsyBillItems;
     Double totDiscount;
     Double totCash;
@@ -71,14 +69,6 @@ public class BillEntry implements Serializable {
 
     public void setLstBillFees(List<BillFee> lstBillFees) {
         this.lstBillFees = lstBillFees;
-    }
-
-    public List<BillSession> getLstBillSessions() {
-        return lstBillSessions;
-    }
-
-    public void setLstBillSessions(List<BillSession> lstBillSessions) {
-        this.lstBillSessions = lstBillSessions;
     }
 
     public List<BillItem> getLsyBillItems() {

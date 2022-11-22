@@ -5,12 +5,9 @@
 package com.divudi.bean.pharmacy;
 
 import com.divudi.bean.common.BillBeanController;
-import com.divudi.bean.common.PriceMatrixController;
 import com.divudi.bean.common.SessionController;
 import com.divudi.bean.common.UtilityController;
 import com.divudi.bean.common.WebUserController;
-import com.divudi.bean.inward.InwardBeanController;
-import com.divudi.bean.store.StoreBillSearch;
 import com.divudi.data.BillClassType;
 import com.divudi.data.BillNumberSuffix;
 import com.divudi.data.BillType;
@@ -32,7 +29,6 @@ import com.divudi.entity.CancelledBill;
 import com.divudi.entity.Department;
 import com.divudi.entity.Payment;
 import com.divudi.entity.PaymentScheme;
-import com.divudi.entity.PriceMatrix;
 import com.divudi.entity.RefundBill;
 import com.divudi.entity.WebUser;
 import com.divudi.entity.pharmacy.PharmaceuticalBillItem;
@@ -93,7 +89,6 @@ public class PharmacyBillSearch implements Serializable {
     private Date toDate;
     //  private String comment;
     WebUser user;
-    StoreBillSearch storeBillSearch;
     ////////////////
     List<BillItem> refundingItems;
     List<Bill> bills;
@@ -136,23 +131,12 @@ public class PharmacyBillSearch implements Serializable {
     @Inject
     private WebUserController webUserController;
     @Inject
-    InwardBeanController inwardBean;
-    @Inject
     PharmacySaleController pharmacySaleController;
 
     public void markAsChecked() {
         if (bill == null) {
             return;
         }
-
-        if (bill.getPatientEncounter() == null) {
-            return;
-        }
-
-        if (bill.getPatientEncounter().isPaymentFinalized()) {
-            return;
-        }
-
         bill.setCheckeAt(new Date());
         bill.setCheckedBy(getSessionController().getLoggedUser());
 
@@ -163,15 +147,6 @@ public class PharmacyBillSearch implements Serializable {
         if (bill == null) {
             return;
         }
-
-        if (bill.getPatientEncounter() == null) {
-            return;
-        }
-
-        if (bill.getPatientEncounter().isPaymentFinalized()) {
-            return;
-        }
-
         bill.setCheckeAt(null);
         bill.setCheckedBy(null);
 
@@ -290,18 +265,11 @@ public class PharmacyBillSearch implements Serializable {
 
     }
 
-    public InwardBeanController getInwardBean() {
-        return inwardBean;
-    }
 
-    public void setInwardBean(InwardBeanController inwardBean) {
-        this.inwardBean = inwardBean;
-    }
 
     @EJB
     BillItemFacade billItemFacade;
-    @Inject
-    PriceMatrixController priceMatrixController;
+   
 
     public BillItemFacade getBillItemFacade() {
         return billItemFacade;
@@ -311,13 +279,7 @@ public class PharmacyBillSearch implements Serializable {
         this.billItemFacade = billItemFacade;
     }
 
-    public PriceMatrixController getPriceMatrixController() {
-        return priceMatrixController;
-    }
-
-    public void setPriceMatrixController(PriceMatrixController priceMatrixController) {
-        this.priceMatrixController = priceMatrixController;
-    }
+   
 
     public void updateMargin(List<BillItem> billItems, Bill bill, Department matrixDepartment, PaymentMethod paymentMethod) {
         double total = 0;
@@ -327,11 +289,6 @@ public class PharmacyBillSearch implements Serializable {
             double rate = Math.abs(bi.getRate());
             double margin = 0;
 
-            PriceMatrix priceMatrix = getPriceMatrixController().fetchInwardMargin(bi, rate, matrixDepartment, paymentMethod);
-
-            if (priceMatrix != null) {
-                margin = ((bi.getGrossValue() * priceMatrix.getMargin()) / 100);
-            }
 
             bi.setMarginValue(margin);
 
@@ -350,9 +307,6 @@ public class PharmacyBillSearch implements Serializable {
     }
 
     public void updateFeeMargin() {
-
-        updateMargin(getBill().getBillItems(), getBill(), getBill().getFromDepartment(), getBill().getPatientEncounter().getPaymentMethod());
-
     }
 
     public void editBill() {
@@ -559,13 +513,7 @@ public class PharmacyBillSearch implements Serializable {
         return bills;
     }
 
-    public StoreBillSearch getStoreBillSearch() {
-        return storeBillSearch;
-    }
 
-    public void setStoreBillSearch(StoreBillSearch storeBillSearch) {
-        this.storeBillSearch = storeBillSearch;
-    }
 
     public List<BillItem> getRefundingItems() {
         return refundingItems;
@@ -1290,7 +1238,6 @@ public class PharmacyBillSearch implements Serializable {
         for (BillFee nB : tmp) {
             BillFee bf = new BillFee();
             bf.setFee(nB.getFee());
-            bf.setPatienEncounter(nB.getPatienEncounter());
             bf.setPatient(nB.getPatient());
             bf.setDepartment(nB.getDepartment());
             bf.setInstitution(nB.getInstitution());
@@ -1661,11 +1608,6 @@ public class PharmacyBillSearch implements Serializable {
             return;
         }
 
-        if (getBill().getPatientEncounter().isPaymentFinalized()) {
-            UtilityController.addErrorMessage("This Bill Already Discharged");
-            return;
-        }
-        
         if (getBill().getCheckedBy() != null) {
             UtilityController.addErrorMessage("Checked Bill. Can not cancel");
             return;
@@ -1704,10 +1646,6 @@ public class PharmacyBillSearch implements Serializable {
     private void CancelBillWithStockBht(BillNumberSuffix billNumberSuffix) {
         if (getBill() != null && getBill().getId() != null && getBill().getId() != 0) {
             if (pharmacyErrorCheck()) {
-                return;
-            }
-
-            if (getBill().getPatientEncounter().isPaymentFinalized()) {
                 return;
             }
 
@@ -1792,11 +1730,6 @@ public class PharmacyBillSearch implements Serializable {
 
             if (getBill().getCheckedBy() != null) {
                 UtilityController.addErrorMessage("Checked Bill. Can not cancel");
-                return;
-            }
-            
-            if (getBill().getPatientEncounter().isPaymentFinalized()) {
-                UtilityController.addErrorMessage("This BHT Already Discharge..");
                 return;
             }
 
@@ -2188,7 +2121,6 @@ public class PharmacyBillSearch implements Serializable {
         for (BillFee nB : tmp) {
             BillFee bf = new BillFee();
             bf.setFee(nB.getFee());
-            bf.setPatienEncounter(nB.getPatienEncounter());
             bf.setPatient(nB.getPatient());
             bf.setDepartment(nB.getDepartment());
             bf.setInstitution(nB.getInstitution());
@@ -2656,7 +2588,6 @@ public class PharmacyBillSearch implements Serializable {
         billForRefund.setInstitution(getBill().getInstitution());
 
         billForRefund.setPatient(getBill().getPatient());
-        billForRefund.setPatientEncounter(getBill().getPatientEncounter());
         billForRefund.setPaymentMethod(paymentMethod);
         billForRefund.setPaymentScheme(getBill().getPaymentScheme());
         billForRefund.setPaymentSchemeInstitution(getBill().getPaymentSchemeInstitution());

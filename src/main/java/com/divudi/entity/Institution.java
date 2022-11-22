@@ -6,7 +6,6 @@ package com.divudi.entity;
 
 import com.divudi.data.IdentifiableWithNameOrCode;
 import com.divudi.data.InstitutionType;
-import com.divudi.entity.channel.AgentReferenceBook;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -103,8 +102,6 @@ public class Institution implements Serializable, IdentifiableWithNameOrCode {
     private String transAddress6;
     @Transient
     private String transAddress7;
-    @Transient
-    List<AgentReferenceBook> agentReferenceBooks;
     String pointOfIssueNo;
     
     @OneToMany(mappedBy = "institution", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -524,17 +521,6 @@ public class Institution implements Serializable, IdentifiableWithNameOrCode {
 
     public void setStandardCreditLimit(double standardCreditLimit) {
         this.standardCreditLimit = standardCreditLimit;
-    }
-
-    public List<AgentReferenceBook> getAgentReferenceBooks() {
-        if (agentReferenceBooks==null) {
-            agentReferenceBooks=new ArrayList<>();
-        }
-        return agentReferenceBooks;
-    }
-
-    public void setAgentReferenceBooks(List<AgentReferenceBook> agentReferenceBooks) {
-        this.agentReferenceBooks = agentReferenceBooks;
     }
 
     public String getAccountNo() {

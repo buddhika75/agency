@@ -12,7 +12,6 @@ import com.divudi.data.BillClassType;
 import com.divudi.data.BillNumberSuffix;
 import com.divudi.data.BillType;
 import com.divudi.data.dataStructure.YearMonthDay;
-import com.divudi.data.inward.InwardChargeType;
 import com.divudi.ejb.BillNumberGenerator;
 import com.divudi.ejb.PharmacyBean;
 import com.divudi.entity.Bill;
@@ -359,7 +358,6 @@ public class PharmacyAdjustmentController implements Serializable {
         tbi.setGrossValue(getStock().getItemBatch().getRetailsaleRate() * qty);
         tbi.setNetValue(qty * tbi.getNetRate());
         tbi.setDiscount(tbi.getGrossValue() - tbi.getNetValue());
-        tbi.setInwardChargeType(InwardChargeType.Medicine);
         tbi.setItem(getStock().getItemBatch().getItem());
         tbi.setBill(getDeptAdjustmentPreBill());
         tbi.setSearialNo(getDeptAdjustmentPreBill().getBillItems().size() + 1);
@@ -419,7 +417,6 @@ public class PharmacyAdjustmentController implements Serializable {
         tbi.setGrossValue(s.getItemBatch().getRetailsaleRate() * s.getCalculated());
         tbi.setNetValue(s.getCalculated() * tbi.getNetRate());
         tbi.setDiscount(tbi.getGrossValue() - tbi.getNetValue());
-        tbi.setInwardChargeType(InwardChargeType.Medicine);
         tbi.setItem(s.getItemBatch().getItem());
         tbi.setBill(getDeptAdjustmentPreBill());
         tbi.setSearialNo(getDeptAdjustmentPreBill().getBillItems().size() + 1);
@@ -467,7 +464,6 @@ public class PharmacyAdjustmentController implements Serializable {
         tbi.setGrossValue(getStock().getItemBatch().getRetailsaleRate() * getStock().getStock());
         tbi.setNetValue(getStock().getStock() * tbi.getNetRate());
         tbi.setDiscount(tbi.getGrossValue() - tbi.getNetValue());
-        tbi.setInwardChargeType(InwardChargeType.Medicine);
         tbi.setItem(getStock().getItemBatch().getItem());
         tbi.setBill(getDeptAdjustmentPreBill());
         tbi.setSearialNo(getDeptAdjustmentPreBill().getBillItems().size() + 1);
@@ -510,7 +506,6 @@ public class PharmacyAdjustmentController implements Serializable {
         tbi.setGrossValue(getStock().getItemBatch().getRetailsaleRate() * getStock().getStock());
         tbi.setNetValue(getStock().getStock() * tbi.getNetRate());
         tbi.setDiscount(tbi.getGrossValue() - tbi.getNetValue());
-        tbi.setInwardChargeType(InwardChargeType.Medicine);
         tbi.setItem(getStock().getItemBatch().getItem());
         tbi.setBill(getDeptAdjustmentPreBill());
         tbi.setSearialNo(getDeptAdjustmentPreBill().getBillItems().size() + 1);
@@ -555,7 +550,6 @@ public class PharmacyAdjustmentController implements Serializable {
         tbi.setGrossValue(getStock().getItemBatch().getWholesaleRate() * getStock().getStock());
         tbi.setNetValue(getStock().getStock() * tbi.getNetRate());
         tbi.setDiscount(tbi.getGrossValue() - tbi.getNetValue());
-        tbi.setInwardChargeType(InwardChargeType.Medicine);
         tbi.setItem(getStock().getItemBatch().getItem());
         tbi.setBill(getDeptAdjustmentPreBill());
         tbi.setSearialNo(getDeptAdjustmentPreBill().getBillItems().size() + 1);
@@ -597,7 +591,6 @@ public class PharmacyAdjustmentController implements Serializable {
         tbi.setGrossValue(getStock().getItemBatch().getRetailsaleRate() * getStock().getStock());
         tbi.setNetValue(getStock().getStock() * tbi.getNetRate());
         tbi.setDiscount(tbi.getGrossValue() - tbi.getNetValue());
-        tbi.setInwardChargeType(InwardChargeType.Medicine);
         tbi.setItem(getStock().getItemBatch().getItem());
         tbi.setBill(getDeptAdjustmentPreBill());
         tbi.setSearialNo(getDeptAdjustmentPreBill().getBillItems().size() + 1);
@@ -754,7 +747,6 @@ public class PharmacyAdjustmentController implements Serializable {
             fromBi.setGrossValue(s.getItemBatch().getRetailsaleRate() * s.getStock());
             fromBi.setNetValue(s.getStock() * fromBi.getNetRate());
             fromBi.setDiscount(0.0);
-            fromBi.setInwardChargeType(InwardChargeType.Medicine);
             fromBi.setItem(s.getItemBatch().getItem());
             fromBi.setBill(fromBill);
             fromBi.setSearialNo(i + 1);
@@ -793,7 +785,6 @@ public class PharmacyAdjustmentController implements Serializable {
             toBi.setGrossValue(s.getItemBatch().getRetailsaleRate() * s.getStock());
             toBi.setNetValue(s.getStock() * toBi.getNetRate());
             toBi.setDiscount(0.0);
-            toBi.setInwardChargeType(InwardChargeType.Medicine);
             toBi.setItem(s.getItemBatch().getItem());
             toBi.setBill(toBill);
             toBi.setSearialNo(i + 1);
@@ -847,7 +838,6 @@ public class PharmacyAdjustmentController implements Serializable {
         toBi.setGrossValue(s.getItemBatch().getRetailsaleRate() * s.getStock());
         toBi.setNetValue(s.getStock() * toBi.getNetRate());
         toBi.setDiscount(0.0);
-        toBi.setInwardChargeType(InwardChargeType.Medicine);
         toBi.setItem(s.getItemBatch().getItem());
         toBi.setBill(toBill);
         toBi.setSearialNo(i + 1);

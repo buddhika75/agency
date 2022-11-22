@@ -51,9 +51,6 @@ public class Appointment implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIME)
     private Date appointmentTimeTo;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private PatientEncounter patientEncounter;
-
     @ManyToOne
     private Patient patient;
 
@@ -160,14 +157,6 @@ public class Appointment implements Serializable {
 
     public void setAppointmentTimeTo(Date appointmentTimeTo) {
         this.appointmentTimeTo = appointmentTimeTo;
-    }
-
-    public PatientEncounter getPatientEncounter() {
-        return patientEncounter;
-    }
-
-    public void setPatientEncounter(PatientEncounter patientEncounter) {
-        this.patientEncounter = patientEncounter;
     }
 
     public Patient getPatient() {

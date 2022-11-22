@@ -14,13 +14,11 @@ import com.divudi.entity.Item;
 import com.divudi.entity.ItemFee;
 import com.divudi.entity.ServiceSession;
 import com.divudi.entity.Staff;
-import com.divudi.entity.channel.ArrivalRecord;
 import com.divudi.entity.pharmacy.Ampp;
 import com.divudi.entity.pharmacy.StockHistory;
 import com.divudi.facade.AmpFacade;
 import com.divudi.facade.DepartmentFacade;
 import com.divudi.facade.FeeChangeFacade;
-import com.divudi.facade.FingerPrintRecordFacade;
 import com.divudi.facade.ItemFacade;
 import com.divudi.facade.ItemFeeFacade;
 import com.divudi.facade.PharmaceuticalItemFacade;
@@ -65,11 +63,7 @@ public class StockHistoryRecorder {
     @EJB
     ServiceSessionFacade serviceSessionFacade;
     @EJB
-    ChannelBean channelBean;
-    @EJB
     StaffFacade staffFacade;
-    @EJB
-    FingerPrintRecordFacade fingerPrintRecordFacade;
     @EJB
     FinalVariables finalVariables;
 
@@ -170,32 +164,6 @@ public class StockHistoryRecorder {
     }
 
    
-
-    public void checkDoctorArival(ServiceSession s) {
-        s.setArival(findArrivals(s));
-    }
-
-    public Boolean findArrivals(ServiceSession ss) {
-        ArrivalRecord arrivalRecord = new ArrivalRecord();
-        String sql = "Select bs From ArrivalRecord bs "
-                + " where bs.retired=false"
-                + " and bs.serviceSession.id=:ss "
-                + " and bs.sessionDate=:ssDate ";
-        HashMap hh = new HashMap();
-        hh.put("ssDate", ss.getSessionDate());
-        hh.put("ss", ss.getId());
-        arrivalRecord = (ArrivalRecord) fingerPrintRecordFacade.findFirstBySQL(sql, hh);
-
-        if (arrivalRecord != null) {
-            if (arrivalRecord.isApproved()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return null;
-    }
-
     public List<Department> fetchStockDepartment() {
         String sql;
         Map m = new HashMap();

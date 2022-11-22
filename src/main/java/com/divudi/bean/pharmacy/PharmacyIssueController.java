@@ -10,12 +10,10 @@ import com.divudi.bean.common.CommonController;
 import com.divudi.bean.common.CommonFunctionsController;
 import com.divudi.bean.common.SessionController;
 import com.divudi.bean.common.UtilityController;
-import com.divudi.bean.membership.PaymentSchemeController;
 import com.divudi.data.BillNumberSuffix;
 import com.divudi.data.BillType;
 import com.divudi.data.dataStructure.PaymentMethodData;
 import com.divudi.data.dataStructure.YearMonthDay;
-import com.divudi.data.inward.InwardChargeType;
 import com.divudi.ejb.BillNumberGenerator;
 import com.divudi.ejb.CashTransactionBean;
 import com.divudi.ejb.PharmacyBean;
@@ -75,9 +73,6 @@ public class PharmacyIssueController implements Serializable {
      */
     public PharmacyIssueController() {
     }
-
-    @Inject
-    PaymentSchemeController PaymentSchemeController;
 
     @Inject
     SessionController sessionController;
@@ -431,7 +426,6 @@ public class PharmacyIssueController implements Serializable {
                 continue;
             }
 
-            tbi.setInwardChargeType(InwardChargeType.Medicine);
             tbi.setBill(getPreBill());
 
             tbi.setCreatedAt(Calendar.getInstance().getTime());
@@ -631,8 +625,6 @@ public class PharmacyIssueController implements Serializable {
         billItem.getPharmaceuticalBillItem().setStock(stock);
         billItem.getPharmaceuticalBillItem().setItemBatch(getStock().getItemBatch());
         calculateBillItem();
-
-        billItem.setInwardChargeType(InwardChargeType.Medicine);
 
         billItem.setItem(getStock().getItemBatch().getItem());
         billItem.setBill(getPreBill());
@@ -1035,14 +1027,6 @@ public class PharmacyIssueController implements Serializable {
 
     public void setPrintBill(Bill printBill) {
         this.printBill = printBill;
-    }
-
-    public PaymentSchemeController getPaymentSchemeController() {
-        return PaymentSchemeController;
-    }
-
-    public void setPaymentSchemeController(PaymentSchemeController PaymentSchemeController) {
-        this.PaymentSchemeController = PaymentSchemeController;
     }
 
     public StockHistoryFacade getStockHistoryFacade() {

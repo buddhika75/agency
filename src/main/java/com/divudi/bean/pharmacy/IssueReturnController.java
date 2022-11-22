@@ -4,10 +4,9 @@
  */
 package com.divudi.bean.pharmacy;
 
-import com.divudi.bean.common.PriceMatrixController;
+
 import com.divudi.bean.common.SessionController;
 import com.divudi.bean.common.UtilityController;
-import com.divudi.bean.inward.InwardBeanController;
 import com.divudi.data.BillClassType;
 import com.divudi.data.BillNumberSuffix;
 import com.divudi.data.BillType;
@@ -18,7 +17,6 @@ import com.divudi.ejb.PharmacyCalculation;
 import com.divudi.entity.Bill;
 import com.divudi.entity.BillItem;
 import com.divudi.entity.Department;
-import com.divudi.entity.PriceMatrix;
 import com.divudi.entity.RefundBill;
 import com.divudi.entity.pharmacy.PharmaceuticalBillItem;
 import com.divudi.facade.BillFacade;
@@ -214,11 +212,6 @@ public class IssueReturnController implements Serializable {
         double rate = Math.abs(bi.getRate());
         double margin = 0;
 
-        PriceMatrix priceMatrix = getPriceMatrixController().fetchInwardMargin(bi, rate, matrixDepartment, paymentMethod);
-
-        if (priceMatrix != null) {
-            margin = ((bi.getGrossValue() * priceMatrix.getMargin()) / 100);
-        }
 
         bi.setMarginValue(margin);
 
@@ -253,9 +246,6 @@ public class IssueReturnController implements Serializable {
         saveReturnBill();
         saveComponent();
 
-        if (getBill().getPatientEncounter() != null) {
-            updateMargin(getReturnBill().getBillItems(), getReturnBill(), getReturnBill().getFromDepartment(), getBill().getPatientEncounter().getPaymentMethod());
-        }
 
         getBillFacade().edit(getReturnBill());
 
@@ -270,27 +260,7 @@ public class IssueReturnController implements Serializable {
 
     @EJB
     private BillFeeFacade billFeeFacade;
-    @Inject
-    InwardBeanController inwardBean;
 
-    public InwardBeanController getInwardBean() {
-        return inwardBean;
-    }
-
-    public void setInwardBean(InwardBeanController inwardBean) {
-        this.inwardBean = inwardBean;
-    }
-
-    @Inject
-    PriceMatrixController priceMatrixController;
-
-    public PriceMatrixController getPriceMatrixController() {
-        return priceMatrixController;
-    }
-
-    public void setPriceMatrixController(PriceMatrixController priceMatrixController) {
-        this.priceMatrixController = priceMatrixController;
-    }
 
     private void calTotal() {
         double grossTotal = 0.0;

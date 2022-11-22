@@ -27,10 +27,6 @@ public class BatchBill implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
-    @ManyToOne
-    private PatientEncounter patientEncounter;
-    @ManyToOne
-    private PatientEncounter procedure;
     @Enumerated(EnumType.STRING)
     private BillType billType;
     private double total;
@@ -130,13 +126,6 @@ public class BatchBill implements Serializable {
         this.retireComments = retireComments;
     }
 
-    public PatientEncounter getPatientEncounter() {
-        return patientEncounter;
-    }
-
-    public void setPatientEncounter(PatientEncounter patientEncounter) {
-        this.patientEncounter = patientEncounter;
-    }
 
     public BillType getBillType() {
         return billType;
@@ -144,14 +133,6 @@ public class BatchBill implements Serializable {
 
     public void setBillType(BillType billType) {
         this.billType = billType;
-    }
-
-    public PatientEncounter getProcedure() {
-        return procedure;
-    }
-
-    public void setProcedure(PatientEncounter procedure) {
-        this.procedure = procedure;
     }
 
     public double getTotal() {

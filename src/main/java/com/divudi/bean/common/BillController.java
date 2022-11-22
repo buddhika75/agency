@@ -1,8 +1,6 @@
 package com.divudi.bean.common;
 
-import com.divudi.bean.collectingCentre.CollectingCentreBillController;
-import com.divudi.bean.membership.MembershipSchemeController;
-import com.divudi.bean.membership.PaymentSchemeController;
+
 import com.divudi.data.BillClassType;
 import com.divudi.data.BillNumberSuffix;
 import com.divudi.data.BillType;
@@ -26,7 +24,7 @@ import com.divudi.entity.BillEntry;
 import com.divudi.entity.BillFee;
 import com.divudi.entity.BillFeePayment;
 import com.divudi.entity.BillItem;
-import com.divudi.entity.BillSession;
+
 import com.divudi.entity.BilledBill;
 import com.divudi.entity.CancelledBill;
 import com.divudi.entity.Category;
@@ -38,19 +36,19 @@ import com.divudi.entity.Patient;
 import com.divudi.entity.Payment;
 import com.divudi.entity.PaymentScheme;
 import com.divudi.entity.Person;
-import com.divudi.entity.PriceMatrix;
+
 import com.divudi.entity.Staff;
 import com.divudi.entity.WebUser;
-import com.divudi.entity.membership.MembershipScheme;
+
 import com.divudi.facade.BatchBillFacade;
 import com.divudi.facade.BillComponentFacade;
 import com.divudi.facade.BillFacade;
 import com.divudi.facade.BillFeeFacade;
 import com.divudi.facade.BillFeePaymentFacade;
 import com.divudi.facade.BillItemFacade;
-import com.divudi.facade.BillSessionFacade;
+
 import com.divudi.facade.InstitutionFacade;
-import com.divudi.facade.PatientEncounterFacade;
+
 import com.divudi.facade.PatientFacade;
 import com.divudi.facade.PaymentFacade;
 import com.divudi.facade.PersonFacade;
@@ -101,8 +99,7 @@ public class BillController implements Serializable {
     private BillItemFacade billItemFacade;
     @EJB
     private InstitutionFacade institutionFacade;
-    @EJB
-    private PatientEncounterFacade patientEncounterFacade;
+
     @EJB
     BillEjb billEjb;
     @EJB
@@ -116,14 +113,12 @@ public class BillController implements Serializable {
     SessionController sessionController;
     @Inject
     CommonController commonController;
-    @Inject
-    PaymentSchemeController paymentSchemeController;
+   
     @Inject
     ApplicationController applicationController;
     @Inject
     private EnumController enumController;
-    @Inject
-    CollectingCentreBillController collectingCentreBillController;
+   
     /**
      * Class Vairables
      */
@@ -983,13 +978,6 @@ public class BillController implements Serializable {
         this.searchController = searchController;
     }
 
-    public MembershipSchemeController getMembershipSchemeController() {
-        return membershipSchemeController;
-    }
-
-    public void setMembershipSchemeController(MembershipSchemeController membershipSchemeController) {
-        this.membershipSchemeController = membershipSchemeController;
-    }
 
     public Date getSessionDate() {
         if (sessionDate == null) {
@@ -1166,7 +1154,7 @@ public class BillController implements Serializable {
         }
 
         saveBatchBill();
-        saveBillItemSessions();
+
 
         if (toStaff != null && getPaymentMethod() == PaymentMethod.Credit) {
             staffBean.updateStaffCredit(toStaff, netPlusVat);
@@ -1228,14 +1216,7 @@ public class BillController implements Serializable {
     @EJB
     StaffBean staffBean;
 
-    private void saveBillItemSessions() {
-        for (BillEntry be : lstBillEntries) {
-            be.getBillItem().setBillSession(getServiceSessionBean().createBillSession(be.getBillItem()));
-            if (be.getBillItem().getBillSession() != null) {
-                getBillSessionFacade().create(be.getBillItem().getBillSession());
-            }
-        }
-    }
+
     @EJB
     private BatchBillFacade batchBillFacade;
 
@@ -1335,8 +1316,7 @@ public class BillController implements Serializable {
         temp.setBillTime(new Date());
         temp.setPatient(tmpPatient);
 
-        temp.setMembershipScheme(membershipSchemeController.fetchPatientMembershipScheme(tmpPatient, getSessionController().getApplicationPreference().isMembershipExpires()));
-
+   
         temp.setPaymentScheme(getPaymentScheme());
         temp.setPaymentMethod(paymentMethod);
         temp.setCreatedAt(new Date());
@@ -1506,9 +1486,6 @@ public class BillController implements Serializable {
             return true;
         }
 
-        if (getPaymentSchemeController().errorCheckPaymentMethod(paymentMethod, getPaymentMethodData())) {
-            return true;
-        }
 
         if (paymentMethod != null && paymentMethod == PaymentMethod.Credit) {
             if (toStaff == null && creditCompany == null && collectingCentre == null) {
@@ -1546,64 +1523,7 @@ public class BillController implements Serializable {
         return false;
     }
 
-    public PaymentSchemeController getPaymentSchemeController() {
-        return paymentSchemeController;
-    }
 
-    public void setPaymentSchemeController(PaymentSchemeController paymentSchemeController) {
-        this.paymentSchemeController = paymentSchemeController;
-    }
-
-    List<BillSession> billSessions;
-    @EJB
-    BillSessionFacade billSessionFacade;
-    @Inject
-    ServiceSessionFunctions serviceSessionBean;
-
-    public List<BillSession> getBillSessions() {
-        return billSessions;
-    }
-
-    public void fillBillSessions(SelectEvent event) {
-        ////// // System.out.println("event = " + event);
-        ////// // System.out.println("this = filling bill sessions");
-        if (lastBillItem != null && lastBillItem.getItem() != null) {
-            billSessions = getServiceSessionBean().getBillSessions(lastBillItem.getItem(), getSessionDate());
-            ////// // System.out.println("billSessions = " + billSessions);
-        } else ////// // System.out.println("billSessions = " + billSessions);
-        if (billSessions == null || !billSessions.isEmpty()) {
-            ////// // System.out.println("new array");
-            billSessions = new ArrayList<>();
-        }
-    }
-
-    public void fillBillSessionsLstner() {
-        if (lastBillItem != null && lastBillItem.getItem() != null) {
-            billSessions = getServiceSessionBean().getBillSessions(lastBillItem.getItem(), getSessionDate());
-        } else if (billSessions == null || !billSessions.isEmpty()) {
-            billSessions = new ArrayList<>();
-        }
-    }
-
-    public ServiceSessionFunctions getServiceSessionBean() {
-        return serviceSessionBean;
-    }
-
-    public void setServiceSessionBean(ServiceSessionFunctions serviceSessionBean) {
-        this.serviceSessionBean = serviceSessionBean;
-    }
-
-    public BillSessionFacade getBillSessionFacade() {
-        return billSessionFacade;
-    }
-
-    public void setBillSessionFacade(BillSessionFacade billSessionFacade) {
-        this.billSessionFacade = billSessionFacade;
-    }
-
-    public void setBillSessions(List<BillSession> billSessions) {
-        this.billSessions = billSessions;
-    }
 
     public void addToBill() {
 
@@ -1629,9 +1549,7 @@ public class BillController implements Serializable {
             UtilityController.addErrorMessage("Please set Category to Item");
             return;
         }
-        if (getCurrentBillItem().getItem().getPriority() != null) {
-            getCurrentBillItem().setPriority(getCurrentBillItem().getItem().getPriority());
-        }
+
         if (getCurrentBillItem().getQty() == null) {
             getCurrentBillItem().setQty(1.0);
         }
@@ -1649,7 +1567,7 @@ public class BillController implements Serializable {
             addingEntry.setBillItem(bi);
             addingEntry.setLstBillComponents(getBillBean().billComponentsFromBillItem(bi));
             addingEntry.setLstBillFees(getBillBean().billFeefromBillItem(bi));
-            addingEntry.setLstBillSessions(getBillBean().billSessionsfromBillItem(bi));
+
             getLstBillEntries().add(addingEntry);
             bi.setRate(getBillBean().billItemRate(addingEntry));
             bi.setQty(1.0);
@@ -1764,19 +1682,6 @@ public class BillController implements Serializable {
         //billTotal = 0.0;
     }
 
-    @Inject
-    PriceMatrixController priceMatrixController;
-
-    public PriceMatrixController getPriceMatrixController() {
-        return priceMatrixController;
-    }
-
-    public void setPriceMatrixController(PriceMatrixController priceMatrixController) {
-        this.priceMatrixController = priceMatrixController;
-    }
-
-    @Inject
-    MembershipSchemeController membershipSchemeController;
 
     public void calTotals() {
 //     //   ////// // System.out.println("calculating totals");
@@ -1794,9 +1699,7 @@ public class BillController implements Serializable {
         double billNet = 0.0;
         double billVat = 0.0;
 
-        MembershipScheme membershipScheme = membershipSchemeController.fetchPatientMembershipScheme(getSearchedPatient(), getSessionController().getApplicationPreference().isMembershipExpires());
-
-
+ 
         for (BillEntry be : getLstBillEntries()) {
             //////// // System.out.println("bill item entry");
             double entryGross = 0.0;
@@ -1810,7 +1713,6 @@ public class BillController implements Serializable {
             for (BillFee bf : be.getLstBillFees()) {
                 Department department = null;
                 Item item = null;
-                PriceMatrix priceMatrix;
                 Category category = null;
 
                 if (bf.getBillItem() != null && bf.getBillItem().getItem() != null) {
@@ -1819,20 +1721,10 @@ public class BillController implements Serializable {
                     item = bf.getBillItem().getItem();
                 }
 
-                //Membership Scheme
-                if (membershipScheme != null) {
-                    priceMatrix = getPriceMatrixController().getOpdMemberDisCount(paymentMethod, membershipScheme, department, category);
-                    getBillBean().setBillFees(bf, isForeigner(), paymentMethod, membershipScheme, bi.getItem(), priceMatrix);
-                    ////// // System.out.println("priceMetrix = " + priceMatrix);
-
-                } else {
-                    //Payment  Scheme && Credit Company
-                    priceMatrix = getPriceMatrixController().getPaymentSchemeDiscount(paymentMethod, paymentScheme, department, item);
-                    getBillBean().setBillFees(bf, isForeigner(), paymentMethod, paymentScheme, getCreditCompany(), priceMatrix);
-                }
+                
 
                 if (bf.getBillItem().getItem().isVatable()) {
-                    if (!(bf.getFee().getFeeType() == FeeType.CollectingCentre && collectingCentreBillController.getCollectingCentre() != null)) {
+                    if (!(bf.getFee().getFeeType() == FeeType.CollectingCentre )) {
                         bf.setFeeVat(bf.getFeeValue() * bf.getBillItem().getItem().getVatPercentage() / 100);
                         bf.setFeeVat(roundOff(bf.getFeeVat()));
                     }
@@ -1965,7 +1857,7 @@ public class BillController implements Serializable {
         paymentMethodData = null;
         paymentScheme = null;
         paymentMethod = PaymentMethod.Cash;
-        collectingCentreBillController.setCollectingCentre(null);
+
     }
 
     public void prepareNewBillForMember() {
@@ -1976,7 +1868,7 @@ public class BillController implements Serializable {
         paymentMethodData = null;
         paymentScheme = null;
         paymentMethod = PaymentMethod.Cash;
-        collectingCentreBillController.setCollectingCentre(null);
+
     }
 
     public void makeNull() {
@@ -2532,13 +2424,7 @@ public class BillController implements Serializable {
 
     }
 
-    public PatientEncounterFacade getPatientEncounterFacade() {
-        return patientEncounterFacade;
-    }
-
-    public void setPatientEncounterFacade(PatientEncounterFacade patientEncounterFacade) {
-        this.patientEncounterFacade = patientEncounterFacade;
-    }
+ 
 
     public CashTransactionBean getCashTransactionBean() {
         return cashTransactionBean;

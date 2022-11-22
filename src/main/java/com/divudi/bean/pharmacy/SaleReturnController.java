@@ -314,7 +314,6 @@ public class SaleReturnController implements Serializable {
         bf.setCreatedAt(Calendar.getInstance().getTime());
         bf.setCreater(getSessionController().getLoggedUser());
         bf.setBillItem(bi);
-        bf.setPatienEncounter(bi.getBill().getPatientEncounter());
         bf.setPatient(bi.getBill().getPatient());
         bf.setFeeValue(bi.getNetValue());
         bf.setFeeGrossValue(bi.getGrossValue());

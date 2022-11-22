@@ -4,8 +4,6 @@
  */
 package com.divudi.bean.common;
 
-import com.divudi.bean.collectingCentre.CollectingCentreBillController;
-import com.divudi.bean.lab.PatientInvestigationController;
 import com.divudi.bean.pharmacy.PharmacyPreSettleController;
 import com.divudi.data.BillClassType;
 import com.divudi.data.BillNumberSuffix;
@@ -35,7 +33,6 @@ import com.divudi.entity.Payment;
 import com.divudi.entity.RefundBill;
 import com.divudi.entity.WebUser;
 import com.divudi.entity.cashTransaction.CashTransaction;
-import com.divudi.entity.lab.PatientInvestigation;
 import com.divudi.entity.pharmacy.PharmaceuticalBillItem;
 import com.divudi.facade.AgentHistoryFacade;
 import com.divudi.facade.BillComponentFacade;
@@ -117,8 +114,7 @@ public class BillSearch implements Serializable {
     /**
      * Controllers
      */
-    @Inject
-    private CollectingCentreBillController collectingCentreBillController;
+
     @Inject
     private SessionController sessionController;
     @Inject
@@ -127,10 +123,6 @@ public class BillSearch implements Serializable {
     private WebUserController webUserController;
     @Inject
     private PharmacyPreSettleController pharmacyPreSettleController;
-    @Inject
-    private OpdPreSettleController opdPreSettleController;
-    @Inject
-    private PatientInvestigationController patientInvestigationController;
     @Inject
     private BillController billController;
     @Inject
@@ -176,7 +168,6 @@ public class BillSearch implements Serializable {
     ///////////////////
     private SearchKeyword searchKeyword;
     private Institution creditCompany;
-    private PatientInvestigation patientInvestigation;
     private Institution institution;
     private Department department;
     private double refundTotal = 0;
@@ -289,22 +280,19 @@ public class BillSearch implements Serializable {
             i++;
         }
     }
-    
-    
-    
+
     public String listBillsFromBillTypeSummery() {
-        if(billSummery==null){
+        if (billSummery == null) {
             JsfUtil.addErrorMessage("No Summary Selected");
             return "";
         }
         String directTo;
         Map m = new HashMap();
         String j;
-        
+
         BillClassType tmpBillClassType = billSummery.getBillClassType();
         BillType tmpBllType = billSummery.getBillType();
-        
-        
+
         if (tmpBillClassType == null) {
             j = "select b "
                     + " from Bill b "
@@ -339,16 +327,15 @@ public class BillSearch implements Serializable {
         m.put("fd", fromDate);
         m.put("td", toDate);
         bills = billFacade.findBySQL(j, m, TemporalType.TIMESTAMP);
-        
-        if(tmpBillClassType==BillClassType.CancelledBill || tmpBillClassType==BillClassType.RefundBill){
+
+        if (tmpBillClassType == BillClassType.CancelledBill || tmpBillClassType == BillClassType.RefundBill) {
             directTo = "/reportIncome/bill_list_cancelled";
-        }else{
+        } else {
             directTo = "/reportIncome/bill_list";
         }
-        
+
         return directTo;
     }
-    
 
     public void fillBillFeeTypeSummery() {
         Map m = new HashMap();
@@ -418,10 +405,6 @@ public class BillSearch implements Serializable {
         }
     }
 
-    
-    
-    
-    
     public void clearSearchFIelds() {
         department = null;
         fromDate = null;
@@ -436,17 +419,10 @@ public class BillSearch implements Serializable {
     }
 
     public void updateBill() {
-
-        if (bill.getPatientEncounter() == null) {
-            bill.setCreditCompany(creditCompany);
-        } else {
-            bill.getPatientEncounter().setCreditCompany(creditCompany);
-        }
         bill.setEditedAt(new Date());
         bill.setEditor(sessionController.getLoggedUser());
         billFacade.edit(bill);
         UtilityController.addSuccessMessage("Bill Upadted");
-
     }
 
     private double roundOff(double d, int position) {
@@ -602,14 +578,6 @@ public class BillSearch implements Serializable {
         return user;
     }
 
-    public PatientInvestigation getPatientInvestigation() {
-        return patientInvestigation;
-    }
-
-    public void setPatientInvestigation(PatientInvestigation patientInvestigation) {
-        this.patientInvestigation = patientInvestigation;
-    }
-
     public void onEdit(RowEditEvent event) {
 
         BillFee tmp = (BillFee) event.getObject();
@@ -759,7 +727,7 @@ public class BillSearch implements Serializable {
         return lazyBills;
     }
 
-     public void createDealorPaymentTable() {
+    public void createDealorPaymentTable() {
         bills = null;
         String sql;
         Map temMap = new HashMap();
@@ -849,16 +817,7 @@ public class BillSearch implements Serializable {
             return "";
 
         }
-        if (getBill().getPatientEncounter() != null) {
-            if (getBill().getPatientEncounter().isPaymentFinalized()) {
-                UtilityController.addErrorMessage("Final Payment is Finalized You can't Return");
-                return "";
-            }
-        }
-//        if (refundAmount == 0.0) {
-//            UtilityController.addErrorMessage("There is no item to Refund");
-//            return "";
-//        }
+
         if (comment == null || comment.trim().equals("")) {
             UtilityController.addErrorMessage("Please enter a comment");
             return "";
@@ -883,17 +842,14 @@ public class BillSearch implements Serializable {
 
             if (!getWebUserController().hasPrivilege("LabBillRefundSpecial")) {
                 for (BillItem trbi : refundingItems) {
-                    if (patientInvestigationController.sampledForBillItem(trbi)) {
-                        UtilityController.addErrorMessage("One or more bill Item has been already undersone process at the Lab. Can not return.");
-                        return "";
-                    }
+
                 }
             }
 
             RefundBill rb = (RefundBill) createRefundBill();
-            Payment p = getOpdPreSettleController().createPayment(rb, paymentMethod);
+            Payment p =null;
             refundBillItems(rb, p);
-            p.setPaidValue(getOpdPreSettleController().calBillPaidValue(rb));
+            p.setPaidValue(0.0);
             paymentFacade.edit(p);
 
             calculateRefundBillFees(rb);
@@ -913,7 +869,6 @@ public class BillSearch implements Serializable {
                     }
                 }
 
-                collectingCentreBillController.updateBallance(getBill().getInstitution(), Math.abs(feeTotalExceptCcfs), HistoryType.CollectingCentreBilling, getBill().getRefundedBill(), getBill().getReferralNumber());
             }
 
             if (getBill().getPaymentMethod() == PaymentMethod.Credit) {
@@ -1044,7 +999,6 @@ public class BillSearch implements Serializable {
 
         rb.setNetTotal(refundAmount);
         rb.setPatient(getBill().getPatient());
-        rb.setPatientEncounter(getBill().getPatientEncounter());
         rb.setPaymentMethod(paymentMethod);
         rb.setReferredBy(getBill().getReferredBy());
         rb.setTotal(0 - refundAmount);
@@ -1132,8 +1086,7 @@ public class BillSearch implements Serializable {
             //create BillFeePayments For Refund
             sql = "Select bf From BillFee bf where bf.retired=false and bf.billItem.id=" + rbi.getId();
             List<BillFee> tmpC = getBillFeeFacade().findBySQL(sql);
-            getOpdPreSettleController().createOpdCancelRefundBillFeePayment(rb, tmpC, p);
-            //
+           
 
             rb.getBillItems().add(rbi);
 
@@ -1284,23 +1237,11 @@ public class BillSearch implements Serializable {
         }
 
         if (getBill().getBillType() == BillType.LabBill) {
-            if (patientInvestigation.getCollected()) {
-                UtilityController.addErrorMessage("You can't cancell this bill. Sample is already taken");
-                return true;
-            }
-             if (patientInvestigation.getPrinted()) {
-                UtilityController.addErrorMessage("You can't cancell this bill. Report is already printed");
-                return true;
-            }
-
+           
         }
         if (!getWebUserController().hasPrivilege("LabBillCancelSpecial")) {
 
-            ////// // System.out.println("patientInvestigationController.sampledForAnyItemInTheBill(bill) = " + patientInvestigationController.sampledForAnyItemInTheBill(bill));
-            if (patientInvestigationController.sampledForAnyItemInTheBill(bill)) {
-                UtilityController.addErrorMessage("Sample Already collected can't cancel");
-                return true;
-            }
+           
         }
 
         if (getBill().getBillType() != BillType.LabBill && getPaymentMethod() == null) {
@@ -1417,7 +1358,7 @@ public class BillSearch implements Serializable {
                     || (getBill().getBillType() == BillType.CollectingCentreBill && getWebUserController().hasPrivilege("CollectingCentreCancelling"))) {
 
                 getBillFacade().create(cb);
-                Payment p = getOpdPreSettleController().createPayment(cb, paymentMethod);
+                Payment p = null;
                 List<BillItem> list = cancelBillItems(cb, p);
                 cb.setBillItems(list);
                 billFacade.edit(cb);
@@ -1440,7 +1381,7 @@ public class BillSearch implements Serializable {
                         }
                     }
 
-                    collectingCentreBillController.updateBallance(getBill().getInstitution(), Math.abs(feeTotalExceptCcfs), HistoryType.CollectingCentreBilling, getBill().getCancelledBill(), getBill().getReferralNumber());
+               
                 }
 
                 if (getBill().getPaymentMethod() == PaymentMethod.Credit) {
@@ -1588,7 +1529,7 @@ public class BillSearch implements Serializable {
             //Copy & paste
 
             getBillFacade().create(cb);
-            Payment p = getOpdPreSettleController().createPayment(cb, paymentMethod);
+            Payment p = null;
 //            cancelBillItems(cb);
             cancelBillItems(cb, p);
             cancelPaymentItems(bill);
@@ -1755,9 +1696,7 @@ public class BillSearch implements Serializable {
             //create BillFeePayments For cancel
             sql = "Select bf From BillFee bf where bf.retired=false and bf.billItem.id=" + b.getId();
             List<BillFee> tmpC = getBillFeeFacade().findBySQL(sql);
-            getOpdPreSettleController().createOpdCancelRefundBillFeePayment(can, tmpC, p);
-            //
-
+          
             list.add(b);
 
         }
@@ -1769,7 +1708,6 @@ public class BillSearch implements Serializable {
         for (BillFee nB : tmp) {
             BillFee bf = new BillFee();
             bf.setFee(nB.getFee());
-            bf.setPatienEncounter(nB.getPatienEncounter());
             bf.setPatient(nB.getPatient());
             bf.setDepartment(nB.getDepartment());
             bf.setInstitution(nB.getInstitution());
@@ -2141,7 +2079,6 @@ public class BillSearch implements Serializable {
         billForRefund.setInstitution(getBill().getInstitution());
 
         billForRefund.setPatient(getBill().getPatient());
-        billForRefund.setPatientEncounter(getBill().getPatientEncounter());
         billForRefund.setPaymentScheme(getBill().getPaymentScheme());
         billForRefund.setPaymentMethod(getBill().getPaymentMethod());
         billForRefund.setPaymentSchemeInstitution(getBill().getPaymentSchemeInstitution());
@@ -2378,12 +2315,7 @@ public class BillSearch implements Serializable {
     }
 
     public Institution getCreditCompany() {
-        if (getBillSearch().getPatientEncounter() == null) {
-            creditCompany = getBillSearch().getCreditCompany();
-        } else {
-            creditCompany = getBillSearch().getPatientEncounter().getCreditCompany();
-        }
-
+      
         return creditCompany;
     }
 
@@ -2553,14 +2485,7 @@ public class BillSearch implements Serializable {
         this.billFeesList = billFeesList;
     }
 
-    public PatientInvestigationController getPatientInvestigationController() {
-        return patientInvestigationController;
-    }
-
-    public void setPatientInvestigationController(PatientInvestigationController patientInvestigationController) {
-        this.patientInvestigationController = patientInvestigationController;
-    }
-
+ 
     public List<BillItem> getBillItemList() {
         return billItemList;
     }
@@ -2569,13 +2494,7 @@ public class BillSearch implements Serializable {
         this.billItemList = billItemList;
     }
 
-    public OpdPreSettleController getOpdPreSettleController() {
-        return opdPreSettleController;
-    }
-
-    public void setOpdPreSettleController(OpdPreSettleController opdPreSettleController) {
-        this.opdPreSettleController = opdPreSettleController;
-    }
+   
 
     public CommonController getCommonController() {
         return commonController;
@@ -2648,7 +2567,5 @@ public class BillSearch implements Serializable {
     public void setBillSummery(BillSummery billSummery) {
         this.billSummery = billSummery;
     }
-    
-    
 
 }

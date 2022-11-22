@@ -10,8 +10,6 @@ import com.divudi.data.PaymentMethod;
 import com.divudi.entity.Department;
 import com.divudi.entity.Institution;
 import com.divudi.entity.Item;
-import com.divudi.entity.PatientEncounter;
-import com.divudi.entity.inward.AdmissionType;
 import java.util.List;
 
 /**
@@ -48,9 +46,9 @@ public class SearchKeyword {
     private String insId;
     private String deptId;
     String serviceName;
-    PatientEncounter patientEncounter;
+
     PaymentMethod paymentMethod;
-    AdmissionType admissionType;
+
     Institution ins;
     Department frmDepartment;
     Department tooDepartment;
@@ -318,13 +316,6 @@ public class SearchKeyword {
         this.deptId = deptId;
     }
 
-    public PatientEncounter getPatientEncounter() {
-        return patientEncounter;
-    }
-
-    public void setPatientEncounter(PatientEncounter patientEncounter) {
-        this.patientEncounter = patientEncounter;
-    }
 
     public PaymentMethod getPaymentMethod() {
         return paymentMethod;
@@ -332,14 +323,6 @@ public class SearchKeyword {
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
-    }
-
-    public AdmissionType getAdmissionType() {
-        return admissionType;
-    }
-
-    public void setAdmissionType(AdmissionType admissionType) {
-        this.admissionType = admissionType;
     }
 
     public Institution getIns() {

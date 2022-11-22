@@ -28,7 +28,6 @@ import com.divudi.facade.BillFeeFacade;
 import com.divudi.facade.BillItemFacade;
 import com.divudi.facade.BilledBillFacade;
 import com.divudi.facade.CancelledBillFacade;
-import com.divudi.facade.PatientEncounterFacade;
 import com.divudi.facade.RefundBillFacade;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -72,8 +71,6 @@ public class CreditCompanyBillSearch implements Serializable {
     CancelledBillFacade cancelledBillFacade;
     @EJB
     private BillItemFacade billItemFacede;
-    @EJB
-    private PatientEncounterFacade patientEncounterFacade;
     @EJB
     BilledBillFacade billedBillFacade;
     @EJB
@@ -432,10 +429,6 @@ public class CreditCompanyBillSearch implements Serializable {
             if (b.getReferenceBill() != null) {
                 updateReferenceBill(b);
             }
-
-            if (b.getPatientEncounter() != null) {
-                updateReferenceBht(b);
-            }
         }
     }
 
@@ -451,10 +444,7 @@ public class CreditCompanyBillSearch implements Serializable {
     }
 
     private void updateReferenceBht(BillItem tmp) {
-        double dbl = getCreditBean().getPaidAmount(tmp.getPatientEncounter(), BillType.CashRecieveBill);
 
-        tmp.getPatientEncounter().setCreditPaidAmount(0 - dbl);
-        getPatientEncounterFacade().edit(tmp.getPatientEncounter());
 
     }
 
@@ -782,11 +772,5 @@ public class CreditCompanyBillSearch implements Serializable {
         this.creditBean = creditBean;
     }
 
-    public PatientEncounterFacade getPatientEncounterFacade() {
-        return patientEncounterFacade;
-    }
 
-    public void setPatientEncounterFacade(PatientEncounterFacade patientEncounterFacade) {
-        this.patientEncounterFacade = patientEncounterFacade;
-    }
 }

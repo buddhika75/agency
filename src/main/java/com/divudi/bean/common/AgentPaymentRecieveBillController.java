@@ -4,7 +4,6 @@
  */
 package com.divudi.bean.common;
 
-import com.divudi.bean.membership.PaymentSchemeController;
 import com.divudi.data.BillClassType;
 import com.divudi.data.BillNumberSuffix;
 import com.divudi.data.BillType;
@@ -18,7 +17,6 @@ import com.divudi.entity.Bill;
 import com.divudi.entity.BillItem;
 import com.divudi.entity.BilledBill;
 import com.divudi.entity.Institution;
-import com.divudi.entity.PatientEncounter;
 import com.divudi.entity.WebUser;
 import com.divudi.facade.AgentHistoryFacade;
 import com.divudi.facade.BillFacade;
@@ -60,7 +58,7 @@ public class AgentPaymentRecieveBillController implements Serializable {
     @EJB
     AgentHistoryFacade agentHistoryFacade;
 
-    private PatientEncounter patientEncounter;
+
     private BillItem currentBillItem;
     private List<BillItem> billItems;
     private int index;
@@ -71,7 +69,7 @@ public class AgentPaymentRecieveBillController implements Serializable {
     public void addToBill() {
         getCurrentBillItem().setNetValue(getCurrent().getNetTotal());
         getCurrentBillItem().setGrossValue(getCurrent().getNetTotal());
-        getCurrentBillItem().setBillSession(null);
+
         getCurrentBillItem().setDiscount(0.0);
         getCurrentBillItem().setItem(null);
         getCurrentBillItem().setQty(1.0);
@@ -83,9 +81,7 @@ public class AgentPaymentRecieveBillController implements Serializable {
     public AgentPaymentRecieveBillController() {
     }
 
-    @Inject
-    private PaymentSchemeController paymentSchemeController;
-
+ 
     private boolean errorCheck() {
         if (getCurrent().getFromInstitution() == null) {
             UtilityController.addErrorMessage("Select Agency");
@@ -96,9 +92,7 @@ public class AgentPaymentRecieveBillController implements Serializable {
             return true;
         }
 
-        if (getPaymentSchemeController().errorCheckPaymentMethod(getCurrent().getPaymentMethod(), paymentMethodData)) {
-            return true;
-        }
+        
 
         return false;
     }
@@ -277,7 +271,7 @@ public class AgentPaymentRecieveBillController implements Serializable {
         current = null;
         printPreview = false;
         currentBillItem = null;
-        patientEncounter = null;
+
         paymentMethodData = null;
         billItems = null;
         comment = null;
@@ -355,13 +349,7 @@ public class AgentPaymentRecieveBillController implements Serializable {
         this.billItemFacade = billItemFacade;
     }
 
-    public PatientEncounter getPatientEncounter() {
-        return patientEncounter;
-    }
-
-    public void setPatientEncounter(PatientEncounter patientEncounter) {
-        this.patientEncounter = patientEncounter;
-    }
+   
 
     public BillItem getCurrentBillItem() {
         if (currentBillItem == null) {
@@ -420,14 +408,7 @@ public class AgentPaymentRecieveBillController implements Serializable {
         this.billBean = billBean;
     }
 
-    public PaymentSchemeController getPaymentSchemeController() {
-        return paymentSchemeController;
-    }
-
-    public void setPaymentSchemeController(PaymentSchemeController paymentSchemeController) {
-        this.paymentSchemeController = paymentSchemeController;
-    }
-
+  
     public AgentHistoryFacade getAgentHistoryFacade() {
         return agentHistoryFacade;
     }

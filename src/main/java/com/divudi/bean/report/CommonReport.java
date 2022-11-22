@@ -24,7 +24,7 @@ import com.divudi.entity.Department;
 import com.divudi.entity.Institution;
 import com.divudi.entity.Item;
 import com.divudi.entity.PreBill;
-import com.divudi.entity.PriceMatrix;
+
 import com.divudi.entity.RefundBill;
 import com.divudi.entity.Service;
 import com.divudi.entity.WebUser;
@@ -32,7 +32,7 @@ import com.divudi.facade.BillFacade;
 import com.divudi.facade.BillFeeFacade;
 import com.divudi.facade.BillItemFacade;
 import com.divudi.facade.InstitutionFacade;
-import com.divudi.facade.PriceMatrixFacade;
+
 import com.divudi.facade.util.JsfUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -64,8 +64,7 @@ public class CommonReport implements Serializable {
     private BillFacade billFacade;
     @EJB
     CommonFunctions commonFunctions;
-    @EJB
-    private PriceMatrixFacade inwdPriceAdjFacade;
+
     @EJB
     BillItemFacade billItemFac;
     @EJB
@@ -483,7 +482,6 @@ public class CommonReport implements Serializable {
 
     //////////////////    
     private List<String1Value1> dataTableData;
-    private List<PriceMatrix> items = null;
 
     /**
      * Creates a new instance of CommonReport
@@ -3583,12 +3581,7 @@ public class CommonReport implements Serializable {
         return d;
     }
 
-    public List<PriceMatrix> createMatrxTabl() {
-        String sql;
-        sql = "select a from InwardPriceAdjustment a where a.retired=false order by a.department.name,a.category.name,a.fromPrice";
-        items = getInwdPriceAdjFacade().findBySQL(sql);
-        return items;
-    }
+
 
     public void createGrnDetailTable() {
         Date startTime = new Date();
@@ -5768,21 +5761,6 @@ public class CommonReport implements Serializable {
         this.grnReturnCancel = grnReturnCancel;
     }
 
-    public List<PriceMatrix> getItems() {
-        return items;
-    }
-
-    public void setItems(List<PriceMatrix> items) {
-        this.items = items;
-    }
-
-    public PriceMatrixFacade getInwdPriceAdjFacade() {
-        return inwdPriceAdjFacade;
-    }
-
-    public void setInwdPriceAdjFacade(PriceMatrixFacade inwdPriceAdjFacade) {
-        this.inwdPriceAdjFacade = inwdPriceAdjFacade;
-    }
 
     public BillsTotals getPurchaseBilled() {
         return purchaseBilled;

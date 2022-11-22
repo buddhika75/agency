@@ -28,7 +28,6 @@ import com.divudi.entity.Person;
 import com.divudi.entity.PersonInstitution;
 import com.divudi.entity.RefundBill;
 import com.divudi.entity.WebUser;
-import com.divudi.entity.lab.Investigation;
 import com.divudi.facade.BillFacade;
 import com.divudi.facade.BillItemFacade;
 import com.divudi.facade.PersonInstitutionFacade;
@@ -586,7 +585,6 @@ public class CommonReport1 implements Serializable {
 
         m.put("fromDate", getFromDate());
         m.put("toDate", getToDate());
-        m.put("inv", Investigation.class);
         //// // System.out.println("sql = " + sql);
         List<Object[]> objects = billItemFacade.findAggregates(sql, m, TemporalType.TIMESTAMP);
         List<Object[]> obj = fetchReferingDoctoerNull();
@@ -705,7 +703,6 @@ public class CommonReport1 implements Serializable {
 
         m.put("fromDate", getFromDate());
         m.put("toDate", getToDate());
-        m.put("inv", Investigation.class);
         List<Object[]> obj = billItemFacade.findAggregates(sql, m, TemporalType.TIMESTAMP);
         List<Object[]> objects = new ArrayList<>();
         if (!obj.isEmpty()) {

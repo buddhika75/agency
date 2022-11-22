@@ -6,8 +6,6 @@
 package com.divudi.entity;
 
 import com.divudi.data.MessageType;
-import com.divudi.entity.lab.PatientInvestigation;
-import com.divudi.entity.lab.PatientReport;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
@@ -32,10 +30,7 @@ public class AppEmail implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    PatientReport patientReport;
-    @ManyToOne
-    private PatientInvestigation patientInvestigation;
+
     @ManyToOne
     private Bill bill;
 
@@ -86,21 +81,7 @@ public class AppEmail implements Serializable {
         this.bill = bill;
     }
 
-    public PatientInvestigation getPatientInvestigation() {
-        return patientInvestigation;
-    }
-
-    public void setPatientInvestigation(PatientInvestigation patientInvestigation) {
-        this.patientInvestigation = patientInvestigation;
-    }
-
-    public PatientReport getPatientReport() {
-        return patientReport;
-    }
-
-    public void setPatientReport(PatientReport patientReport) {
-        this.patientReport = patientReport;
-    }
+   
 
     
     public WebUser getCreater() {

@@ -10,13 +10,6 @@ import com.divudi.data.DepartmentType;
 import com.divudi.data.ItemType;
 import com.divudi.data.SessionNumberType;
 import com.divudi.data.SymanticType;
-import com.divudi.data.inward.InwardChargeType;
-import com.divudi.data.lab.Priority;
-import com.divudi.entity.lab.Investigation;
-import com.divudi.entity.lab.InvestigationItem;
-import com.divudi.entity.lab.Machine;
-import com.divudi.entity.lab.ReportItem;
-import com.divudi.entity.lab.WorksheetItem;
 import com.divudi.entity.pharmacy.Amp;
 import com.divudi.entity.pharmacy.Ampp;
 import com.divudi.entity.pharmacy.Atm;
@@ -52,13 +45,6 @@ import javax.persistence.Transient;
  */
 @Entity
 public class Item implements Serializable, Comparable<Item> {
-
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
-    List<InvestigationItem> reportItems;
-    //
-
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
-    List<WorksheetItem> worksheetItems;
 
     @OneToMany(mappedBy = "item", fetch = FetchType.EAGER)
     List<ItemFee> itemFeesAuto;
@@ -121,8 +107,6 @@ public class Item implements Serializable, Comparable<Item> {
     @ManyToOne
     Item parentItem;
     boolean userChangable;
-    @Enumerated(EnumType.STRING)
-    InwardChargeType inwardChargeType;
     private double dblValue = 0.0f;
     SessionNumberType sessionNumberType;
     boolean priceByBatch;
@@ -172,8 +156,6 @@ public class Item implements Serializable, Comparable<Item> {
     @ManyToOne
     private Vmp vmp;
 
-    @ManyToOne
-    private Machine machine;
 
     String creditNumbers;
     String cashNumbers;
@@ -183,13 +165,9 @@ public class Item implements Serializable, Comparable<Item> {
     int maxTableRows;
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
-    @Enumerated(EnumType.STRING)
-    private Priority priority;
 
     private boolean hasMoreThanOneComponant;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private ReportItem reportItem;
 
     @Transient
     double channelStaffFee;
@@ -289,37 +267,8 @@ public class Item implements Serializable, Comparable<Item> {
         this.inactive = inactive;
     }
 
-    public List<WorksheetItem> getWorksheetItems() {
-        if (worksheetItems != null) {
-            try {
-                Collections.sort(worksheetItems, new ReportItemComparator());
-            } catch (Exception e) {
-            }
-        } else {
-            worksheetItems = new ArrayList<>();
-        }
-        return worksheetItems;
-    }
-
-    public void setWorksheetItems(List<WorksheetItem> worksheetItems) {
-        this.worksheetItems = worksheetItems;
-    }
-
     public Item() {
 
-    }
-
-    public List<InvestigationItem> getReportItems() {
-        if (reportItems != null) {
-            try {
-                Collections.sort(reportItems, new ReportItemComparator());
-            } catch (Exception e) {
-            }
-
-        } else {
-            reportItems = new ArrayList<>();
-        }
-        return reportItems;
     }
 
     @Override
@@ -687,14 +636,6 @@ public class Item implements Serializable, Comparable<Item> {
         this.userChangable = userChangable;
     }
 
-    public InwardChargeType getInwardChargeType() {
-        return inwardChargeType;
-    }
-
-    public void setInwardChargeType(InwardChargeType inwardChargeType) {
-        this.inwardChargeType = inwardChargeType;
-    }
-
     public boolean isPriceByBatch() {
         return priceByBatch;
     }
@@ -919,14 +860,6 @@ public class Item implements Serializable, Comparable<Item> {
         this.scanFee = scanFee;
     }
 
-    public Machine getMachine() {
-        return machine;
-    }
-
-    public void setMachine(Machine machine) {
-        this.machine = machine;
-    }
-
     public String getReserveNumbers() {
         return reserveNumbers;
     }
@@ -1067,9 +1000,6 @@ public class Item implements Serializable, Comparable<Item> {
             if (this instanceof Service) {
                 itemType = ItemType.Service;
             }
-            if (this instanceof Investigation) {
-                itemType = ItemType.Investigation;
-            }
             if (this instanceof Atm) {
                 itemType = ItemType.Medicine;
             }
@@ -1087,25 +1017,6 @@ public class Item implements Serializable, Comparable<Item> {
 
     public void setHasMoreThanOneComponant(boolean hasMoreThanOneComponant) {
         this.hasMoreThanOneComponant = hasMoreThanOneComponant;
-    }
-
-    public ReportItem getReportItem() {
-        if (reportItem == null) {
-            reportItem = new ReportItem();
-        }
-        return reportItem;
-    }
-
-    public void setReportItem(ReportItem reportItem) {
-        this.reportItem = reportItem;
-    }
-
-    public Priority getPriority() {
-        return priority;
-    }
-
-    public void setPriority(Priority priority) {
-        this.priority = priority;
     }
 
     public Double getTotalForForeigner() {
@@ -1133,36 +1044,6 @@ public class Item implements Serializable, Comparable<Item> {
 
     public void setTransCodeFromName(String transCodeFromName) {
         this.transCodeFromName = transCodeFromName;
-    }
-
-    static class ReportItemComparator implements Comparator<ReportItem> {
-
-        @Override
-        public int compare(ReportItem o1, ReportItem o2) {
-            if (o1 == null) {
-                return 1;
-            }
-            if (o1.getRiTop() == 0) {
-                return 1;
-            }
-            if (o2 == null) {
-                return -1;
-            }
-            if (o2.getRiTop() == 0) {
-                return 1;
-            }
-            if (o1.getRiTop() == o2.getRiTop()) {
-                if (o1.getId() > o2.getId()) {
-                    return 1;
-                } else {
-                    return -1;
-                }
-            } else if (o1.getRiTop() > o2.getRiTop()) {
-                return 1;
-            } else {
-                return -1;
-            }
-        }
     }
 
 }

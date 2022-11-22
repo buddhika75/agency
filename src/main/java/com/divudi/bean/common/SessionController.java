@@ -10,6 +10,7 @@ package com.divudi.bean.common;
 import com.divudi.bean.pharmacy.PharmacySaleController;
 import com.divudi.data.DepartmentType;
 import com.divudi.data.Privileges;
+import com.divudi.data.WebUserRole;
 import com.divudi.ejb.ApplicationEjb;
 import com.divudi.ejb.CashTransactionBean;
 import com.divudi.entity.Bill;
@@ -21,7 +22,6 @@ import com.divudi.entity.UserPreference;
 import com.divudi.entity.WebUser;
 import com.divudi.entity.WebUserDashboard;
 import com.divudi.entity.WebUserPrivilege;
-import com.divudi.entity.WebUserRole;
 import com.divudi.facade.DepartmentFacade;
 import com.divudi.facade.LoginsFacade;
 import com.divudi.facade.PersonFacade;
@@ -30,7 +30,6 @@ import com.divudi.facade.WebUserDashboardFacade;
 import com.divudi.facade.WebUserDepartmentFacade;
 import com.divudi.facade.WebUserFacade;
 import com.divudi.facade.WebUserPrivilegeFacade;
-import com.divudi.facade.WebUserRoleFacade;
 import com.divudi.facade.util.JsfUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -312,8 +311,6 @@ public class SessionController implements Serializable, HttpSessionListener {
     WebUserFacade uFacade;
     @EJB
     PersonFacade pFacade;
-    @EJB
-    WebUserRoleFacade rFacade;
     //
     WebUser current;
     String userName;
@@ -452,29 +449,11 @@ public class SessionController implements Serializable, HttpSessionListener {
         Person person = new Person();
         person.setName(userName);
         pFacade.create(person);
-
-        WebUserRole myRole;
-        myRole = new WebUserRole();
-        myRole.setName("circular_editor");
-        rFacade.create(myRole);
-
-        myRole = new WebUserRole();
-        myRole.setName("circular_adder");
-        rFacade.create(myRole);
-
-        myRole = new WebUserRole();
-        myRole.setName("circular_viewer");
-        rFacade.create(myRole);
-
-        myRole = new WebUserRole();
-        myRole.setName("admin");
-        rFacade.create(myRole);
-
         user.setName(userName);
         user.setWebUserPassword(getSecurityController().hash(passord));
         user.setWebUserPerson(person);
         user.setActivated(true);
-        user.setRole(myRole);
+        user.setRole(WebUserRole.System_Administrator);
         uFacade.create(user);
     }
 
@@ -1134,14 +1113,6 @@ public class SessionController implements Serializable, HttpSessionListener {
 
     public void setLogged(boolean logged) {
         this.logged = logged;
-    }
-
-    public WebUserRoleFacade getrFacade() {
-        return rFacade;
-    }
-
-    public void setrFacade(WebUserRoleFacade rFacade) {
-        this.rFacade = rFacade;
     }
 
     public String getDisplayName() {

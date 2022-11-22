@@ -121,8 +121,7 @@ public class PharmacyPurchaseController implements Serializable {
 
         BillType[] bts = new BillType[]{BillType.PharmacyGrnBill, BillType.PharmacyPurchaseBill, BillType.PharmacyGrnReturn, BillType.PurchaseReturn,};
         Class[] bcs = new Class[]{BilledBill.class, CancelledBill.class, RefundBill.class};
-        billListWithTotals = billEjb.findBillsAndTotals(fromDate, toDate, bts, bcs, department, null, null);
-
+      
         commonController.printReportDetails(fromDate, toDate, startTime, "Pharmacy/Reports/Summeries/Purchase/Purchase bill by departments(Fill All)(/faces/pharmacy/pharmacy_report_purchase_bills_by_department.xhtml)");
     }
 
@@ -131,8 +130,7 @@ public class PharmacyPurchaseController implements Serializable {
 
         BillType[] bts = new BillType[]{BillType.PharmacyPurchaseBill, BillType.PurchaseReturn,};
         Class[] bcs = new Class[]{BilledBill.class, CancelledBill.class, RefundBill.class};
-        billListWithTotals = billEjb.findBillsAndTotals(fromDate, toDate, bts, bcs, department, null, null);
-
+      
         commonController.printReportDetails(fromDate, toDate, startTime, "Pharmacy/Reports/Summeries/Purchase/Purchase bill by departments(Purchase Only)(/faces/pharmacy/pharmacy_report_purchase_bills_by_department.xhtml)");
     }
 
@@ -141,7 +139,6 @@ public class PharmacyPurchaseController implements Serializable {
 
         BillType[] bts = new BillType[]{BillType.PharmacyGrnBill, BillType.PurchaseReturn,};
         Class[] bcs = new Class[]{BilledBill.class, CancelledBill.class, RefundBill.class};
-        billListWithTotals = billEjb.findBillsAndTotals(fromDate, toDate, bts, bcs, department, null, null);
 
         commonController.printReportDetails(fromDate, toDate, startTime, "Pharmacy/Reports/Summeries/Purchase/Purchase bill by departments(GRN Only)(/faces/pharmacy/pharmacy_report_purchase_bills_by_department.xhtml)");
     }
@@ -512,7 +509,6 @@ public class PharmacyPurchaseController implements Serializable {
         bf.setCreatedAt(Calendar.getInstance().getTime());
         bf.setCreater(getSessionController().getLoggedUser());
         bf.setBillItem(bi);
-        bf.setPatienEncounter(bi.getBill().getPatientEncounter());
         bf.setPatient(bi.getBill().getPatient());
         bf.setFeeValue(bi.getNetValue());
         bf.setFeeGrossValue(bi.getGrossValue());

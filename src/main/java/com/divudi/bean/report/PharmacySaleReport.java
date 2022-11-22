@@ -8,7 +8,6 @@ package com.divudi.bean.report;
 import com.divudi.bean.common.CommonController;
 import com.divudi.bean.common.SessionController;
 import com.divudi.bean.common.UtilityController;
-import com.divudi.bean.membership.PaymentSchemeController;
 import com.divudi.data.BillClassType;
 import com.divudi.data.BillType;
 import com.divudi.data.DepartmentType;
@@ -5046,8 +5045,7 @@ public class PharmacySaleReport implements Serializable {
     double canTotalWholeSale;
     double refTotalWholeSale;
 
-    @Inject
-    PaymentSchemeController paymentSchemeController;
+
 
     public List<PaymentSchemeSummery> getPaymentSchemeSummerys() {
         return paymentSchemeSummerys;
@@ -5122,14 +5120,7 @@ public class PharmacySaleReport implements Serializable {
         }
         paymentSchemeSummerys = new ArrayList<>();
         paymentSchemeSummeryWholeSale = new ArrayList<>();
-        List<PaymentScheme> paymentSchemes = paymentSchemeController.getItems();
-        paymentSchemes.add(null);
 
-        for (PaymentScheme ps : paymentSchemes) {
-            addSaleValueByDepartmentPaymentSchemeP(paymentSchemeSummerys, ps, BillType.PharmacySale);
-            addSaleValueByDepartmentPaymentSchemeP(paymentSchemeSummeryWholeSale, ps, BillType.PharmacyWholeSale);
-
-        }
         BillListWithTotals b = addSaleTotal(paymentSchemeSummerys, billTotal, canTotal, refTotal);
         BillListWithTotals w = addSaleTotal(paymentSchemeSummeryWholeSale, billTotalWholeSale, canTotalWholeSale, refTotalWholeSale);
 

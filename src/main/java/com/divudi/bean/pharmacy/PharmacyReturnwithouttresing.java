@@ -8,12 +8,10 @@ package com.divudi.bean.pharmacy;
 import com.divudi.bean.common.BillBeanController;
 import com.divudi.bean.common.SessionController;
 import com.divudi.bean.common.UtilityController;
-import com.divudi.bean.membership.PaymentSchemeController;
 import com.divudi.data.BillNumberSuffix;
 import com.divudi.data.BillType;
 import com.divudi.data.dataStructure.PaymentMethodData;
 import com.divudi.data.dataStructure.YearMonthDay;
-import com.divudi.data.inward.InwardChargeType;
 import com.divudi.ejb.BillNumberGenerator;
 import com.divudi.ejb.CashTransactionBean;
 import com.divudi.ejb.PharmacyBean;
@@ -75,9 +73,7 @@ public class PharmacyReturnwithouttresing implements Serializable {
     public PharmacyReturnwithouttresing() {
     }
 
-    @Inject
-    PaymentSchemeController PaymentSchemeController;
-
+   
     @Inject
     SessionController sessionController;
 ////////////////////////
@@ -441,7 +437,6 @@ public class PharmacyReturnwithouttresing implements Serializable {
                 continue;
             }
 
-            tbi.setInwardChargeType(InwardChargeType.Medicine);
             tbi.setBill(getPreBill());
 
             tbi.setCreatedAt(Calendar.getInstance().getTime());
@@ -629,7 +624,6 @@ public class PharmacyReturnwithouttresing implements Serializable {
         billItem.getPharmaceuticalBillItem().setItemBatch(getStock().getItemBatch());
         calculateBillItem();
 
-        billItem.setInwardChargeType(InwardChargeType.Medicine);
 
         billItem.setItem(getStock().getItemBatch().getItem());
         billItem.setBill(getPreBill());
@@ -1022,13 +1016,6 @@ public class PharmacyReturnwithouttresing implements Serializable {
         this.printBill = printBill;
     }
 
-    public PaymentSchemeController getPaymentSchemeController() {
-        return PaymentSchemeController;
-    }
-
-    public void setPaymentSchemeController(PaymentSchemeController PaymentSchemeController) {
-        this.PaymentSchemeController = PaymentSchemeController;
-    }
 
     public StockHistoryFacade getStockHistoryFacade() {
         return stockHistoryFacade;

@@ -5,7 +5,6 @@
 package com.divudi.entity;
 
 import com.divudi.data.FeeType;
-import com.divudi.entity.inward.PatientRoom;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
@@ -51,10 +50,6 @@ public class BillFee implements Serializable {
     @ManyToOne
     Patient patient;
     @ManyToOne
-    PatientEncounter patienEncounter;
-    @ManyToOne
-    PatientEncounter childEncounter;
-    @ManyToOne
     Staff staff;
     @ManyToOne
     Institution institution;
@@ -67,10 +62,7 @@ public class BillFee implements Serializable {
     Date FeeAt;
     @ManyToOne
     private BillFee referenceBillFee;
-    @ManyToOne
-    private PatientItem patientItem;
-    @ManyToOne
-    PriceMatrix priceMatrix;
+
     //////////////////
     @ManyToOne
     BillItem billItem;
@@ -99,18 +91,10 @@ public class BillFee implements Serializable {
     private double transSerial;
     @Transient
     double transNetValue;
-    @ManyToOne
-    private PatientRoom referencePatientRoom;
     
     
 
-    public PriceMatrix getPriceMatrix() {
-        return priceMatrix;
-    }
 
-    public void setPriceMatrix(PriceMatrix priceMatrix) {
-        this.priceMatrix = priceMatrix;
-    }
 
     public double getFeeAdjusted() {
         return feeAdjusted;
@@ -140,8 +124,6 @@ public class BillFee implements Serializable {
     public void copy(BillFee billFee) {
         fee = billFee.getFee();
         patient = billFee.getPatient();
-        patienEncounter = billFee.getPatienEncounter();
-        childEncounter = billFee.getChildEncounter();
         staff = billFee.getStaff();
         institution = billFee.getInstitution();
         department = billFee.getDepartment();
@@ -474,21 +456,7 @@ public class BillFee implements Serializable {
         this.patient = patient;
     }
 
-    public PatientEncounter getPatienEncounter() {
-        return patienEncounter;
-    }
 
-    public void setPatienEncounter(PatientEncounter patienEncounter) {
-        this.patienEncounter = patienEncounter;
-    }
-
-    public PatientEncounter getChildEncounter() {
-        return childEncounter;
-    }
-
-    public void setChildEncounter(PatientEncounter childEncounter) {
-        this.childEncounter = childEncounter;
-    }
 
     public BillItem getBillItem() {
         return billItem;
@@ -610,13 +578,6 @@ public class BillFee implements Serializable {
         this.transSerial = transSerial;
     }
 
-    public PatientItem getPatientItem() {
-        return patientItem;
-    }
-
-    public void setPatientItem(PatientItem patientItem) {
-        this.patientItem = patientItem;
-    }
 
     public WebUser getEditor() {
         return editor;
@@ -640,14 +601,6 @@ public class BillFee implements Serializable {
 
     public void setReferenceBillItem(BillItem referenceBillItem) {
         this.referenceBillItem = referenceBillItem;
-    }
-
-    public PatientRoom getReferencePatientRoom() {
-        return referencePatientRoom;
-    }
-
-    public void setReferencePatientRoom(PatientRoom referencePatientRoom) {
-        this.referencePatientRoom = referencePatientRoom;
     }
 
     public Double getFeeGrossValue() {

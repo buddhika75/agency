@@ -8,7 +8,7 @@
  */
 package com.divudi.bean.common;
 
-import com.divudi.bean.hr.StaffController;
+
 import com.divudi.data.Dashboard;
 import com.divudi.data.Privileges;
 import com.divudi.entity.Department;
@@ -26,7 +26,6 @@ import com.divudi.facade.StaffFacade;
 import com.divudi.facade.WebUserDashboardFacade;
 import com.divudi.facade.WebUserFacade;
 import com.divudi.facade.WebUserPrivilegeFacade;
-import com.divudi.facade.WebUserRoleFacade;
 import com.divudi.facade.util.JsfUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -60,8 +59,6 @@ public class WebUserController implements Serializable {
     @EJB
     private WebUserFacade ejbFacade;
     @EJB
-    WebUserRoleFacade roleFacade;
-    @EJB
     private PersonFacade personFacade;
     @EJB
     private WebUserPrivilegeFacade webUserPrevilageFacade;
@@ -76,12 +73,10 @@ public class WebUserController implements Serializable {
     SessionController sessionController;
     @Inject
     SecurityController securityController;
-    @Inject
-    private UserPaymentSchemeController userPaymentSchemeController;
+
     @Inject
     private UserDepartmentController userDepartmentController;
-    @Inject
-    private StaffController staffController;
+
     @Inject
     private UserPrivilageController userPrivilageController;
     /**
@@ -517,13 +512,6 @@ public class WebUserController implements Serializable {
         this.ejbFacade = ejbFacade;
     }
 
-    public WebUserRoleFacade getRoleFacade() {
-        return roleFacade;
-    }
-
-    public void setRoleFacade(WebUserRoleFacade roleFacade) {
-        this.roleFacade = roleFacade;
-    }
 
     public List<WebUser> getSearchItems() {
         if (searchItems == null) {
@@ -709,14 +697,6 @@ public class WebUserController implements Serializable {
         return "/admin_user";
     }
 
-    public String toManageStaff() {
-        if (selected == null) {
-            JsfUtil.addErrorMessage("Please select a user");
-            return "";
-        }
-        getStaffController().setCurrent(selected.getStaff());
-        return "/hr/hr_staff_admin";
-    }
 
     public String toManagePassword() {
         if (selected == null) {
@@ -737,21 +717,13 @@ public class WebUserController implements Serializable {
         return "/admin_user_privilages";
     }
 
-    public String toManagePaymentSchemes() {
-        if (selected == null) {
-            JsfUtil.addErrorMessage("Please select a user");
-            return "";
-        }
-        getUserPaymentSchemeController().setSelectedUser(selected);
-        return "/admin_user_paymentScheme";
-    }
+
 
     public String toManageSignature() {
         if (selected == null) {
             JsfUtil.addErrorMessage("Please select a user");
             return "";
         }
-        getStaffController().setCurrent(selected.getStaff());
         return "/admin_staff_signature";
     }
 
@@ -850,17 +822,11 @@ public class WebUserController implements Serializable {
         return "/admin_manage_users";
     }
 
-    public UserPaymentSchemeController getUserPaymentSchemeController() {
-        return userPaymentSchemeController;
-    }
 
     public UserDepartmentController getUserDepartmentController() {
         return userDepartmentController;
     }
 
-    public StaffController getStaffController() {
-        return staffController;
-    }
 
     public String getNewPassword() {
         return newPassword;

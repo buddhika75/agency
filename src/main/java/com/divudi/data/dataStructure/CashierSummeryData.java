@@ -4,7 +4,6 @@
  */
 package com.divudi.data.dataStructure;
 
-import com.divudi.data.table.String1Value5;
 import com.divudi.entity.WebUser;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
 public class CashierSummeryData {
 
     private WebUser casheir;
-    private List<String1Value5> dataTable5Value;
+
     ////////////////////////
     private double billedCash;
     private double billedCredit;
@@ -468,14 +467,6 @@ public class CashierSummeryData {
 
     public void setInwardCancelSlip(double inwardCancelSlip) {
         this.inwardCancelSlip = inwardCancelSlip;
-    }
-
-    public List<String1Value5> getDataTable5Value() {
-        return dataTable5Value;
-    }
-
-    public void setDataTable5Value(List<String1Value5> dataTable5Value) {
-        this.dataTable5Value = dataTable5Value;
     }
 
     public double getBilledCashPh() {

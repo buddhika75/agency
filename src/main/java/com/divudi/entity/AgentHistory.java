@@ -33,8 +33,6 @@ public class AgentHistory implements Serializable {
     BillItem billItem;
     @ManyToOne
     Bill bill;
-    @ManyToOne
-    BillSession billSession;
     double beforeBallance;
     double transactionValue;
     @Enumerated(EnumType.STRING)
@@ -88,14 +86,6 @@ public class AgentHistory implements Serializable {
 
     public void setBill(Bill bill) {
         this.bill = bill;
-    }
-
-    public BillSession getBillSession() {
-        return billSession;
-    }
-
-    public void setBillSession(BillSession billSession) {
-        this.billSession = billSession;
     }
 
     public double getBeforeBallance() {

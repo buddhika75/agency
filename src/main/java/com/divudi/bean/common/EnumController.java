@@ -23,14 +23,6 @@ import com.divudi.data.SessionNumberType;
 import com.divudi.data.Sex;
 import com.divudi.data.MessageType;
 import com.divudi.data.Title;
-import com.divudi.data.hr.DayType;
-import com.divudi.data.hr.LeaveType;
-import com.divudi.data.hr.PaysheetComponentType;
-import com.divudi.data.hr.Times;
-import com.divudi.data.inward.AdmissionTypeEnum;
-import com.divudi.data.inward.InwardChargeType;
-import com.divudi.data.inward.PatientEncounterComponentType;
-import com.divudi.data.lab.Priority;
 import com.divudi.entity.PaymentScheme;
 import com.divudi.entity.Person;
 import java.io.Serializable;
@@ -51,9 +43,6 @@ public class EnumController implements Serializable {
 
     SessionNumberType[] sessionNumberTypes;
 
-    public Priority[] getPriorities() {
-        return Priority.values();
-    }
 
     public Dashboard[] getDashboardTypes() {
         return Dashboard.values();
@@ -89,26 +78,8 @@ public class EnumController implements Serializable {
         return ReportItemType.values();
     }
 
-    public LeaveType[] getLeaveType() {
-        LeaveType[] ltp = {LeaveType.Annual,
-            LeaveType.AnnualHalf,
-            LeaveType.Casual,
-            LeaveType.CasualHalf,
-            LeaveType.DutyLeave,
-            LeaveType.DutyLeaveHalf,
-            LeaveType.Lieu,
-            LeaveType.LieuHalf,
-            LeaveType.Maternity1st,
-            LeaveType.Maternity2nd,
-            LeaveType.Medical,
-            LeaveType.No_Pay,
-            LeaveType.No_Pay_Half};
-        return ltp;
-    }
+   
 
-    public Times[] getTimeses() {
-        return new Times[]{Times.inTime, Times.outTime};
-    }
 
     public void setSessionNumberTypes(SessionNumberType[] sessionNumberTypes) {
         this.sessionNumberTypes = sessionNumberTypes;
@@ -118,21 +89,7 @@ public class EnumController implements Serializable {
         return FeeType.values();
     }
 
-    public DayType[] getDayTypes() {
-        return DayType.values();
-    }
-
-    public DayType[] getDayTypeForShift() {
-        DayType[] dayTypes = {DayType.Normal, DayType.DayOff, DayType.SleepingDay, DayType.Poya};
-
-        return dayTypes;
-    }
-
-    public DayType[] getDayTypesForPh() {
-        DayType[] dayTypes = {DayType.MurchantileHoliday, DayType.Poya, DayType.PublicHoliday};
-
-        return dayTypes;
-    }
+   
 
     public InvestigationItemType[] getInvestigationItemTypes() {
         return InvestigationItemType.values();
@@ -142,10 +99,7 @@ public class EnumController implements Serializable {
         return InvestigationItemValueType.values();
     }
 
-    public PaysheetComponentType[] getAddingComponentTypes() {
-        return PaysheetComponentType.addition.children();
-
-    }
+   
 
     public BillType[] getBillTypes() {
         return BillType.values();
@@ -159,32 +113,7 @@ public class EnumController implements Serializable {
         return CalculationType.values();
     }
 
-    public PaysheetComponentType[] getDiductionComponentTypes() {
-        return PaysheetComponentType.subtraction.children();
-
-    }
-
-    public PaysheetComponentType[] getPaysheetComponentTypes() {
-        List<PaysheetComponentType> list = new ArrayList<>();
-
-        for (PaysheetComponentType pct : PaysheetComponentType.addition.children()) {
-            list.add(pct);
-        }
-
-        for (PaysheetComponentType pct : PaysheetComponentType.subtraction.children()) {
-            list.add(pct);
-        }
-
-        return list.toArray(new PaysheetComponentType[list.size()]);
-    }
-
-    public List<PaysheetComponentType> getPaysheetComponentTypesUserDefinded() {
-        return PaysheetComponentType.addition.getUserDefinedComponents();
-    }
-
-    public List<PaysheetComponentType> getPaysheetComponentTypesSystemDefinded() {
-        return PaysheetComponentType.addition.getSystemDefinedComponents();
-    }
+  
 
     public Title[] getTitle() {
         return Title.values();
@@ -220,67 +149,7 @@ public class EnumController implements Serializable {
         return tmp;
     }
 
-    public InwardChargeType[] getInwardChargeTypes() {
-        return InwardChargeType.values();
-    }
-
-    public InwardChargeType[] getInwardChargeTypesForSetting() {
-        InwardChargeType[] b = {
-            InwardChargeType.AdmissionFee,
-            InwardChargeType.Medicine,
-            InwardChargeType.BloodTransfusioncharges,
-            InwardChargeType.Immunization,
-            InwardChargeType.Equipment,
-            InwardChargeType.MealCharges,
-            InwardChargeType.OperationTheatreCharges,
-            InwardChargeType.OperationTheatreNursingCharges,
-            InwardChargeType.OperationTheatreMachineryCharges,
-            InwardChargeType.LarbourRoomCharges,
-            InwardChargeType.ETUCharges,
-            InwardChargeType.TreatmentCharges,
-            InwardChargeType.IntensiveCareManagement,
-            InwardChargeType.AmbulanceCharges,
-            InwardChargeType.HomeVisiting,
-            InwardChargeType.GeneralIssuing,
-            InwardChargeType.WardProcedures,
-            InwardChargeType.ReimbursementCharges,
-            InwardChargeType.DressingCharges,
-            InwardChargeType.OxygenCharges,
-            InwardChargeType.physiotherapy,
-            InwardChargeType.Laboratory,
-            InwardChargeType.X_Ray,
-            InwardChargeType.CT,
-            InwardChargeType.Scanning,
-            InwardChargeType.ECG_EEG,
-            InwardChargeType.MedicalServices,
-            InwardChargeType.AdministrationCharge,
-            InwardChargeType.LinenCharges,
-            InwardChargeType.MaintainCharges,
-            InwardChargeType.MedicalCareICU,
-            InwardChargeType.MOCharges,
-            InwardChargeType.NursingCharges,
-            InwardChargeType.RoomCharges,
-            InwardChargeType.CardiacMonitoring,
-            InwardChargeType.Nebulisation,
-            InwardChargeType.Echo,
-            InwardChargeType.SyringePump,
-            InwardChargeType.TheaterConsumbale,
-            InwardChargeType.ExerciseECG,
-            InwardChargeType.TheaterConsumbale,
-            InwardChargeType.VAT,
-            InwardChargeType.EyeLence,
-            InwardChargeType.AccessoryCharges,
-            InwardChargeType.HospitalSupportService,
-            InwardChargeType.ExtraMedicine,
-            InwardChargeType.DialysisTreatment,
-            InwardChargeType.OtherCharges};
-
-        return b;
-    }
-
-    public PatientEncounterComponentType[] getPatientEncounterComponentTypes() {
-        return PatientEncounterComponentType.values();
-    }
+  
 
     public BillType[] getCashFlowBillTypes() {
         BillType[] b = {
@@ -504,9 +373,7 @@ public class EnumController implements Serializable {
 
     }
 
-    public AdmissionTypeEnum[] getAdmissionTypeEnum() {
-        return AdmissionTypeEnum.values();
-    }
+ 
 
     public MessageType[] getSmsType() {
         return MessageType.values();

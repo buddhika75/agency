@@ -8,12 +8,9 @@ package com.divudi.bean.pharmacy;
 import com.divudi.bean.common.BillBeanController;
 import com.divudi.bean.common.CommonController;
 import com.divudi.bean.common.CommonFunctionsController;
-import com.divudi.bean.common.PriceMatrixController;
 import com.divudi.bean.common.SearchController;
 import com.divudi.bean.common.SessionController;
 import com.divudi.bean.common.UtilityController;
-import com.divudi.bean.membership.MembershipSchemeController;
-import com.divudi.bean.membership.PaymentSchemeController;
 import com.divudi.data.BillClassType;
 import com.divudi.data.BillNumberSuffix;
 import com.divudi.data.BillType;
@@ -22,7 +19,6 @@ import com.divudi.data.Sex;
 import com.divudi.data.Title;
 import com.divudi.data.dataStructure.PaymentMethodData;
 import com.divudi.data.dataStructure.YearMonthDay;
-import com.divudi.data.inward.InwardChargeType;
 import com.divudi.ejb.BillNumberGenerator;
 import com.divudi.ejb.CashTransactionBean;
 import com.divudi.ejb.PharmacyBean;
@@ -39,9 +35,7 @@ import com.divudi.entity.Payment;
 import com.divudi.entity.PaymentScheme;
 import com.divudi.entity.Person;
 import com.divudi.entity.PreBill;
-import com.divudi.entity.PriceMatrix;
 import com.divudi.entity.Staff;
-import com.divudi.entity.membership.MembershipScheme;
 import com.divudi.entity.pharmacy.Amp;
 import com.divudi.entity.pharmacy.PharmaceuticalBillItem;
 import com.divudi.entity.pharmacy.Stock;
@@ -93,9 +87,6 @@ public class PharmacySaleController implements Serializable {
      */
     public PharmacySaleController() {
     }
-
-    @Inject
-    PaymentSchemeController PaymentSchemeController;
 
     @Inject
     SessionController sessionController;
@@ -814,7 +805,6 @@ public class PharmacySaleController implements Serializable {
         billItem.getPharmaceuticalBillItem().setItemBatch(getStock().getItemBatch());
         calculateBillItem();
         ////System.out.println("Rate*****" + billItem.getRate());
-        billItem.setInwardChargeType(InwardChargeType.Medicine);
 
         billItem.setItem(getStock().getItemBatch().getItem());
         billItem.setBill(getPreBill());
@@ -973,8 +963,6 @@ public class PharmacySaleController implements Serializable {
 //        return false;
 //
 //    }
-    @Inject
-    PaymentSchemeController paymentSchemeController;
     PaymentMethod paymentMethod;
 
     public PaymentMethod getPaymentMethod() {
@@ -987,9 +975,6 @@ public class PharmacySaleController implements Serializable {
 
     private boolean errorCheckForSaleBill() {
 
-        if (getPaymentSchemeController().errorCheckPaymentMethod(getPaymentMethod(), paymentMethodData)) {
-            return true;
-        }
 
 //        if (getPaymentScheme().getPaymentMethod() == PaymentMethod.Cash) {
 //            if (cashPaid == 0.0) {
@@ -1013,7 +998,6 @@ public class PharmacySaleController implements Serializable {
         getPreBill().setCreater(getSessionController().getLoggedUser());
 
         getPreBill().setPatient(pt);
-        getPreBill().setMembershipScheme(membershipSchemeController.fetchPatientMembershipScheme(pt, getSessionController().getApplicationPreference().isMembershipExpires()));
         getPreBill().setToStaff(toStaff);
         getPreBill().setToInstitution(toInstitution);
 
@@ -1085,7 +1069,6 @@ public class PharmacySaleController implements Serializable {
 //                continue;
             }
 
-            tbi.setInwardChargeType(InwardChargeType.Medicine);
             tbi.setBill(getPreBill());
 
             tbi.setCreatedAt(Calendar.getInstance().getTime());
@@ -1151,7 +1134,6 @@ public class PharmacySaleController implements Serializable {
             newBil.copy(tbi);
             newBil.setReferanceBillItem(tbi);
             newBil.setBill(getSaleBill());
-            newBil.setInwardChargeType(InwardChargeType.Medicine);
             //      newBil.setBill(getSaleBill());
             newBil.setCreatedAt(Calendar.getInstance().getTime());
             newBil.setCreater(getSessionController().getLoggedUser());
@@ -1188,7 +1170,6 @@ public class PharmacySaleController implements Serializable {
             newBil.copy(tbi);
             newBil.setReferanceBillItem(tbi);
             newBil.setBill(getSaleBill());
-            newBil.setInwardChargeType(InwardChargeType.Medicine);
             //      newBil.setBill(getSaleBill());
             newBil.setCreatedAt(Calendar.getInstance().getTime());
             newBil.setCreater(getSessionController().getLoggedUser());
@@ -1554,7 +1535,6 @@ public class PharmacySaleController implements Serializable {
         }
 //        getBillItem();
         billItem.setRate(billItem.getPharmaceuticalBillItem().getStock().getItemBatch().getRetailsaleRate());
-        billItem.setInwardChargeType(InwardChargeType.Medicine);
         billItem.setItem(getStock().getItemBatch().getItem());
         //pharmaceutical Bill Item
         billItem.getPharmaceuticalBillItem().setDoe(getStock().getItemBatch().getDateOfExpire());
@@ -1589,18 +1569,7 @@ public class PharmacySaleController implements Serializable {
         bi.setNetRate(bi.getRate() - bi.getDiscountRate());
     }
 
-    @Inject
-    PriceMatrixController priceMatrixController;
-    @Inject
-    MembershipSchemeController membershipSchemeController;
 
-    public PriceMatrixController getPriceMatrixController() {
-        return priceMatrixController;
-    }
-
-    public void setPriceMatrixController(PriceMatrixController priceMatrixController) {
-        this.priceMatrixController = priceMatrixController;
-    }
 
 //    TO check the functionality
     public double calculateBillItemDiscountRate(BillItem bi) {
@@ -1629,55 +1598,13 @@ public class PharmacySaleController implements Serializable {
         double tdp = 0;
         boolean discountAllowed = bi.getItem().isDiscountAllowed();
 
-        MembershipScheme membershipScheme = membershipSchemeController.fetchPatientMembershipScheme(getSearchedPatient(), getSessionController().getApplicationPreference().isMembershipExpires());
 
         
         //MEMBERSHIPSCHEME DISCOUNT
-        if (membershipScheme != null && discountAllowed) {
-            PaymentMethod tpm = getPaymentMethod();
-            if(tpm==null){
-                tpm = PaymentMethod.Cash;
-            }
-            PriceMatrix priceMatrix = getPriceMatrixController().getPharmacyMemberDisCount(tpm, membershipScheme, getSessionController().getDepartment(), bi.getItem().getCategory());
-            if (priceMatrix == null) {
-                return 0;
-            } else {
-                bi.setPriceMatrix(priceMatrix);
-                return (tr * priceMatrix.getDiscountPercent()) / 100;
-            }
-        }
+       
 
         //PAYMENTSCHEME DISCOUNT
-        if (getPaymentScheme() != null && discountAllowed) {
-            PriceMatrix priceMatrix = getPriceMatrixController().getPaymentSchemeDiscount(getPaymentMethod(), getPaymentScheme(), getSessionController().getDepartment(), bi.getItem());
-
-            //  //System.err.println("tr = " + tr);
-            if (priceMatrix != null) {
-                bi.setPriceMatrix(priceMatrix);
-                tdp = priceMatrix.getDiscountPercent();
-            }
-
-            double dr;
-            dr = (tr * tdp) / 100;
-            return dr;
-
-        }
-
-        //PAYMENTMETHOD DISCOUNT
-        if (getPaymentMethod() != null && discountAllowed) {
-            PriceMatrix priceMatrix = getPriceMatrixController().getPaymentSchemeDiscount(getPaymentMethod(), getSessionController().getDepartment(), bi.getItem());
-
-            if (priceMatrix != null) {
-                bi.setPriceMatrix(priceMatrix);
-                tdp = priceMatrix.getDiscountPercent();
-            }
-
-            double dr;
-            dr = (tr * tdp) / 100;
-
-            return dr;
-
-        }
+        
 
         //CREDIT COMPANY DISCOUNT
         if (getPaymentMethod() == PaymentMethod.Credit && toInstitution != null) {
@@ -1698,7 +1625,6 @@ public class PharmacySaleController implements Serializable {
         bf.setCreatedAt(Calendar.getInstance().getTime());
         bf.setCreater(getSessionController().getLoggedUser());
         bf.setBillItem(bi);
-        bf.setPatienEncounter(bi.getBill().getPatientEncounter());
         bf.setPatient(bi.getBill().getPatient());
         bf.setFeeValue(bi.getNetValue());
         bf.setFeeGrossValue(bi.getGrossValue());
@@ -2014,13 +1940,7 @@ public class PharmacySaleController implements Serializable {
         this.printBill = printBill;
     }
 
-    public PaymentSchemeController getPaymentSchemeController() {
-        return PaymentSchemeController;
-    }
 
-    public void setPaymentSchemeController(PaymentSchemeController PaymentSchemeController) {
-        this.PaymentSchemeController = PaymentSchemeController;
-    }
 
     public PaymentScheme getPaymentScheme() {
         //  //System.err.println("GEtting Paymen");

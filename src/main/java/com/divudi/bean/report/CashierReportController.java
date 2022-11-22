@@ -14,7 +14,7 @@ import com.divudi.data.dataStructure.BillsTotals;
 import com.divudi.data.dataStructure.CashierSummeryData;
 import com.divudi.data.dataStructure.WebUserBillsTotal;
 import com.divudi.data.table.String1Value1;
-import com.divudi.data.table.String1Value5;
+
 import com.divudi.ejb.CommonFunctions;
 import com.divudi.entity.Bill;
 import com.divudi.entity.BilledBill;
@@ -107,9 +107,7 @@ public class CashierReportController implements Serializable {
             CashierSummeryData temp = new CashierSummeryData();
             temp.setCasheir(w);
             findSummeryOwn(temp, w);
-            setDataTable(temp);
             cashierDatas.add(temp);
-
         }
 
         return cashierDatas;
@@ -1307,140 +1305,6 @@ public class CashierReportController implements Serializable {
 
     }
 
-    private void setDataTable(CashierSummeryData c) {
-        List<String1Value5> dataTable5Values = new ArrayList<>();
-
-        if (c.getBilledCash() != 0 || c.getBilledCheque() != 0 || c.getBilledCredit() != 0
-                || c.getBilledCreditCard() != 0 || c.getBilledSlip() != 0) {
-            String1Value5 tmp = new String1Value5();
-            tmp.setString("Billed");
-            tmp.setValue1(c.getBilledCash());
-            tmp.setValue2(c.getBilledCredit());
-            tmp.setValue3(c.getBilledCreditCard());
-            tmp.setValue4(c.getBilledCheque());
-            tmp.setValue5(c.getBilledSlip());
-            dataTable5Values.add(tmp);
-        }
-
-        if (c.getCancelledCash() != 0 || c.getCancelledCheque() != 0 || c.getCancelledCredit() != 0
-                || c.getCancelledCreditCard() != 0 || c.getCancelledSlip() != 0) {
-            String1Value5 tmp = new String1Value5();
-            tmp.setString("Cancelled");
-            tmp.setValue1(c.getCancelledCash());
-            tmp.setValue2(c.getCancelledCredit());
-            tmp.setValue3(c.getCancelledCreditCard());
-            tmp.setValue4(c.getCancelledCheque());
-            tmp.setValue5(c.getCancelledSlip());
-            dataTable5Values.add(tmp);
-        }
-
-        if (c.getRefundCheque() != 0 || c.getRefundSlip() != 0 || c.getRefundedCash() != 0
-                || c.getRefundedCredit() != 0 || c.getRefundedCreditCard() != 0) {
-            String1Value5 tmp = new String1Value5();
-            tmp.setString("Refunded");
-            tmp.setValue1(c.getRefundedCash());
-            tmp.setValue2(c.getRefundedCredit());
-            tmp.setValue3(c.getRefundedCreditCard());
-            tmp.setValue4(c.getRefundCheque());
-            tmp.setValue5(c.getRefundSlip());
-            dataTable5Values.add(tmp);
-        }
-
-        if (c.getPaymentCash() != 0) {
-            String1Value5 tmp = new String1Value5();
-            tmp.setString("Payment");
-            tmp.setValue1(c.getPaymentCash());
-            dataTable5Values.add(tmp);
-        }
-
-        if (c.getPaymentCashCancel() != 0) {
-            String1Value5 tmp = new String1Value5();
-            tmp.setString("Payment Cancel");
-            tmp.setValue1(c.getPaymentCashCancel());
-            dataTable5Values.add(tmp);
-        }
-
-        if (c.getPettyCash() != 0 || c.getPettyCheque() != 0) {
-            String1Value5 tmp = new String1Value5();
-            tmp.setString("Petty Cash");
-            tmp.setValue1(c.getPettyCash());
-            tmp.setValue4(c.getPettyCheque());
-            dataTable5Values.add(tmp);
-        }
-
-        if (c.getPettyCancelCash() != 0 || c.getPettyCancelCheque() != 0) {
-            String1Value5 tmp = new String1Value5();
-            tmp.setString("Petty Cash Cancel");
-            tmp.setValue1(c.getPettyCancelCash());
-            tmp.setValue4(c.getPettyCancelCheque());
-            dataTable5Values.add(tmp);
-        }
-
-        if (c.getCompanyCash() != 0 || c.getCompanyCheque() != 0 || c.getCompanySlip() != 0) {
-            String1Value5 tmp = new String1Value5();
-            tmp.setString("Credit Company Payment");
-            tmp.setValue1(c.getCompanyCash());
-            tmp.setValue4(c.getCompanyCheque());
-            tmp.setValue5(c.getCompanySlip());
-            dataTable5Values.add(tmp);
-        }
-
-        if (c.getCompanyCancelCash() != 0 || c.getCompanyCancelCheque() != 0 || c.getCompanyCancelSlip() != 0) {
-            String1Value5 tmp = new String1Value5();
-            tmp.setString("Credit Company Payment Cancel");
-            tmp.setValue1(c.getCompanyCancelCash());
-            tmp.setValue4(c.getCompanyCancelCheque());
-            tmp.setValue5(c.getCompanyCancelSlip());
-            dataTable5Values.add(tmp);
-        }
-
-        if (c.getAgentCash() != 0 || c.getAgentCheque() != 0 || c.getAgentSlip() != 0) {
-            String1Value5 tmp = new String1Value5();
-            tmp.setString("Agent Payment");
-            tmp.setValue1(c.getAgentCash());
-            tmp.setValue4(c.getAgentCheque());
-            tmp.setValue5(c.getAgentSlip());
-            dataTable5Values.add(tmp);
-        }
-
-        if (c.getAgentCancelCash() != 0 || c.getAgentCancelCheque() != 0 || c.getAgentCancelSlip() != 0) {
-            String1Value5 tmp = new String1Value5();
-            tmp.setString("Agent Payment Cancel");
-            tmp.setValue1(c.getAgentCancelCash());
-            tmp.setValue4(c.getAgentCancelCheque());
-            tmp.setValue5(c.getAgentCancelSlip());
-            dataTable5Values.add(tmp);
-        }
-
-        if (c.getInwardPaymentCash() != 0 || c.getInwardPaymentCheque() != 0 || c.getInwardPaymentSlip() != 0) {
-            String1Value5 tmp = new String1Value5();
-            tmp.setString("Inward Payment");
-            tmp.setValue1(c.getInwardPaymentCash());
-            tmp.setValue4(c.getInwardPaymentCheque());
-            tmp.setValue5(c.getInwardPaymentSlip());
-            dataTable5Values.add(tmp);
-        }
-
-        if (c.getInwardCancelCash() != 0 || c.getInwardCancelCheque() != 0 || c.getInwardCancelSlip() != 0) {
-            String1Value5 tmp = new String1Value5();
-            tmp.setString("Inward Payment Cancel");
-            tmp.setValue1(c.getInwardCancelCash());
-            tmp.setValue4(c.getInwardCancelCheque());
-            tmp.setValue5(c.getInwardCancelSlip());
-            dataTable5Values.add(tmp);
-        }
-
-        String1Value5 tmp = new String1Value5();
-        tmp.setString("Net Total");
-        tmp.setValue1(c.getNetCash());
-        tmp.setValue2(c.getNetCredit());
-        tmp.setValue3(c.getNetCreditCard());
-        tmp.setValue4(c.getNetCheque());
-        tmp.setValue5(c.getNetSlip());
-        dataTable5Values.add(tmp);
-
-        c.setDataTable5Value(dataTable5Values);
-    }
     private double finalSlipTot = 0.0;
 
     public double getFinalChequeTot() {
@@ -1701,7 +1565,6 @@ public class CashierReportController implements Serializable {
             CashierSummeryData temp = new CashierSummeryData();
             temp.setCasheir(w);
             findSummery(temp, w);
-            setDataTable(temp);
             cashierDatas.add(temp);
 
         }

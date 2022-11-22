@@ -10,7 +10,6 @@ import com.divudi.bean.common.SearchController;
 import com.divudi.bean.common.SessionController;
 import com.divudi.bean.common.UtilityController;
 import com.divudi.bean.common.util.JsfUtil;
-import com.divudi.bean.membership.PaymentSchemeController;
 import com.divudi.data.BillClassType;
 import com.divudi.data.BillType;
 import com.divudi.data.PaymentMethod;
@@ -18,7 +17,6 @@ import com.divudi.data.Sex;
 import com.divudi.data.Title;
 import com.divudi.data.dataStructure.PaymentMethodData;
 import com.divudi.data.dataStructure.YearMonthDay;
-import com.divudi.data.inward.InwardChargeType;
 import com.divudi.ejb.BillNumberGenerator;
 import com.divudi.ejb.CashTransactionBean;
 import com.divudi.ejb.PharmacyBean;
@@ -272,28 +270,12 @@ public class PharmacyPreSettleController implements Serializable {
         this.billItems = billItems;
     }
 
-    @Inject
-    private PaymentSchemeController paymentSchemeController;
 
     @SuppressWarnings("empty-statement")
     private boolean errorCheckForSaleBill() {
-
         if (getPreBill().getPaymentMethod() == null) {
             return true;
         }
-
-        if (getPaymentSchemeController().errorCheckPaymentMethod(getPreBill().getPaymentMethod(), paymentMethodData));
-
-//        if (getPreBill().getPaymentScheme().getPaymentMethod() == PaymentMethod.Cash) {
-//            if (cashPaid == 0.0) {
-//                UtilityController.addErrorMessage("Please select tendered amount correctly");
-//                return true;
-//            }
-//            if (cashPaid < getNetTotal()) {
-//                UtilityController.addErrorMessage("Please select tendered amount correctly");
-//                return true;
-//            }
-//        }
         return false;
     }
 
@@ -381,8 +363,6 @@ public class PharmacyPreSettleController implements Serializable {
             BillItem newBil = new BillItem();
             newBil.copy(tbi);
             newBil.setBill(getSaleBill());
-            newBil.setInwardChargeType(InwardChargeType.Medicine);
-            //      newBil.setBill(getSaleBill());
             newBil.setCreatedAt(Calendar.getInstance().getTime());
             newBil.setCreater(getSessionController().getLoggedUser());
 
@@ -413,8 +393,6 @@ public class PharmacyPreSettleController implements Serializable {
             BillItem newBil = new BillItem();
             newBil.copy(tbi);
             newBil.setBill(getSaleBill());
-            newBil.setInwardChargeType(InwardChargeType.Medicine);
-            //      newBil.setBill(getSaleBill());
             newBil.setCreatedAt(Calendar.getInstance().getTime());
             newBil.setCreater(getSessionController().getLoggedUser());
 
@@ -549,7 +527,6 @@ public class PharmacyPreSettleController implements Serializable {
         bf.setCreatedAt(Calendar.getInstance().getTime());
         bf.setCreater(getSessionController().getLoggedUser());
         bf.setBillItem(bi);
-        bf.setPatienEncounter(bi.getBill().getPatientEncounter());
         bf.setPatient(bi.getBill().getPatient());
         bf.setFeeValue(bi.getNetValue());
         bf.setFeeGrossValue(bi.getGrossValue());
@@ -926,14 +903,6 @@ public class PharmacyPreSettleController implements Serializable {
 
     public void setBillBean(BillBeanController billBean) {
         this.billBean = billBean;
-    }
-
-    public PaymentSchemeController getPaymentSchemeController() {
-        return paymentSchemeController;
-    }
-
-    public void setPaymentSchemeController(PaymentSchemeController paymentSchemeController) {
-        this.paymentSchemeController = paymentSchemeController;
     }
 
     public PaymentFacade getPaymentFacade() {

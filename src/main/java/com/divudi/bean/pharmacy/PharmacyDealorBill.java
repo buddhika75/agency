@@ -10,7 +10,6 @@ import com.divudi.bean.common.BillController;
 import com.divudi.bean.common.CommonController;
 import com.divudi.bean.common.SessionController;
 import com.divudi.bean.common.UtilityController;
-import com.divudi.bean.membership.PaymentSchemeController;
 import com.divudi.data.BillClassType;
 import com.divudi.data.BillNumberSuffix;
 import com.divudi.data.BillType;
@@ -249,8 +248,6 @@ public class PharmacyDealorBill implements Serializable {
 
     }
 
-    @Inject
-    private PaymentSchemeController paymentSchemeController;
 
     private boolean errorCheck() {
         if (getBillItems().isEmpty()) {
@@ -264,10 +261,6 @@ public class PharmacyDealorBill implements Serializable {
         }
 
         if (getCurrent().getPaymentMethod() == null) {
-            return true;
-        }
-
-        if (getPaymentSchemeController().errorCheckPaymentMethod(getCurrent().getPaymentMethod(), getPaymentMethodData())) {
             return true;
         }
 
@@ -455,7 +448,6 @@ public class PharmacyDealorBill implements Serializable {
         bf.setCreatedAt(Calendar.getInstance().getTime());
         bf.setCreater(getSessionController().getLoggedUser());
         bf.setBillItem(bi);
-        bf.setPatienEncounter(bi.getBill().getPatientEncounter());
         bf.setPatient(bi.getBill().getPatient());
         bf.setFeeValue(bi.getNetValue());
         bf.setFeeGrossValue(bi.getGrossValue());
@@ -610,14 +602,6 @@ public class PharmacyDealorBill implements Serializable {
 
     public void setPaymentMethodData(PaymentMethodData paymentMethodData) {
         this.paymentMethodData = paymentMethodData;
-    }
-
-    public PaymentSchemeController getPaymentSchemeController() {
-        return paymentSchemeController;
-    }
-
-    public void setPaymentSchemeController(PaymentSchemeController paymentSchemeController) {
-        this.paymentSchemeController = paymentSchemeController;
     }
 
     public BillBeanController getBillBean() {

@@ -4,7 +4,7 @@
  */
 package com.divudi.bean.common;
 
-import com.divudi.bean.hr.StaffController;
+
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.context.FacesContext;
@@ -34,20 +34,12 @@ public class ImageBean {
         } else {
             // So, browser is requesting the image. Get ID value from actual request param.
             String id = context.getExternalContext().getRequestParameterMap().get("id");
-            return getStaffController().getSignature();
+            return null;
         }
     }
 
     public ImageBean() {
     }
-    @Inject
-    StaffController staffController;
+   
 
-    public StaffController getStaffController() {
-        return staffController;
-    }
-
-    public void setStaffController(StaffController staffController) {
-        this.staffController = staffController;
-    }
 }

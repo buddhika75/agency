@@ -8,9 +8,7 @@ import com.divudi.data.BillClassType;
 import com.divudi.data.BillType;
 import com.divudi.data.IdentifiableWithNameOrCode;
 import com.divudi.data.PaymentMethod;
-import com.divudi.data.inward.SurgeryBillType;
 import com.divudi.entity.cashTransaction.CashTransaction;
-import com.divudi.entity.membership.MembershipScheme;
 import com.divudi.entity.pharmacy.StockVarientBillItem;
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -28,8 +26,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
@@ -41,14 +37,8 @@ import javax.persistence.Transient;
  * @author buddhika
  */
 @Entity
-@NamedQueries({
-    @NamedQuery(name = "Bill.findAll", query = "SELECT b FROM Bill b")
-    ,
-    @NamedQuery(name = "Bill.findById", query = "SELECT b FROM Bill b WHERE b.id = :id")})
 public class Bill implements Serializable {
 
-    @ManyToOne
-    MembershipScheme membershipScheme;
     @OneToOne
     private CashTransaction cashTransaction;
     @OneToMany(mappedBy = "bill", fetch = FetchType.LAZY)
@@ -125,8 +115,6 @@ public class Bill implements Serializable {
     PaymentMethod paymentMethod;
     @ManyToOne
     BillItem singleBillItem;
-    @ManyToOne
-    BillSession singleBillSession;
     String qutationNumber;
     @ManyToOne
     Institution referredByInstitution;
@@ -141,7 +129,7 @@ public class Bill implements Serializable {
     double discount;
     double vat;
     double vatPlusNetTotal;
-    
+
     @Transient
     private double absoluteNetTotal;
 
@@ -259,10 +247,6 @@ public class Bill implements Serializable {
     Patient patient;
     @ManyToOne
     Doctor referredBy;
-    @ManyToOne
-    PatientEncounter patientEncounter;
-    @ManyToOne
-    private PatientEncounter procedure;
     @Transient
     List<Bill> listOfBill;
 
@@ -280,8 +264,6 @@ public class Bill implements Serializable {
     private double tmpReturnTotal;
     @Transient
     private boolean transBoolean;
-    @Enumerated(EnumType.STRING)
-    private SurgeryBillType surgeryBillType;
     @ManyToOne
     private WebUser toWebUser;
     @ManyToOne
@@ -356,14 +338,6 @@ public class Bill implements Serializable {
         this.qty = 0 - qty;
     }
 
-    public MembershipScheme getMembershipScheme() {
-        return membershipScheme;
-    }
-
-    public void setMembershipScheme(MembershipScheme membershipScheme) {
-        this.membershipScheme = membershipScheme;
-    }
-
     public double getBillTotal() {
         return billTotal;
     }
@@ -410,8 +384,6 @@ public class Bill implements Serializable {
         return claimableTotal;
     }
 
-    
-    
     public void setAdjustedTotal(double dbl) {
         claimableTotal = dbl;
     }
@@ -488,7 +460,6 @@ public class Bill implements Serializable {
 
     public void copy(Bill bill) {
         billType = bill.getBillType();
-        membershipScheme = bill.getMembershipScheme();
         collectingCentre = bill.getCollectingCentre();
         catId = bill.getCatId();
         creditCompany = bill.getCreditCompany();
@@ -501,10 +472,8 @@ public class Bill implements Serializable {
         fromInstitution = bill.getFromInstitution();
         discountPercent = bill.getDiscountPercent();
         patient = bill.getPatient();
-        patientEncounter = bill.getPatientEncounter();
         referredBy = bill.getReferredBy();
         referringDepartment = bill.getReferringDepartment();
-        surgeryBillType = bill.getSurgeryBillType();
         comments = bill.getComments();
         paymentMethod = bill.getPaymentMethod();
         paymentScheme = bill.getPaymentScheme();
@@ -603,14 +572,6 @@ public class Bill implements Serializable {
     }
 
     public double getDiscountPercentPharmacy() {
-        ////System.out.println("getting discount percent");
-//        ////System.out.println("bill item"+getBillItems());
-//        ////System.out.println(getBillItems().get(0).getPriceMatrix());
-        if (!getBillItems().isEmpty() && getBillItems().get(0).getPriceMatrix() != null) {
-            ////System.out.println("sys inside");
-            discountPercent = getBillItems().get(0).getPriceMatrix().getDiscountPercent();
-        }
-
         return discountPercent;
     }
 
@@ -859,14 +820,6 @@ public class Bill implements Serializable {
         this.paymentSchemeInstitution = paymentSchemeInstitution;
     }
 
-    public PatientEncounter getPatientEncounter() {
-        return patientEncounter;
-    }
-
-    public void setPatientEncounter(PatientEncounter patientEncounter) {
-        this.patientEncounter = patientEncounter;
-    }
-
     public Long getId() {
         return id;
     }
@@ -954,9 +907,6 @@ public class Bill implements Serializable {
     }
 
     public Patient getPatient() {
-        if (patientEncounter != null) {
-            patient = patientEncounter.getPatient();
-        }
         return patient;
     }
 
@@ -1372,22 +1322,6 @@ public class Bill implements Serializable {
         this.transActiveBillItem = transActiveBillItem;
     }
 
-    public PatientEncounter getProcedure() {
-        return procedure;
-    }
-
-    public void setProcedure(PatientEncounter procedure) {
-        this.procedure = procedure;
-    }
-
-    public SurgeryBillType getSurgeryBillType() {
-        return surgeryBillType;
-    }
-
-    public void setSurgeryBillType(SurgeryBillType surgeryBillType) {
-        this.surgeryBillType = surgeryBillType;
-    }
-
     public List<Bill> getReturnPreBills() {
         List<Bill> bills = new ArrayList<>();
 
@@ -1589,14 +1523,6 @@ public class Bill implements Serializable {
 
     public void setReferenceInstitution(Institution referenceInstitution) {
         this.referenceInstitution = referenceInstitution;
-    }
-
-    public BillSession getSingleBillSession() {
-        return singleBillSession;
-    }
-
-    public void setSingleBillSession(BillSession singleBillSession) {
-        this.singleBillSession = singleBillSession;
     }
 
     public Date getAppointmentAt() {
