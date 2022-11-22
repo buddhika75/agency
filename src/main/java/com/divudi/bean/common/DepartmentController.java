@@ -30,8 +30,8 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Dr. M. H. B. Ariyaratne, MBBS, MSc, MD(Health Informatics)
- * Acting Consultant (Health Informatics)
+ * @author Dr. M. H. B. Ariyaratne, MBBS, MSc, MD(Health Informatics) Acting
+ * Consultant (Health Informatics)
  */
 @Named
 @SessionScoped
@@ -106,7 +106,6 @@ public class DepartmentController implements Serializable {
         return items;
     }
 
-
     public List<Department> listAllDepatrments() {
         List<Department> departments;
         String sql = "Select d From Department d "
@@ -164,6 +163,7 @@ public class DepartmentController implements Serializable {
     }
 
     public DepartmentType[] getDepartmentType() {
+        DepartmentType[] dts = {DepartmentType.Company, DepartmentType.Manufacturer, DepartmentType.Distributor, DepartmentType.Bank, DepartmentType.Customer};
         return DepartmentType.values();
     }
 
@@ -173,11 +173,11 @@ public class DepartmentController implements Serializable {
     }
 
     public List<Department> getPharmacies() {
-        return getDepartments(DepartmentType.Pharmacy, getSessionController().getLoggedUser().getInstitution());
+        return getDepartments(DepartmentType.Distributor, getSessionController().getLoggedUser().getInstitution());
     }
 
     public List<Department> getLabs() {
-        return getDepartments(DepartmentType.Lab, null);
+        return getDepartments(DepartmentType.Manufacturer, null);
     }
 
     public List<Department> getDepartments(DepartmentType dt, Institution i) {
@@ -224,7 +224,7 @@ public class DepartmentController implements Serializable {
                 + " and c.departmentType=:dt"
                 + " order by c.name";
 
-        hm.put("dt", DepartmentType.Pharmacy);
+        hm.put("dt", DepartmentType.Distributor);
         hm.put("ins", getSessionController().getInstitution());
         hm.put("q", "%" + qry.toUpperCase() + "%");
 

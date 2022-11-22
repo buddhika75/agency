@@ -111,6 +111,8 @@ public class WebUserController implements Serializable {
     private WebUserDashboard webUserDashboard;
     private List<WebUserDashboard> webUserDashboards;
 
+    
+    
     public void removeSelectedItems() {
         for (WebUser s : itemsToRemove) {
             s.setRetired(true);

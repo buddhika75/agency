@@ -1306,7 +1306,7 @@ public class BillNumberGenerator {
         HashMap hm = new HashMap();
         String sql = "SELECT count(b) FROM Amp b where b.retired=false"
                 + " and b.departmentType=:dep ";
-        hm.put("dep", DepartmentType.Store);
+        hm.put("dep", DepartmentType.Company);
         String result;
         Long dd = getBillFacade().findAggregateLong(sql, hm, TemporalType.TIMESTAMP);
         dd = dd + 1;

@@ -29,80 +29,59 @@
                             </p:panelGrid>
 
 
-                            <p:tabView class="w-100" >
-                                <p:tab title="Basic" >
-                                    <p:panelGrid id="pg0" columns="2" style="text-align: left;" >
-                                        <p:outputLabel for="txtName" value="Name" rendered="#{!webUserController.createOnlyUserForExsistingUser}"></p:outputLabel>
-                                        <p:inputText id="txtName" class="w-100"
-                                                     autocomplete="off"
-                                                     required="true" rendered="#{!webUserController.createOnlyUserForExsistingUser}"
-                                                     value="#{webUserController.current.webUserPerson.name}"
-                                                     requiredMessage="Please enter a Name"></p:inputText>
-                                        <p:outputLabel for="acTitle" value="Title" rendered="#{!webUserController.createOnlyUserForExsistingUser}"></p:outputLabel>
-                                        <p:selectOneMenu 
-                                            id="acTitle"
-                                            required="false" rendered="#{!webUserController.createOnlyUserForExsistingUser}"
-                                            value="#{webUserController.current.webUserPerson.title}"
-                                            requiredMessage="Please enter a Title">
-                                            <f:selectItem itemLabel="Select Title" ></f:selectItem>
-                                            <f:selectItems value="#{enumController.titleDoctor}" ></f:selectItems>
-                                        </p:selectOneMenu>
-                                        <p:outputLabel for="txtAddress" value="Address"
-                                                       
-                                                       rendered="#{!webUserController.createOnlyUserForExsistingUser}"></p:outputLabel>
-                                        <p:inputText autocomplete="off" 
-                                                     id="txtAddress"
-                                                      class="w-100"
-                                                     required="true" rendered="#{!webUserController.createOnlyUserForExsistingUser}"
-                                                     value="#{webUserController.current.webUserPerson.address}"
-                                                     requiredMessage="Please enter an address."></p:inputText>
-                                        <p:outputLabel for="txtPhone" value="Mobile" rendered="#{!webUserController.createOnlyUserForExsistingUser}"></p:outputLabel>
-                                        <p:inputText id="txtPhone" required="true" rendered="#{!webUserController.createOnlyUserForExsistingUser}"
-                                                     value="#{webUserController.current.webUserPerson.mobile}"
-                                                     requiredMessage="Plase enter a phone number"></p:inputText>
-                                        <p:outputLabel value="Speciality" rendered="#{!webUserController.createOnlyUserForExsistingUser}" ></p:outputLabel>                                            
-                                        <autocomplete:completeSpeciality value="#{webUserController.speciality}" disable="#{webUserController.createOnlyUser}" rendered="#{!webUserController.createOnlyUserForExsistingUser}"/>
 
-                                        <p:outputLabel for="txtUsername" value="User Name"></p:outputLabel>
-                                        <p:inputText id="txtUsername"
-                                                     autocomplete="off" required="true" maxlength="50" 
-                                                     value="#{webUserController.current.name}" ></p:inputText>
+                            <p:panelGrid id="pg0" columns="2" style="text-align: left;" >
+                                <p:outputLabel for="txtName" value="Name" ></p:outputLabel>
+                                <p:inputText id="txtName" class="w-100"
+                                             autocomplete="off"
+                                             required="true" 
+                                             value="#{webUserController.current.webUserPerson.name}"
+                                             requiredMessage="Please enter a Name"></p:inputText>
 
-                                        <p:outputLabel for="pw1" value="Password" ></p:outputLabel>
-                                        <p:password id="pw1" validatorMessage="Passwords are NOT matching." match="pw2" feedback="true" required="true" maxlength="15" value="#{webUserController.current.webUserPassword}" />
-
-                                        <p:outputLabel value="Re-enter password" for="pw2"></p:outputLabel>
-                                        <p:password id="pw2" required="true" maxlength="15" value="#{webUserController.current.webUserPassword}" />
-                                    </p:panelGrid>
-                                </p:tab>
-                                <p:tab title="Advance" >
-                                    <p:panelGrid id="pg1" columns="2" style="text-align: left;" >
-                                        <p:outputLabel value="Add Only User" ></p:outputLabel>
-                                        <p:selectBooleanCheckbox value="#{webUserController.createOnlyUser}" >
-                                            <p:ajax process="@this" update="pg1" listener="#{webUserController.onlyAddStaffListner()}" />
-                                        </p:selectBooleanCheckbox>
-                                        <p:outputLabel value="Add User To Exsisting Staff" ></p:outputLabel>
-                                        <p:selectBooleanCheckbox value="#{webUserController.createOnlyUserForExsistingUser}" >
-                                            <p:ajax process="@this" update="pg1" listener="#{webUserController.onlyAddStaffForExsistingUserListner()}" />
-                                        </p:selectBooleanCheckbox>
-                                        <p:outputLabel value="Staff" rendered="#{webUserController.createOnlyUserForExsistingUser}" ></p:outputLabel>
-                                        <autocomplete:completeStaff value="#{webUserController.staff}" rendered="#{webUserController.createOnlyUserForExsistingUser}" />
+                                <p:outputLabel value="Re-enter password" for="role"></p:outputLabel>
+                                <p:selectOneMenu id="role" value="#{webUserController.current.role}"
+                                                 required="true"
+                                                 requiredMessage="Please select a role">
+                                    <f:selectItem itemLabel="select" ></f:selectItem>
+                                    <f:selectItems value="#{enumController.webUserRoles}" ></f:selectItems>
+                                </p:selectOneMenu>
 
 
-                                        <p:outputLabel value="Institution" rendered="#{!webUserController.createOnlyUserForExsistingUser}"></p:outputLabel>
-                                        <autocomplete:institution value="#{webUserController.institution}" rendered="#{!webUserController.createOnlyUserForExsistingUser}"></autocomplete:institution>
+                                <p:outputLabel for="txtAddress" value="Address"
 
-                                        <p:outputLabel value="Department" rendered="#{!webUserController.createOnlyUserForExsistingUser}"></p:outputLabel>
-                                        <autocomplete:department value="#{webUserController.department}" rendered="#{!webUserController.createOnlyUserForExsistingUser}"></autocomplete:department>
+                                               ></p:outputLabel>
+                                <p:inputTextarea  
+                                    id="txtAddress"
+                                    class="w-100"
+                                    required="true" 
+                                    value="#{webUserController.current.webUserPerson.address}"
+                                    requiredMessage="Please enter an address."></p:inputTextarea>
+                                <p:outputLabel for="txtPhone" value="Phone" ></p:outputLabel>
+                                <p:inputText id="txtPhone" required="true" 
+                                             value="#{webUserController.current.webUserPerson.mobile}"
+                                             requiredMessage="Plase enter a phone number"></p:inputText>
 
-                                        <h:outputLabel value="Code" rendered="#{!webUserController.createOnlyUserForExsistingUser}"></h:outputLabel>
-                                        <p:inputText autocomplete="off" value="#{webUserController.current.code}" maxlength="10" rendered="#{!webUserController.createOnlyUserForExsistingUser}" ></p:inputText>
+                                <p:outputLabel for="txtUsername" value="Username"></p:outputLabel>
+                                <p:inputText id="txtUsername"
+                                             autocomplete="off" required="true" maxlength="50" 
+                                             value="#{webUserController.current.name}" ></p:inputText>
+
+                                <p:outputLabel for="pw1" value="Password" ></p:outputLabel>
+                                <p:password id="pw1" validatorMessage="Passwords are NOT matching." match="pw2" feedback="true" required="true" maxlength="15" value="#{webUserController.current.webUserPassword}" />
+
+                                <p:outputLabel value="Re-enter password" for="pw2"></p:outputLabel>
+                                <p:password id="pw2" required="true" maxlength="15" value="#{webUserController.current.webUserPassword}" />
 
 
-                                    </p:panelGrid>
-                                </p:tab>
 
-                            </p:tabView>
+                                <p:outputLabel value="Institution" ></p:outputLabel>
+                                <autocomplete:institution value="#{webUserController.institution}" ></autocomplete:institution>
+
+                                <p:outputLabel value="Department" ></p:outputLabel>
+                                <autocomplete:department value="#{webUserController.department}" ></autocomplete:department>
+
+                            </p:panelGrid>
+
 
 
 

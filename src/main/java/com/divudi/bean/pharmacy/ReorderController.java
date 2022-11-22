@@ -566,7 +566,7 @@ public class ReorderController implements Serializable {
         if (false) {
             Stock s = new Stock();
             s.getDepartment();
-            s.getItemBatch().getItem().setDepartmentType(DepartmentType.Pharmacy);
+            s.getItemBatch().getItem().setDepartmentType(DepartmentType.Distributor);
         }
         sql = "select s.department from Stock s "
                 + " where s.stock > 0 "
@@ -582,7 +582,7 @@ public class ReorderController implements Serializable {
         }
         sql += " group by s.department";
 
-        m.put("dt", DepartmentType.Pharmacy);
+        m.put("dt", DepartmentType.Distributor);
         List<Department> depss = departmentController.getDepartments(sql, m);
 
         for (Department d : depst) {
@@ -670,10 +670,10 @@ public class ReorderController implements Serializable {
         List<Department> deps = null;
         switch (departmentListMethod) {
             case AllPharmaciesOfLoggedInstitution:
-                deps = departmentController.getInstitutionDepatrments(sessionController.getInstitution(), DepartmentType.Pharmacy);
+                deps = departmentController.getInstitutionDepatrments(sessionController.getInstitution(), DepartmentType.Distributor);
                 break;
             case AllPharmaciesOfAllInstitutions:
-                deps = departmentController.getInstitutionDepatrments(DepartmentType.Pharmacy);
+                deps = departmentController.getInstitutionDepatrments(DepartmentType.Distributor);
                 break;
             case ActiveDepartmentsOfAllInstitutions:
                 deps = getActiveDepartments(null, true);

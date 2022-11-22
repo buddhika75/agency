@@ -45,7 +45,7 @@ public class KitchenController implements Serializable {
 
     public void prepareAdd() {
         current = new Department();
-        current.setDepartmentType(DepartmentType.Kitchen);
+        current.setDepartmentType(DepartmentType.Bank);
     }
 
     // Need new Enum Department type
@@ -102,7 +102,7 @@ public class KitchenController implements Serializable {
     public Department getCurrent() {
         if (current == null) {
             current = new Department();
-            current.setDepartmentType(DepartmentType.Kitchen);
+            current.setDepartmentType(DepartmentType.Bank);
         }
         return current;
     }

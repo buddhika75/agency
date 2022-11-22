@@ -76,7 +76,7 @@ public class CreditCompanyController implements Serializable {
 
     public void prepareAdd() {
         current = new Institution();
-        current.setInstitutionType(InstitutionType.CreditCompany);
+        current.setInstitutionType(InstitutionType.Customer);
     }
 
     public void setSelectedItems(List<Institution> selectedItems) {
@@ -185,7 +185,7 @@ public class CreditCompanyController implements Serializable {
     public Institution getCurrent() {
         if (current == null) {
             current = new Institution();
-            current.setInstitutionType(InstitutionType.CreditCompany);
+            current.setInstitutionType(InstitutionType.Customer);
         }
         return current;
     }

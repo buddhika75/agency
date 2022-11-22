@@ -25,8 +25,8 @@ import javax.inject.Named;
 
 /**
  *
- * @author Dr. M. H. B. Ariyaratne, MBBS, MSc, MD(Health Informatics)
- * Acting Consultant (Health Informatics)
+ * @author Dr. M. H. B. Ariyaratne, MBBS, MSc, MD(Health Informatics) Acting
+ * Consultant (Health Informatics)
  */
 @Named
 @SessionScoped
@@ -86,7 +86,7 @@ public class InstitutionController implements Serializable {
     }
 
     public void fetchSelectedCollectingCentre() {
-        InstitutionType[] types = {InstitutionType.CollectingCentre};
+        InstitutionType[] types = {InstitutionType.Distributor};
         if (selectText.trim().equals("")) {
             collectingCentre = completeInstitution(null, types);
         } else {
@@ -129,7 +129,7 @@ public class InstitutionController implements Serializable {
 
     public List<Institution> getCollectingCentre() {
         if (collectingCentre == null) {
-            collectingCentre = completeInstitution(null, InstitutionType.CollectingCentre);
+            collectingCentre = completeInstitution(null, InstitutionType.Distributor);
         }
 
         return collectingCentre;
@@ -169,7 +169,7 @@ public class InstitutionController implements Serializable {
     }
 
     public List<Institution> completeCollectingCenter(String qry) {
-        return completeInstitution(qry, InstitutionType.CollectingCentre);
+        return completeInstitution(qry, InstitutionType.Distributor);
     }
 
     public List<Institution> completeAgency(String qry) {
@@ -185,7 +185,7 @@ public class InstitutionController implements Serializable {
     }
 
     public List<Institution> completeCreditCompany(String qry) {
-        return completeInstitution(qry, InstitutionType.CreditCompany);
+        return completeInstitution(qry, InstitutionType.Customer);
     }
 
     public List<Institution> completeSuppliers(String qry) {
@@ -194,7 +194,7 @@ public class InstitutionController implements Serializable {
 
     public List<Institution> getCreditCompanies() {
         if (creditCompanies == null) {
-            creditCompanies = completeInstitution(null, InstitutionType.CreditCompany);
+            creditCompanies = completeInstitution(null, InstitutionType.Customer);
         }
         return creditCompanies;
     }
@@ -215,7 +215,7 @@ public class InstitutionController implements Serializable {
 
 //    public List<Institution> getCollectingCenter() {
 //        if (banks == null) {
-//            banks = completeInstitution(null, InstitutionType.CollectingCentre);
+//            banks = completeInstitution(null, InstitutionType.Distributor);
 //        }
 //        return banks;
 //    }
@@ -524,8 +524,8 @@ public class InstitutionController implements Serializable {
         selectedAgencies = completeInstitution(null, types);
         for (Institution a : selectedAgencies) {
 //            //// // System.out.println("a.getInstitutionCode() = " + a.getInstitutionCode());
-            DecimalFormat df=new DecimalFormat("000");
-            double d=Double.parseDouble(a.getInstitutionCode());
+            DecimalFormat df = new DecimalFormat("000");
+            double d = Double.parseDouble(a.getInstitutionCode());
 //            //// // System.out.println("d = " + d);
             a.setInstitutionCode(df.format(d));
 //            //// // System.out.println("a.getInstitutionCode() = " + a.getInstitutionCode());
@@ -542,7 +542,8 @@ public class InstitutionController implements Serializable {
     }
 
     public InstitutionType[] getInstitutionTypes() {
-        return InstitutionType.values();
+        InstitutionType[] its = {InstitutionType.Company, InstitutionType.Manufacturer, InstitutionType.Distributor, InstitutionType.Customer, InstitutionType.Bank};
+        return its;
     }
 
     public List<Institution> getItemsToRemove() {

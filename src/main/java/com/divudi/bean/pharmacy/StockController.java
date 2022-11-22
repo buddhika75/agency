@@ -73,7 +73,7 @@ public class StockController implements Serializable {
 
     public void removeStoreItemsWithoutStocks() {
         Map m = new HashMap();
-        m.put("dt", DepartmentType.Store);
+        m.put("dt", DepartmentType.Company);
         String jpsql = "Select i from Item i where i.departmentType=:dt and i.retired=false ";
         List<Item> items = getItemFacade().findBySQL(jpsql, m);
     }

@@ -99,7 +99,7 @@ public class StockHistoryController implements Serializable {
         }
 
         if (departmentType != null) {
-            if (departmentType == DepartmentType.Pharmacy) {
+            if (departmentType == DepartmentType.Distributor) {
                 jpql += " and (s.item.departmentType is null or s.item.departmentType =:depty) ";
             } else {
                 jpql += " and s.item.departmentType=:depty ";

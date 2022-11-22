@@ -197,7 +197,7 @@ public class ItemController implements Serializable {
     List<Item> suggestions;
 
     public List<Item> completeMedicine(String query) {
-        DepartmentType[] dts = new DepartmentType[]{DepartmentType.Pharmacy, null};
+        DepartmentType[] dts = new DepartmentType[]{DepartmentType.Distributor, null};
         Class[] classes = new Class[]{Vmp.class, Amp.class, Vmp.class, Amp.class, Vmpp.class, Ampp.class};
         return completeItem(query, classes, dts, 0);
     }
@@ -207,7 +207,7 @@ public class ItemController implements Serializable {
     }
 
     public List<Item> completeAmpItem(String query) {
-//        DepartmentType[] dts = new DepartmentType[]{DepartmentType.Pharmacy, null};
+//        DepartmentType[] dts = new DepartmentType[]{DepartmentType.Distributor, null};
 //        Class[] classes = new Class[]{Amp.class};
 //        return completeItem(query, classes, dts, 30);
 //        
@@ -223,7 +223,7 @@ public class ItemController implements Serializable {
                     + " and (upper(c.name) like :str or upper(c.code) like :str or"
                     + " upper(c.barcode) like :str ) order by c.name";
             //////// // System.out.println(sql);
-            tmpMap.put("dep", DepartmentType.Store);
+            tmpMap.put("dep", DepartmentType.Company);
             tmpMap.put("amp", Amp.class);
             tmpMap.put("str", "%" + query.toUpperCase() + "%");
             suggestions = getFacade().findBySQL(sql, tmpMap, TemporalType.TIMESTAMP, 30);
@@ -233,7 +233,7 @@ public class ItemController implements Serializable {
     }
 
     public List<Item> completeAmpItemAll(String query) {
-//        DepartmentType[] dts = new DepartmentType[]{DepartmentType.Pharmacy, null};
+//        DepartmentType[] dts = new DepartmentType[]{DepartmentType.Distributor, null};
 //        Class[] classes = new Class[]{Amp.class};
 //        return completeItem(query, classes, dts, 0);
         String sql;
@@ -248,7 +248,7 @@ public class ItemController implements Serializable {
                     + " and (upper(c.name) like :str or upper(c.code) like :str or"
                     + " upper(c.barcode) like :str ) order by c.name";
             //////// // System.out.println(sql);
-            tmpMap.put("dep", DepartmentType.Store);
+            tmpMap.put("dep", DepartmentType.Company);
             tmpMap.put("amp", Amp.class);
             tmpMap.put("str", "%" + query.toUpperCase() + "%");
             suggestions = getFacade().findBySQL(sql, tmpMap, TemporalType.TIMESTAMP, 30);
@@ -258,7 +258,7 @@ public class ItemController implements Serializable {
     }
 
     public List<Item> completeStoreItem(String query) {
-        DepartmentType[] dts = new DepartmentType[]{DepartmentType.Store, DepartmentType.Inventry};
+        DepartmentType[] dts = new DepartmentType[]{DepartmentType.Company, DepartmentType.Inventry};
         Class[] classes = new Class[]{Amp.class};
         return completeItem(query, classes, dts, 0);
 //        String sql;
@@ -277,7 +277,7 @@ public class ItemController implements Serializable {
 //                    + "order by c.name";
 //            //////// // System.out.println(sql);
 //            tmpMap.put("amp", Amp.class);
-//            tmpMap.put("dep", DepartmentType.Store);
+//            tmpMap.put("dep", DepartmentType.Company);
 //            tmpMap.put("inven", DepartmentType.Inventry);
 //            tmpMap.put("str", "%" + query.toUpperCase() + "%");
 //            suggestions = getFacade().findBySQL(sql, tmpMap, TemporalType.TIMESTAMP, 30);
@@ -315,7 +315,7 @@ public class ItemController implements Serializable {
     }
 
     public List<Item> completeStoreItemOnly(String query) {
-        DepartmentType[] dts = new DepartmentType[]{DepartmentType.Store};
+        DepartmentType[] dts = new DepartmentType[]{DepartmentType.Company};
         Class[] classes = new Class[]{Amp.class};
         return completeItem(query, classes, dts, 0);
 //        String sql;
@@ -334,7 +334,7 @@ public class ItemController implements Serializable {
 //                    + "order by c.name";
 //            //////// // System.out.println(sql);
 //            tmpMap.put("amp", Amp.class);
-//            tmpMap.put("dep", DepartmentType.Store);
+//            tmpMap.put("dep", DepartmentType.Company);
 //            tmpMap.put("str", "%" + query.toUpperCase() + "%");
 //            suggestions = getFacade().findBySQL(sql, tmpMap, TemporalType.TIMESTAMP, 30);
 //        }
@@ -377,7 +377,7 @@ public class ItemController implements Serializable {
                 + " order by c.name";
         //////// // System.out.println(sql);
         tmpMap.put("amp", Amp.class);
-        tmpMap.put("dep", DepartmentType.Store);
+        tmpMap.put("dep", DepartmentType.Company);
 
         suggestions = getFacade().findBySQL(sql, tmpMap, TemporalType.TIMESTAMP);
 

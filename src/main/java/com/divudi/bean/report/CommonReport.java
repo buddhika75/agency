@@ -1512,7 +1512,7 @@ public class CommonReport implements Serializable {
 
     public void createGRNBillItemForStore() {
         billItems = new ArrayList<>();
-        billItems = createStoreGRNBillItem(DepartmentType.Store);
+        billItems = createStoreGRNBillItem(DepartmentType.Company);
     }
 
     public List<BillItem> createStoreGRNBillItem(DepartmentType dt) {

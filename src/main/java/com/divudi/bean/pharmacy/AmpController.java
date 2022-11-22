@@ -225,7 +225,7 @@ public class AmpController implements Serializable {
         Date toDate = null;
 
         Map m = new HashMap();
-        m.put("dep", DepartmentType.Pharmacy);
+        m.put("dep", DepartmentType.Distributor);
         String sql = "select c from PharmaceuticalItem c "
                 + " where c.retired=false "
                 + " and (c.departmentType is null "
@@ -243,7 +243,7 @@ public class AmpController implements Serializable {
         Date toDate = null;
 
         Map m = new HashMap();
-        m.put("dep", DepartmentType.Pharmacy);
+        m.put("dep", DepartmentType.Distributor);
         String sql = "select c from Amp c "
                 + " where c.retired=false "
                 + " and (c.departmentType is null "
@@ -257,7 +257,7 @@ public class AmpController implements Serializable {
 
     public void createItemListPharmacy() {
         Map m = new HashMap();
-        m.put("dep", DepartmentType.Store);
+        m.put("dep", DepartmentType.Company);
         m.put("dep2", DepartmentType.Inventry);
         String sql = "select c from Amp c "
                 + " where c.retired=false "
@@ -300,7 +300,7 @@ public class AmpController implements Serializable {
         Date startTime = new Date();
         Date fromDate = null;
         Date toDate = null;
-        itemList = deleteOrNotItem(false, DepartmentType.Store);
+        itemList = deleteOrNotItem(false, DepartmentType.Company);
 
         commonController.printReportDetails(fromDate, toDate, startTime, "Reports/Check Entered Data/Item Master/pharmacy Item List(/faces/dataAdmin/pharmacy_item_list.xhtml)");
     }
@@ -309,7 +309,7 @@ public class AmpController implements Serializable {
         Date startTime = new Date();
         Date fromDate = null;
         Date toDate = null;
-        itemList = deleteOrNotItem(true, DepartmentType.Store);
+        itemList = deleteOrNotItem(true, DepartmentType.Company);
 
         commonController.printReportDetails(fromDate, toDate, startTime, "Reports/Check Entered Data/Item Master/pharmacy Item List(/faces/dataAdmin/pharmacy_item_list.xhtml)");
     }
@@ -318,7 +318,7 @@ public class AmpController implements Serializable {
         Date startTime = new Date();
         Date fromDate = null;
         Date toDate = null;
-        itemList = deleteOrNotStoreItem(false, DepartmentType.Store);
+        itemList = deleteOrNotStoreItem(false, DepartmentType.Company);
 
         commonController.printReportDetails(fromDate, toDate, startTime, "Reports/Check Entered Data/Item Master/Store Item list(delete)(/faces/dataAdmin/store_item_list.xhtml)");
     }
@@ -327,7 +327,7 @@ public class AmpController implements Serializable {
         Date startTime = new Date();
         Date fromDate = null;
         Date toDate = null;
-        itemList = deleteOrNotStoreItem(true, DepartmentType.Store);
+        itemList = deleteOrNotStoreItem(true, DepartmentType.Company);
 
         commonController.printReportDetails(fromDate, toDate, startTime, "Reports/Check Entered Data/Item Master/Store Item list(no delete)(/faces/dataAdmin/store_item_list.xhtml)");
     }
@@ -349,7 +349,7 @@ public class AmpController implements Serializable {
         List<Amp> a = null;
         Map m = new HashMap();
         m.put("n", "%" + qry + "%");
-        m.put("dep", DepartmentType.Store);
+        m.put("dep", DepartmentType.Company);
         if (qry != null) {
             a = getFacade().findBySQL("select c from Amp c where "
                     + " c.retired=false and (c.departmentType!=:dep or c.departmentType is null) "
@@ -368,7 +368,7 @@ public class AmpController implements Serializable {
 
         Map m = new HashMap();
         m.put("n", "%" + qry + "%");
-        m.put("dep", DepartmentType.Store);
+        m.put("dep", DepartmentType.Company);
         if (qry != null) {
             ampList = getFacade().findBySQL("select c from Amp c where "
                     + " c.retired=false and"
@@ -388,7 +388,7 @@ public class AmpController implements Serializable {
         List<Vmp> vmps = new ArrayList<>();
         Map m = new HashMap();
         m.put("n", "%" + qry + "%");
-        m.put("dep", DepartmentType.Store);
+        m.put("dep", DepartmentType.Company);
         if (qry != null) {
             vmps = getVmpFacade().findBySQL("select c from Vmp c where "
                     + " c.retired=false and"
@@ -408,7 +408,7 @@ public class AmpController implements Serializable {
 
         Map m = new HashMap();
         m.put("n", "%" + qry + "%");
-        m.put("dep", DepartmentType.Store);
+        m.put("dep", DepartmentType.Company);
         if (qry != null) {
             ampList = getFacade().findBySQL("select c from Amp c where "
                     + " c.retired=false and (c.departmentType is null or c.departmentType!=:dep) and "
@@ -425,7 +425,7 @@ public class AmpController implements Serializable {
 
         Map m = new HashMap();
         m.put("n", "%" + qry + "%");
-        m.put("dep", DepartmentType.Store);
+        m.put("dep", DepartmentType.Company);
         String sql = "select c from Amp c where "
                 + " c.retired=false and c.departmentType!=:dep and "
                 + "(upper(c.barcode) like :n ) order by c.barcode";
@@ -466,7 +466,7 @@ public class AmpController implements Serializable {
                 + " or c.departmentType=:dep) "
                 + " order by c.code desc";
 
-        m.put("dep", DepartmentType.Pharmacy);
+        m.put("dep", DepartmentType.Distributor);
         m.put("cat", getCurrent().getCategory());
 
         Amp amp = getFacade().findFirstBySQL(sql, m);
@@ -616,7 +616,7 @@ public class AmpController implements Serializable {
             current.setName(createAmpName());
         }
 
-        current.setDepartmentType(DepartmentType.Pharmacy);
+        current.setDepartmentType(DepartmentType.Distributor);
 
         if (getCurrent().getId() != null && getCurrent().getId() > 0) {
             getFacade().edit(current);

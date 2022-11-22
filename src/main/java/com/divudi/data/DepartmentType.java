@@ -9,13 +9,16 @@ package com.divudi.data;
  * @author Buddhika
  */
 public enum DepartmentType {
-    Pharmacy,
-    Lab,
-    Store,
-    Theatre,
-    Kitchen,
+    Distributor,
+    Manufacturer,
+    Company,
+    Customer,
+    Bank,
+    @Deprecated
     Opd,
+    @Deprecated
     Inventry,
+    @Deprecated
     Inward;
     
     public String getLabel(){

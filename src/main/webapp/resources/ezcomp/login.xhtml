@@ -11,26 +11,85 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <p:panel header="Please login" id="loginbox" style="text-align: center; " styleClass="nonPrintBlock verticalAndHorizontalCentering">
+
+        <title>Bootstrap Simple Login Form</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
+
+        <style>
+            .login-form {
+                width: 30rem;
+                margin: 50px auto;
+                font-size: 15px;
+            }
+            .login-form form {
+                margin-bottom: 15px;
+                background: #f7f7f7;
+                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+                padding: 30px;
+            }
+            .login-form h2 {
+                margin: 0 0 15px;
+            }
+            .form-control, .btn {
+                min-height: 38px;
+                border-radius: 2px;
+            }
+            .btn {
+                font-size: 15px;
+                font-weight: bold;
+            }
+        </style>
+
+        <div class="login-form">
+            <h:form  id="formLogin">
+                <div >
+                    <h:graphicImage  library="image" name="title_logo.jpg" class="w-100"/>
+                </div>
+                <h2 class="text-center">Log in</h2>       
+                <div class="form-group">
+                    <p:inputText autocomplete="off" id="txtUserName"
+                                 value="#{sessionController.userName}"
+                                 class="form-control"
+                                 required="true"
+                                 placeholder="Username"
+                                 ></p:inputText>
+                </div>
+                <div class="form-group">
+                    <p:password id="txtPassword" value="#{sessionController.passord }"  
+                                class="form-control" placeholder="Password" required="required"
+                                ></p:password>
+                </div>
+                <div class="form-group">
+
+                    <p:commandButton value="Log in" 
+                                     class="btn btn-primary btn-block"
+                                     id="btnLogin"
+                                     ajax="false"
+                                     action="#{sessionController.loginActionWithoutDepartment()}" >
+                    </p:commandButton>
+                </div>
+                <div class="clearfix">
+                    <p:messages ></p:messages>
+                </div>        
+            </h:form>
+        </div>
+
+
+
+
+        <p:panel rendered="false" header="Please login" id="loginbox" style="text-align: center; " styleClass="nonPrintBlock verticalAndHorizontalCentering">
             <h:panelGrid columns="2" >
                 <h:panelGroup >
                     <h:graphicImage  library="image" name="title_logo.jpg" />
                 </h:panelGroup>
                 <h:panelGroup >
-                    <h:form id="formLogin">
+                    <h:form>
                         <h:panelGrid columns="2">
                             <h:outputLabel value="Username"  style="text-align: left; margin: 5px; padding: 5px;"  ></h:outputLabel>
-                            <p:inputText autocomplete="off" id="txtUserName"
-                                         value="#{sessionController.userName}"
-                                         style="text-align: left; margin: 5px; padding: 5px;" ></p:inputText>
+
                             <h:outputLabel value="Password"  style="text-align: left; margin: 5px; padding: 5px;" ></h:outputLabel>
-                            <p:password id="txtPassword" value="#{sessionController.passord }"  style="text-align: left; margin: 5px; padding: 5px;" ></p:password>
                             <h:outputLabel value=""  style="text-align: left; margin: 5px; padding: 5px;" ></h:outputLabel>
-                            <p:commandButton value="Login" 
-                                             id="btnLogin"
-                                             ajax="false"
-                                             action="#{sessionController.loginActionWithoutDepartment()}" >
-                            </p:commandButton>
+
                         </h:panelGrid>
                     </h:form>
 

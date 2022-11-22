@@ -1457,7 +1457,7 @@ public class BillController implements Serializable {
 //                UtilityController.addErrorMessage("Please Enter Correct Tenderd Amount");
 //                return true;
 //            }
-//        if (referredByInstitution != null && referredByInstitution.getInstitutionType() != InstitutionType.CollectingCentre) {
+//        if (referredByInstitution != null && referredByInstitution.getInstitutionType() != InstitutionType.Distributor) {
 //            if (referralId == null || referralId.trim().equals("")) {
 //                JsfUtil.addErrorMessage("Please Enter Referrance Number");
 //                return true;
@@ -1470,7 +1470,7 @@ public class BillController implements Serializable {
 //        }
         boolean checkAge = false;
         for (BillEntry be : getLstBillEntries()) {
-            if (be.getBillItem().getItem().getDepartment().getDepartmentType() == DepartmentType.Lab) {
+            if (be.getBillItem().getItem().getDepartment().getDepartmentType() == DepartmentType.Manufacturer) {
                 //  //System.err.println("ttttt");
                 checkAge = true;
                 break;

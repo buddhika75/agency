@@ -875,7 +875,7 @@ public class SessionController implements Serializable, HttpSessionListener {
         m.put("dep", department);
         insPre = getUserPreferenceFacade().findFirstBySQL(sql, m);
 
-        if (getDepartment().getDepartmentType() == DepartmentType.Pharmacy) {
+        if (getDepartment().getDepartmentType() == DepartmentType.Distributor) {
             long i = searchController.createInwardBHTForIssueBillCount();
             if (i > 0) {
                 UtilityController.addSuccessMessage("This Phrmacy Has " + i + " BHT Request Today.");

@@ -23,6 +23,7 @@ import com.divudi.data.SessionNumberType;
 import com.divudi.data.Sex;
 import com.divudi.data.MessageType;
 import com.divudi.data.Title;
+import com.divudi.data.WebUserRole;
 import com.divudi.entity.PaymentScheme;
 import com.divudi.entity.Person;
 import java.io.Serializable;
@@ -43,6 +44,9 @@ public class EnumController implements Serializable {
 
     SessionNumberType[] sessionNumberTypes;
 
+    public WebUserRole[] getWebUserRoles() {
+        return WebUserRole.values();
+    }
 
     public Dashboard[] getDashboardTypes() {
         return Dashboard.values();
@@ -78,9 +82,6 @@ public class EnumController implements Serializable {
         return ReportItemType.values();
     }
 
-   
-
-
     public void setSessionNumberTypes(SessionNumberType[] sessionNumberTypes) {
         this.sessionNumberTypes = sessionNumberTypes;
     }
@@ -89,8 +90,6 @@ public class EnumController implements Serializable {
         return FeeType.values();
     }
 
-   
-
     public InvestigationItemType[] getInvestigationItemTypes() {
         return InvestigationItemType.values();
     }
@@ -98,8 +97,6 @@ public class EnumController implements Serializable {
     public InvestigationItemValueType[] getInvestigationItemValueTypes() {
         return InvestigationItemValueType.values();
     }
-
-   
 
     public BillType[] getBillTypes() {
         return BillType.values();
@@ -112,8 +109,6 @@ public class EnumController implements Serializable {
     public CalculationType[] getCalculationTypes() {
         return CalculationType.values();
     }
-
-  
 
     public Title[] getTitle() {
         return Title.values();
@@ -148,8 +143,6 @@ public class EnumController implements Serializable {
         PaymentMethod[] tmp = {PaymentMethod.Credit, PaymentMethod.Cash};
         return tmp;
     }
-
-  
 
     public BillType[] getCashFlowBillTypes() {
         BillType[] b = {
@@ -372,8 +365,6 @@ public class EnumController implements Serializable {
         return false;
 
     }
-
- 
 
     public MessageType[] getSmsType() {
         return MessageType.values();

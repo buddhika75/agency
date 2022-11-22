@@ -65,7 +65,7 @@ public class PharmacyUpdateBulkController implements Serializable {
                 + " and c.category=:cat "
                 + " order by c.name ";
 
-        m.put("dep", DepartmentType.Store);
+        m.put("dep", DepartmentType.Company);
         m.put("cat", category);
 
         amps = getAmpFacade().findBySQL(sql, m);
@@ -85,7 +85,7 @@ public class PharmacyUpdateBulkController implements Serializable {
                 + " and c.discountAllowed=false "
                 + " order by c.name ";
 
-        m.put("dep", DepartmentType.Store);
+        m.put("dep", DepartmentType.Company);
 
         amps = getAmpFacade().findBySQL(sql, m);
 

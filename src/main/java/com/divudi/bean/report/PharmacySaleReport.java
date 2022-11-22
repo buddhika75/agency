@@ -4181,7 +4181,7 @@ public class PharmacySaleReport implements Serializable {
     public void createPharmacyReport() {
         Date startTime = new Date();
 
-        List<Department> departments = fetchDepartment(DepartmentType.Pharmacy);
+        List<Department> departments = fetchDepartment(DepartmentType.Distributor);
 
         saleValuesCash = new ArrayList<>();
         saleValuesCheque = new ArrayList<>();
@@ -5671,7 +5671,7 @@ public class PharmacySaleReport implements Serializable {
     public List<Amp> getAllPharmacyItems() {
         String sql;
         Map m = new HashMap();
-        m.put("dep", DepartmentType.Store);
+        m.put("dep", DepartmentType.Company);
         m.put("dep2", DepartmentType.Inventry);
         sql = "select c from Amp c "
                 + " where c.retired=false "

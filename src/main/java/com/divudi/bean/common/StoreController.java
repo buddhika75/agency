@@ -55,7 +55,7 @@ public class StoreController implements Serializable {
 
     public void prepareAdd() {
         current = new Department();
-        current.setDepartmentType(DepartmentType.Store);
+        current.setDepartmentType(DepartmentType.Company);
     }
 
     // Need new Enum Department type
@@ -92,7 +92,7 @@ public class StoreController implements Serializable {
         double d = 0.0;
         Map m = new HashMap();
         m.put("d", getSessionController().getLoggedUser().getDepartment());
-        m.put("dtp1", DepartmentType.Store);
+        m.put("dtp1", DepartmentType.Company);
         m.put("stk", d);
 
         m.put("n", "%" + qry.toUpperCase() + "%");
@@ -113,7 +113,7 @@ public class StoreController implements Serializable {
 //        double d = 0.0;
         Map m = new HashMap();
         m.put("d", getSessionController().getLoggedUser().getDepartment());
-        m.put("dtp1", DepartmentType.Store);
+        m.put("dtp1", DepartmentType.Company);
 //        m.put("stk", d);
 
         m.put("n", "%" + qry.toUpperCase() + "%");
@@ -163,7 +163,7 @@ public class StoreController implements Serializable {
     public Department getCurrent() {
         if (current == null) {
             current = new Department();
-            current.setDepartmentType(DepartmentType.Store);
+            current.setDepartmentType(DepartmentType.Company);
         }
         return current;
     }
