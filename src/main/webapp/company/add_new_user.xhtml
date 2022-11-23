@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:autocomplete="http://java.sun.com/jsf/composite/autocomplete"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:body>
+        <ui:composition template="/company/manage_users.xhtml">
+            <ui:define name="user">
+                <h:form>
+                    <p:panelGrid columns="2" >
+                        <f:facet name="header" >
+                            Add New User
+                        </f:facet>
+                        <p:outputLabel for="txtName" value="Name" ></p:outputLabel>
+                        <p:inputText id="txtName" class="w-100"
+                                     autocomplete="off"
+                                     required="true" 
+                                     value="#{webUserController.current.webUserPerson.name}"
+                                     requiredMessage="Please enter a Name"></p:inputText>
+
+                        <p:outputLabel value="Role" for="role"></p:outputLabel>
+                        <p:selectOneMenu id="role" value="#{webUserController.current.role}"
+                                         required="true"
+                                         requiredMessage="Please select a role">
+                            <f:selectItem itemLabel="select" ></f:selectItem>
+                            <f:selectItems value="#{enumController.webUserRolesForCompanyAdmin}" ></f:selectItems>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="txtAddress" value="Address"></p:outputLabel>
+                        <p:inputTextarea  
+                            id="txtAddress"
+                            class="w-100"
+                            required="true" 
+                            value="#{webUserController.current.webUserPerson.address}"
+                            requiredMessage="Please enter an address."></p:inputTextarea>
+                        
+                        <p:outputLabel for="txtPhone" value="Phone" ></p:outputLabel>
+                        <p:inputText id="txtPhone" required="true" 
+                                     value="#{webUserController.current.webUserPerson.mobile}"
+                                     requiredMessage="Plase enter a phone number"></p:inputText>
+
+                        <p:outputLabel for="txtUsername" value="Username"></p:outputLabel>
+                        <p:inputText id="txtUsername"
+                                     autocomplete="off" required="true" maxlength="50" 
+                                     value="#{webUserController.current.name}" ></p:inputText>
+
+                        <p:outputLabel for="pw1" value="Password" ></p:outputLabel>
+                        <p:password id="pw1" validatorMessage="Passwords are NOT matching." match="pw2" feedback="true" required="true" maxlength="15" value="#{webUserController.current.webUserPassword}" />
+
+                        <p:outputLabel value="Re-enter password" for="pw2"></p:outputLabel>
+                        <p:password id="pw2" required="true" maxlength="15" value="#{webUserController.current.webUserPassword}" />
+
+                        <p:outputLabel value="Department" ></p:outputLabel>
+                        <autocomplete:department_for_company_admin value="#{webUserController.current.department}" />
+
+                        <p:commandButton id="btnCreateUser"
+                                         value="Save" 
+                                         action="#{companyController.saveNewUser()}" ajax="false" >
+                        </p:commandButton>
+
+                    </p:panelGrid>
+                </h:form>
+            </ui:define>
+
+
+        </ui:composition>
+
+    </h:body>
+</html>

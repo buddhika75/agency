@@ -210,7 +210,6 @@ public class DepartmentController implements Serializable {
                 + " order by c.name";
         hm.put("q", "%" + qry.toUpperCase() + "%");
         departmentList = getFacade().findBySQL(sql, hm);
-
         return departmentList;
     }
 

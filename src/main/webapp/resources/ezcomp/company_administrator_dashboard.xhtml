@@ -10,10 +10,10 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <div class="container" >
-            <div class="row" >
-                <div class="col" >
-                    <div class="card" >
+        <h:form >
+            <div class="row w-100" >
+                <div class="col-md-3" >
+                    <div class="card m-3" >
                         <div class="card-header" >
                             <h:outputText value="Data Entry" >
                             </h:outputText>
@@ -50,8 +50,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col" >
-                    <div class="card" >
+                <div class="col-md-3" >
+                    <div class="card m-3" >
                         <div class="card-header" >
                             <h:outputText value="Reports" >
 
@@ -62,11 +62,38 @@
                         </div>
                     </div>
                 </div>
-                <div class="col" >
-                    <div class="card" >
+                <div class="col-md-3" >
+                    <div class="card m-3" >
                         <div class="card-header" >
                             <h:outputText value="Administration" >
-
+                            </h:outputText>
+                        </div>
+                        <div class="card-body" >
+                            <h:commandButton class="btn btn-block btn-primary w-75 m-3" value="User Management" 
+                                             action="#{companyController.toManageUsersIndex()}">
+                            </h:commandButton>
+                            <h:commandButton class="btn btn-block btn-primary w-75 m-3" value="List Manufacturers" 
+                                             action="#">
+                            </h:commandButton>
+                            <h:commandButton class="btn btn-block btn-primary w-75 m-3" value="New Distributor" 
+                                             action="#">
+                            </h:commandButton>
+                            <h:commandButton class="btn btn-block btn-primary w-75 m-3" value="List Distributors" 
+                                             action="#">
+                            </h:commandButton>
+                            <h:commandButton class="btn btn-block btn-primary w-75 m-3" value="New Customer" 
+                                             action="#">
+                            </h:commandButton>
+                            <h:commandButton class="btn btn-block btn-primary w-75 m-3" value="List Customers" 
+                                             action="#">
+                            </h:commandButton>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3" >
+                    <div class="card m-3" >
+                        <div class="card-header" >
+                            <h:outputText value="Settings" >
                             </h:outputText>
                         </div>
                         <div class="card-body" >
@@ -92,7 +119,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
+        </h:form>
     </cc:implementation>
 </html>

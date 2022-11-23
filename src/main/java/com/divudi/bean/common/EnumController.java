@@ -47,6 +47,11 @@ public class EnumController implements Serializable {
     public WebUserRole[] getWebUserRoles() {
         return WebUserRole.values();
     }
+    
+    public WebUserRole[] getWebUserRolesForCompanyAdmin() {
+        WebUserRole[] rs = {WebUserRole.Agency_Administrator,WebUserRole.Agency_User,WebUserRole.Company_Administrator,WebUserRole.Company_User,WebUserRole.Customer_Administrator,WebUserRole.Customer_User,WebUserRole.Distributor_Administrator,WebUserRole.Distributor_User};
+        return WebUserRole.values();
+    }
 
     public Dashboard[] getDashboardTypes() {
         return Dashboard.values();
