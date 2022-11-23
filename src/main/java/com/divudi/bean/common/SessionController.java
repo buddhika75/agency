@@ -420,26 +420,11 @@ public class SessionController implements Serializable, HttpSessionListener {
             UtilityController.addErrorMessage("Please enter a username");
             return false;
         }
-
-        if (false) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(2015, 05, 17, 23, 59, 59);//2015/june/17/23:00:00
-            calendar.set(Calendar.MILLISECOND, 999);
-
-            Date expired = calendar.getTime();
-            Date nowDate = new Date();
-
-            if (nowDate.after(expired)) {
-                UtilityController.addErrorMessage("Your Application has Expired");
-                return false;
-            }
-        }
         // password
         if (isFirstVisit()) {
             prepareFirstVisit();
             return true;
         } else {
-
             return checkUsersWithoutDepartment();
         }
     }
@@ -754,6 +739,10 @@ public class SessionController implements Serializable, HttpSessionListener {
             if ((u.getName()).equalsIgnoreCase(userName)) {
                 if (getSecurityController().matchPassword(passord, u.getWebUserPassword())) {
                     departments = listLoggableDepts(u);
+                    if(departments==null||departments.isEmpty()){
+                        departments = new ArrayList<>();
+                        departments.add(u.getDepartment());
+                    }
                     if (departments.isEmpty()) {
                         UtilityController.addErrorMessage("This user has no privilage to login to any Department. Please conact system administrator.");
                         return false;
