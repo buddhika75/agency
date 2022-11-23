@@ -21,6 +21,9 @@
                 <h:panelGroup rendered="#{sessionController.loggedUser.role eq 'System_Administrator'}" >
                     <ez:system_administrator_dashboard/>
                 </h:panelGroup>
+                <h:panelGroup rendered="#{sessionController.loggedUser.role eq 'Company_Administrator'}" >
+                    <ez:company_administrator_dashboard></ez:company_administrator_dashboard>
+                </h:panelGroup>
 
 
             </ui:define>

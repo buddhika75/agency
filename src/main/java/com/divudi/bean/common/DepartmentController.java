@@ -278,6 +278,7 @@ public class DepartmentController implements Serializable {
     }
 
     public void saveSelected() {
+        System.out.println("save dept");
         if (getCurrent() == null || getCurrent().getName().trim().equals("")) {
             UtilityController.addErrorMessage("Please enter a name");
             return;
@@ -287,20 +288,9 @@ public class DepartmentController implements Serializable {
             return;
         }
         if (getCurrent().getId() != null && getCurrent().getId() > 0) {
-            if (getCurrent().getDepartmentCode() != null) {
-                getCurrent().setDepartmentCode(getCurrent().getDepartmentCode());
-            }
             getFacade().edit(getCurrent());
             UtilityController.addSuccessMessage("Updated");
         } else {
-            if (getCurrent().getDepartmentCode() != null) {
-                if (!checkCodeExist()) {
-                    getCurrent().setDepartmentCode(getCurrent().getDepartmentCode());
-
-                } else {
-                    return;
-                }
-            }
             getCurrent().setCreatedAt(new Date());
             getCurrent().setCreater(getSessionController().getLoggedUser());
             getFacade().create(getCurrent());
