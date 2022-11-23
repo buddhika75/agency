@@ -368,7 +368,7 @@ public class SessionController implements Serializable, HttpSessionListener {
         department = null;
         institution = null;
         if (loginWithoutDepartment()) {
-            return "/home.xhtml";
+            return "/index.xhtml";
         } else {
             UtilityController.addErrorMessage("Invalid User! Login Failure. Please try again");
             return "";
