@@ -52,14 +52,9 @@
             </ui:insert>
         </h:panelGroup>
         <h:panelGroup rendered ="#{sessionController.logged}"  >
-            <h:panelGroup rendered="#{sessionController.department ne null}" styleClass="nonPrintBlock" >
-                <ez:menu/>
-                <ui:insert name="content">
-                </ui:insert>
-            </h:panelGroup>
-            <h:panelGroup rendered="#{sessionController.department eq null}" styleClass="nonPrintBlock" >
-                <ez:select_department/>
-            </h:panelGroup>
+            <ez:menu/>
+            <ui:insert name="content">
+            </ui:insert>
             <ez:footer/>
         </h:panelGroup>
         <h:panelGroup rendered ="#{sessionController.firstLogin}"  >

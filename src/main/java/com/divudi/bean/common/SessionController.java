@@ -7,7 +7,6 @@
  */
 package com.divudi.bean.common;
 
-import com.divudi.data.DepartmentType;
 import com.divudi.data.Privileges;
 import com.divudi.data.WebUserRole;
 import com.divudi.ejb.ApplicationEjb;
@@ -25,7 +24,6 @@ import com.divudi.facade.UserPreferenceFacade;
 import com.divudi.facade.WebUserFacade;
 import com.divudi.facade.util.JsfUtil;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,10 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import org.primefaces.model.DashboardColumn;
 import org.primefaces.model.DashboardModel;
-import org.primefaces.model.DefaultDashboardColumn;
-import org.primefaces.model.DefaultDashboardModel;
 
 /**
  *
