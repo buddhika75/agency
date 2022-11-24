@@ -15,7 +15,6 @@
         <h:form >
             <p:menubar styleClass="nonPrintBlock bottomBorderOnly ui-widget-header"  >
                 <p:menuitem  ajax="false"  action="/index" icon="pi pi-home" styleClass="rightBordrOnly" ></p:menuitem>
-               
 
                 <p:submenu styleClass="rightBordrOnly" label="Pharmacy"  rendered="#{webUserController.hasPrivilege('Pharmacy')}">
                     <p:submenu label="Sale Bills" rendered="#{webUserController.hasPrivilege('PharmacySale')}"> 

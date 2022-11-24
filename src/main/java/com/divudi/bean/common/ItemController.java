@@ -2,7 +2,6 @@ package com.divudi.bean.common;
 
 import com.divudi.data.DepartmentType;
 import com.divudi.data.FeeType;
-import com.divudi.data.ItemType;
 import com.divudi.entity.BillExpense;
 import com.divudi.entity.Category;
 import com.divudi.entity.Department;
@@ -11,8 +10,6 @@ import com.divudi.entity.Item;
 import com.divudi.entity.ItemFee;
 import com.divudi.entity.Packege;
 import com.divudi.entity.Service;
-import com.divudi.entity.ServiceCategory;
-import com.divudi.entity.ServiceSubCategory;
 import com.divudi.entity.pharmacy.Amp;
 import com.divudi.entity.pharmacy.Ampp;
 import com.divudi.entity.pharmacy.Vmp;
@@ -21,15 +18,11 @@ import com.divudi.facade.ItemFacade;
 import com.divudi.facade.ItemFeeFacade;
 import com.divudi.facade.util.JsfUtil;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -39,12 +32,11 @@ import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.TemporalType;
-import org.apache.commons.beanutils.BeanUtils;
 
 /**
  *
- * @author Dr. M. H. B. Ariyaratne, MBBS, MSc, MD(Health Informatics)
- * Acting Consultant (Health Informatics)
+ * @author Dr. M. H. B. Ariyaratne, MBBS, MSc, MD(Health Informatics) Acting
+ * Consultant (Health Informatics)
  */
 @Named
 @SessionScoped
@@ -67,7 +59,7 @@ public class ItemController implements Serializable {
     ItemFeeManager itemFeeManager;
     @Inject
     DepartmentController departmentController;
-    
+
     /**
      * Properties
      */
@@ -87,6 +79,14 @@ public class ItemController implements Serializable {
     private List<Item> machineTests;
     private List<Item> investigationSampleComponents;
 
+    /**
+     * Navigation Functions
+     */
+    
+    public String toManageItemCategories(){
+        
+    }
+    
     public List<Department> getDepartments() {
         departments = departmentController.getInstitutionDepatrments(instituion);
         return departments;
@@ -96,7 +96,6 @@ public class ItemController implements Serializable {
         this.departments = departments;
     }
 
-   
     public List<Item> completeDealorItem(String query) {
         List<Item> suggestions;
         String sql;
@@ -499,7 +498,6 @@ public class ItemController implements Serializable {
 
     }
 
-
     public void makeItemsAsActiveOrInactiveByRetiredStatus() {
         String j = "select i from Item i";
         List<Item> tis = getFacade().findBySQL(j);
@@ -512,8 +510,8 @@ public class ItemController implements Serializable {
             getFacade().edit(i);
         }
     }
-    
-     public void toggleItemIctiveInactiveState() {
+
+    public void toggleItemIctiveInactiveState() {
         String j = "select i from Item i";
         List<Item> tis = getFacade().findBySQL(j);
         for (Item i : tis) {
@@ -758,8 +756,6 @@ public class ItemController implements Serializable {
         return items;
     }
 
-    
-   
     public List<Item> getItems(Category category) {
         String temSql;
         HashMap h = new HashMap();
@@ -921,13 +917,9 @@ public class ItemController implements Serializable {
         this.itemlist = itemlist;
     }
 
-
-
     public void setInvestigationsAndServices(List<Item> investigationsAndServices) {
         this.investigationsAndServices = investigationsAndServices;
     }
-
-   
 
     public List<Item> getMachineTests() {
         return machineTests;
