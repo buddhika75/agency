@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./manage_institutions.xhtml">
+
+            <ui:define name="ins">
+
+                <p:dataTable value="#{companyController.customers}" var="d" rowKey="#{d.id}" 
+
+                             >
+                    <p:column headerText="Name" 
+                              sortBy="#{d.name}"
+                              filterBy="#{d.name}" 
+                              filterMatchMode="contains">
+                        <p:outputLabel value="#{d.name}" ></p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Address" 
+                              sortBy="#{d.address}" 
+                              filterBy="#{d.address}" 
+                              filterMatchMode="contains">
+                        <p:outputLabel value="#{d.address}" ></p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Phone" 
+                              sortBy="#{d.telephone1}" 
+                              filterBy="#{d.telephone1}"
+                              filterMatchMode="contains">
+                        <p:outputLabel value="#{d.telephone1}" ></p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Email" 
+                              sortBy="#{d.email}" 
+                              filterBy="#{d.email}"
+                              filterMatchMode="contains">
+                        <p:outputLabel value="#{d.telephone1}" ></p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Actions">
+                        <h:commandButton  class="btn btn-secondary w-100"  action="#{companyController.toViewDistributor()}" value="Manage">
+                            <f:setPropertyActionListener value="#{d}" target="#{companyController.selectedDepartment}" ></f:setPropertyActionListener>
+                        </h:commandButton>
+                        <h:commandButton class="btn btn-warning w-100" action="#{companyController.removeSelectedDepartment()}" value="Delete" 
+                                         onclick="if (!confirm('Are you sure you want to delete this record?'))
+                                                     return false;" 
+                                         >
+                            <f:setPropertyActionListener value="#{d}" target="#{companyController.selectedDepartment}" ></f:setPropertyActionListener>
+                        </h:commandButton>
+
+                    </p:column>
+                </p:dataTable>
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

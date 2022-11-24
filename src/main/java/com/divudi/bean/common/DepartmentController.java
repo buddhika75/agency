@@ -145,7 +145,7 @@ public class DepartmentController implements Serializable {
                 dep = new Department();
                 dep.setCreatedAt(new Date());
                 dep.setCreater(getSessionController().getLoggedUser());
-                dep.setDepartmentType(DepartmentType.Opd);
+                dep.setDepartmentType(DepartmentType.Route);
                 dep.setInstitution(ins);
                 dep.setName(ins.getName());
                 getFacade().create(dep);

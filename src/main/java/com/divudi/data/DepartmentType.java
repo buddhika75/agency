@@ -14,8 +14,7 @@ public enum DepartmentType {
     Company,
     Customer,
     Bank,
-    @Deprecated
-    Opd,
+    Route,
     @Deprecated
     Inventry,
     @Deprecated
