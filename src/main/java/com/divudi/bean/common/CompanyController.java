@@ -150,6 +150,9 @@ public class CompanyController implements Serializable {
             JsfUtil.addErrorMessage("Nothing selected");
             return "";
         }
+        selectedDepartment.setRetired(true);
+        selectedDepartment.setRetirer(sessionController.getLoggedUser());
+        departmentFacade.edit(selectedDepartment);
         switch (selectedDepartment.getDepartmentType()) {
             case Bank:
                 return toListBanks();
@@ -183,22 +186,22 @@ public class CompanyController implements Serializable {
     public String toAddNewBank() {
         selectedDepartment = new Department();
         selectedDepartment.setInstitution(sessionController.getInstitution());
-        selectedDepartment.setDepartmentType(DepartmentType.Distributor);
+        selectedDepartment.setDepartmentType(DepartmentType.Bank);
         return "/company/bank";
     }
 
     public String toAddNewCustomer() {
         selectedDepartment = new Department();
         selectedDepartment.setInstitution(sessionController.getInstitution());
-        selectedDepartment.setDepartmentType(DepartmentType.Distributor);
+        selectedDepartment.setDepartmentType(DepartmentType.Customer);
         return "/company/customer";
     }
 
     public String toAddNewRoute() {
         selectedDepartment = new Department();
         selectedDepartment.setInstitution(sessionController.getInstitution());
-        selectedDepartment.setDepartmentType(DepartmentType.Distributor);
-        return "/company/customer";
+        selectedDepartment.setDepartmentType(DepartmentType.Route);
+        return "/company/route";
     }
 
     public String toListManufacturers() {
@@ -207,8 +210,8 @@ public class CompanyController implements Serializable {
     }
 
     public String toListRoutes() {
-        routes = fillDepartment(DepartmentType.Manufacturer);
-        return "/company/manufacturers";
+        routes = fillDepartment(DepartmentType.Route);
+        return "/company/routes";
     }
 
     public String toListBanks() {
@@ -222,7 +225,7 @@ public class CompanyController implements Serializable {
     }
 
     public String toListCustomers() {
-        customers = fillDepartment(DepartmentType.Distributor);
+        customers = fillDepartment(DepartmentType.Customer);
         return "/company/customers";
     }
 

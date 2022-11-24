@@ -213,6 +213,35 @@ public class DepartmentController implements Serializable {
         return departmentList;
     }
 
+    public List<Department> completeDistributor(String qry) {
+        return completeDept(qry, DepartmentType.Distributor, null, null);
+    }
+
+    public List<Department> completeDept(String qry, DepartmentType type, Department distributor, Department route) {
+        String sql;
+        HashMap hm = new HashMap();
+        sql = "select c from Department c "
+                + " where c.retired=false "
+                + " and upper(c.name) like :q";
+        if (type != null) {
+            sql += " and c.departmentType=:type ";
+            hm.put("type", type);
+        }
+        if (distributor != null) {
+            sql += " and c.distributor=:distributor ";
+            hm.put("distributor", distributor);
+        }
+        if (route != null) {
+            sql += " and c.route=:route ";
+            hm.put("route", route);
+        }
+
+        sql += " order by c.name";
+        hm.put("q", "%" + qry.toUpperCase() + "%");
+        departmentList = getFacade().findBySQL(sql, hm);
+        return departmentList;
+    }
+
     public List<Department> completeDeptPharmacy(String qry) {
         String sql;
         HashMap hm = new HashMap();

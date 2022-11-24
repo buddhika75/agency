@@ -9,28 +9,65 @@
     <h:body>
         <ui:composition template="/resources/template/template.xhtml">
             <ui:define name="content">
-                <p:panelGrid columns="2"  
-                             class="w-100"
-                             rendered="#{sessionController.loggedUser.role eq 'Company_Administrator'}" >
-                    <f:facet name="header" >
-                        Manage Institutions
-                    </f:facet>
-                    <h:form>
-                        <p:panelGrid columns="1" class="align-top"  >
-                            <h:commandButton class="btn btn-primary w-100 my-3"  
-                                             value="Add New Distrubutor" 
-                                             action="#{companyController.toAddNewDistributor()}" 
-                                             />
-                            <h:commandButton  class="btn btn-primary w-100 my-3"  
-                                              value="View &amp; Manage Distributors" 
-                                              action="#{companyController.toListDistributors()}" />
-                            
-                            
-                        </p:panelGrid>
-                    </h:form>
-                    <ui:insert name="ins" >
-                    </ui:insert>
-                </p:panelGrid>
+
+                <div class="card w-100" >
+                    <div class="card-header" >
+                        <h2>Manage Institutions</h2>
+                    </div>
+                    <div class="card-body" >
+                        <div class="row" >
+                            <div class="col-md-3" >
+                                <h:form>
+
+                                    <h:commandButton class="btn btn-primary w-100 my-1"  
+                                                     value="Add New Distrubutor" 
+                                                     action="#{companyController.toAddNewDistributor()}" 
+                                                     />
+                                    <h:commandButton  class="btn btn-primary w-100 my-1"  
+                                                      value="View &amp; Manage Distributors" 
+                                                      action="#{companyController.toListDistributors()}" />
+
+                                    <h:commandButton class="btn btn-primary w-100 my-1"  
+                                                     value="Add New Manufacturer" 
+                                                     action="#{companyController.toAddNewManufacturer()}" 
+                                                     />
+                                    <h:commandButton  class="btn btn-primary w-100 my-1"  
+                                                      value="View &amp; Manage Manufacturers" 
+                                                      action="#{companyController.toListManufacturers()}" />
+
+                                    <h:commandButton class="btn btn-primary w-100 my-1"  
+                                                     value="Add New Customer" 
+                                                     action="#{companyController.toAddNewCustomer()}" 
+                                                     />
+                                    <h:commandButton  class="btn btn-primary w-100 my-1"  
+                                                      value="View &amp; Manage Customers" 
+                                                      action="#{companyController.toListCustomers()}" />
+                                    
+                                     <h:commandButton class="btn btn-primary w-100 my-1"  
+                                                     value="Add New Route" 
+                                                     action="#{companyController.toAddNewRoute()}" 
+                                                     />
+                                    <h:commandButton  class="btn btn-primary w-100 my-1"  
+                                                      value="View &amp; Manage Routes" 
+                                                      action="#{companyController.toListRoutes()}" />
+
+                                    <h:commandButton class="btn btn-primary w-100 my-1"  
+                                                     value="Add New Bank" 
+                                                     action="#{companyController.toAddNewBank()}" 
+                                                     />
+                                    <h:commandButton  class="btn btn-primary w-100 my-1"  
+                                                      value="View &amp; Manage Banks" 
+                                                      action="#{companyController.toListBanks()}" />
+
+                                </h:form>
+                            </div>
+                            <div class="col-md-9" >
+                                <ui:insert name="ins" >
+                                </ui:insert>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </ui:define>
         </ui:composition>
     </h:body>

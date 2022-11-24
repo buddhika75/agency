@@ -43,11 +43,11 @@ public class Department implements Serializable {
     @ManyToOne
     Institution institution;
     @ManyToOne
-    Department superDepartment;
+    Department distributor;
     @Enumerated(EnumType.STRING)
     DepartmentType departmentType;
     @ManyToOne
-    Department sampleDepartment;
+    Department route;
     @ManyToOne
     Department labDepartment;
 
@@ -148,12 +148,12 @@ public class Department implements Serializable {
         this.institution = institution;
     }
 
-    public Department getSuperDepartment() {
-        return superDepartment;
+    public Department getDistributor() {
+        return distributor;
     }
 
-    public void setSuperDepartment(Department superDepartment) {
-        this.superDepartment = superDepartment;
+    public void setDistributor(Department distributor) {
+        this.distributor = distributor;
     }
 
     public WebUser getCreater() {
@@ -244,12 +244,12 @@ public class Department implements Serializable {
         this.departmentType = departmentType;
     }
 
-    public Department getSampleDepartment() {
-        return sampleDepartment;
+    public Department getRoute() {
+        return route;
     }
 
-    public void setSampleDepartment(Department sampleDepartment) {
-        this.sampleDepartment = sampleDepartment;
+    public void setRoute(Department route) {
+        this.route = route;
     }
 
     public Department getLabDepartment() {

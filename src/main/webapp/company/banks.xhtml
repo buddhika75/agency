@@ -12,13 +12,8 @@
 
             <ui:define name="ins">
                 <h:form >
-                    <p:dataTable value="#{companyController.distributors}" var="d" rowKey="#{d.id}" 
+                    <p:dataTable value="#{companyController.banks}" var="d" rowKey="#{d.id}" 
                                  tableStyleClass="table table-striped"
-                                 rows="10"
-                                 paginator="true" paginatorPosition="both"
-                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
-                                 rowsPerPageTemplate="5,10,{ShowAll|'All'}"
                                  >
                         <p:column headerText="Name" 
                                   sortBy="#{d.name}"

@@ -6,6 +6,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:autocomplete="http://java.sun.com/jsf/composite/autocomplete"
                 xmlns:au="http://java.sun.com/jsf/composite/autocomplete">
 
 
@@ -13,7 +14,7 @@
         <h:form>
             <div class="card" >
                 <div class="card-header" >
-                    <h3>Distributor</h3> 
+                    <h3>Route</h3> 
                 </div>
                 <div class="form form-group card-body" >
                     <h:outputLabel id="lblName" value="Name"  ></h:outputLabel>
@@ -21,24 +22,23 @@
                                  class="form-control" 
                                  value="#{companyController.selectedDepartment.name}"  ></p:inputText>
 
-                    <h:outputLabel id="lblPhone" value="Phone" ></h:outputLabel>
-                    <p:inputText autocomplete="off" id="txtPhone" 
-                                 value="#{companyController.selectedDepartment.telephone1}" 
-                                 class="form-control" ></p:inputText>
-
-                    <h:outputLabel id="lblFax" for="txtFax" value="Fax" ></h:outputLabel>
-                    <p:inputText autocomplete="off" id="txtFax" 
-                                 class="form-control" 
-                                 value="#{companyController.selectedDepartment.fax}"  ></p:inputText>
-
-                    <h:outputLabel id="lblEMail" for="txtEmail" value="Email" ></h:outputLabel>
-                    <p:inputText autocomplete="off" id="txtEmail" 
-                                 value="#{companyController.selectedDepartment.email}" 
-                                 class="form-control" ></p:inputText>
+                    <h:outputLabel id="lblDistributor" value="Distributor" for="acDis"  ></h:outputLabel>
+                    <p:autoComplete
+                        class="form-control"
+                        inputStyleClass="form-control w-100"
+                        id="acDis"
+                        completeMethod="#{departmentController.completeDistributor}" 
+                        var="dept" itemLabel="#{dept.name}"
+                        itemValue="#{dept}" 
+                        forceSelection="true" 
+                        value="#{companyController.selectedDepartment.distributor}" 
+                        required="true"
+                        converter="departmentConverter" >
+                    </p:autoComplete>
 
                     <h:outputLabel id="lblAdress" value="Address"
                                    for="txtAdress"
-                                  ></h:outputLabel>
+                                   ></h:outputLabel>
                     <p:inputTextarea id="txtAdress" 
                                      value="#{companyController.selectedDepartment.address}" 
                                      class="form-control"  ></p:inputTextarea>

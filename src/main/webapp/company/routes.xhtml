@@ -12,7 +12,7 @@
 
             <ui:define name="ins">
                 <h:form >
-                    <p:dataTable value="#{companyController.distributors}" var="d" rowKey="#{d.id}" 
+                    <p:dataTable value="#{companyController.routes}" var="d" rowKey="#{d.id}" 
                                  tableStyleClass="table table-striped"
                                  rows="10"
                                  paginator="true" paginatorPosition="both"
@@ -32,20 +32,8 @@
                                   filterMatchMode="contains">
                             <p:outputLabel value="#{d.address}" ></p:outputLabel>
                         </p:column>
-                        <p:column headerText="Phone" 
-                                  sortBy="#{d.telephone1}" 
-                                  filterBy="#{d.telephone1}"
-                                  filterMatchMode="contains">
-                            <p:outputLabel value="#{d.telephone1}" ></p:outputLabel>
-                        </p:column>
-                        <p:column headerText="Email" 
-                                  sortBy="#{d.email}" 
-                                  filterBy="#{d.email}"
-                                  filterMatchMode="contains">
-                            <p:outputLabel value="#{d.email}" ></p:outputLabel>
-                        </p:column>
                         <p:column headerText="Actions">
-                            <h:commandButton  class="btn btn-secondary w-100"  action="#{companyController.toViewDistributor()}" value="Manage">
+                            <h:commandButton  class="btn btn-secondary w-100"  action="#{companyController.toViewRoute()}" value="Manage">
                                 <f:setPropertyActionListener value="#{d}" target="#{companyController.selectedDepartment}" ></f:setPropertyActionListener>
                             </h:commandButton>
                             <h:commandButton class="btn btn-warning w-100" action="#{companyController.removeSelectedDepartment()}" value="Delete" 
