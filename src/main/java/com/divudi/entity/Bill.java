@@ -6,17 +6,13 @@ package com.divudi.entity;
 
 import com.divudi.data.BillClassType;
 import com.divudi.data.BillType;
-import com.divudi.data.IdentifiableWithNameOrCode;
 import com.divudi.data.PaymentMethod;
-import com.divudi.entity.cashTransaction.CashTransaction;
-import com.divudi.entity.pharmacy.StockVarientBillItem;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -27,7 +23,6 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
@@ -38,27 +33,6 @@ import javax.persistence.Transient;
  */
 @Entity
 public class Bill implements Serializable {
-
-    @OneToOne
-    private CashTransaction cashTransaction;
-    @OneToMany(mappedBy = "bill", fetch = FetchType.LAZY)
-    private List<StockVarientBillItem> stockVarientBillItems = new ArrayList<>();
-    @OneToMany(mappedBy = "backwardReferenceBill", fetch = FetchType.LAZY)
-    private List<Bill> forwardReferenceBills = new ArrayList<>();
-    @OneToMany(mappedBy = "forwardReferenceBill", fetch = FetchType.LAZY)
-    private List<Bill> backwardReferenceBills = new ArrayList<>();
-    @OneToMany(mappedBy = "billedBill", fetch = FetchType.LAZY)
-    private List<Bill> returnPreBills = new ArrayList<>();
-    @OneToMany(mappedBy = "billedBill", fetch = FetchType.LAZY)
-    private List<Bill> returnBhtIssueBills = new ArrayList<>();
-    @OneToMany(mappedBy = "referenceBill", fetch = FetchType.LAZY)
-    private List<Bill> returnCashBills = new ArrayList<>();
-    @OneToMany(mappedBy = "referenceBill", fetch = FetchType.LAZY)
-    private List<Bill> cashBillsPre = new ArrayList<>();
-    @OneToMany(mappedBy = "referenceBill", fetch = FetchType.LAZY)
-    private List<Bill> cashBillsOpdPre = new ArrayList<>();
-    @OneToMany(mappedBy = "billedBill", fetch = FetchType.LAZY)
-    private List<Bill> refundBills = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     BillClassType billClassType;
@@ -79,8 +53,6 @@ public class Bill implements Serializable {
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Payment> payments = new ArrayList<>();
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<BillFee> billFees = new ArrayList<>();
-    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("searialNo")
     List<BillItem> billItems;
 
@@ -88,9 +60,6 @@ public class Bill implements Serializable {
     @OrderBy("searialNo")
     List<BillItem> billExpenses;
 
-    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<BillComponent> billComponents = new ArrayList<>();
-    ////////////////////////////////////////////////   
     @Lob
     String comments;
     // Bank Detail
@@ -116,11 +85,7 @@ public class Bill implements Serializable {
     @ManyToOne
     BillItem singleBillItem;
     String qutationNumber;
-    @ManyToOne
-    Institution referredByInstitution;
-    @Column(name = "referralID")
-    String referralNumber;
-
+   
     //Values
     double margin;
 
@@ -197,13 +162,6 @@ public class Bill implements Serializable {
     String invoiceNumber;
     @Transient
     int intInvoiceNumber;
-    //Staff
-    @ManyToOne
-    Staff staff;
-    @ManyToOne
-    Staff fromStaff;
-    @ManyToOne
-    Staff toStaff;
     //Booleans
     boolean cancelled;
     boolean refunded;
@@ -240,18 +198,9 @@ public class Bill implements Serializable {
     @Transient
     String billClass;
     @ManyToOne
-    Item billPackege;//BILLPACKEGE_ID
-    @ManyToOne
     Person person;
     @ManyToOne
     Patient patient;
-    @ManyToOne
-    Doctor referredBy;
-    @Transient
-    List<Bill> listOfBill;
-
-    @Transient
-    private List<BillItem> transActiveBillItem;
 
     @ManyToOne
     private Bill forwardReferenceBill;
@@ -270,9 +219,6 @@ public class Bill implements Serializable {
     private WebUser fromWebUser;
     double claimableTotal;
 
-    //Denormalization
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    Date appointmentAt;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     Date paidAt;
     @ManyToOne
@@ -281,42 +227,7 @@ public class Bill implements Serializable {
     @Transient
     double transTotalSaleValue;
 
-    //Sms Info
-    private Boolean smsed = false;
-    @ManyToOne
-    private WebUser smsedUser;
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date smsedAt;
-    @OneToMany(mappedBy = "bill")
-    private List<Sms> sentSmses;
-
-    //Print Information
     private boolean printed;
-//    @ManyToOne
-//    private WebUser printedUser;
-//    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-//    private Date printedAt;
-
-    @Transient
-    double transTotalCCFee;
-    @Transient
-    double transTotalWithOutCCFee;
-    @Transient
-    double transCurrentCCBalance;
-    @Transient
-    AgentHistory agentHistory;
-    @Transient
-    double vatCalulatedAmount;
-    @Transient
-    double vatPlusStaffFee;
-    @Transient
-    double vatPlusHosFee;
-
-    @Transient
-    private boolean approvedAnyTest = false;
-
-    @Transient
-    private IdentifiableWithNameOrCode referredInstituteOrDoctor;
 
     public double getTransTotalSaleValue() {
         return transTotalSaleValue;
@@ -463,16 +374,12 @@ public class Bill implements Serializable {
         collectingCentre = bill.getCollectingCentre();
         catId = bill.getCatId();
         creditCompany = bill.getCreditCompany();
-        staff = bill.getStaff();
-        toStaff = bill.getToStaff();
-        fromStaff = bill.getFromStaff();
         toDepartment = bill.getToDepartment();
         toInstitution = bill.getToInstitution();
         fromDepartment = bill.getFromDepartment();
         fromInstitution = bill.getFromInstitution();
         discountPercent = bill.getDiscountPercent();
         patient = bill.getPatient();
-        referredBy = bill.getReferredBy();
         referringDepartment = bill.getReferringDepartment();
         comments = bill.getComments();
         paymentMethod = bill.getPaymentMethod();
@@ -481,12 +388,9 @@ public class Bill implements Serializable {
         chequeDate = bill.getChequeDate();
         referenceInstitution = bill.getReferenceInstitution();
         bookingId = bill.getBookingId();
-        appointmentAt = bill.getAppointmentAt();
-        referredByInstitution = bill.getReferredByInstitution();
         invoiceNumber = bill.getInvoiceNumber();
         vat = bill.getVat();
         vatPlusNetTotal = bill.getVatPlusNetTotal();
-        //      referenceBill=bill.getReferenceBill();
     }
 
     public void copyValue(Bill bill) {
@@ -499,32 +403,6 @@ public class Bill implements Serializable {
         this.margin = bill.getMargin();
         this.vat = bill.getVat();
         this.vatPlusNetTotal = bill.getVatPlusNetTotal();
-    }
-
-    public List<BillComponent> getBillComponents() {
-        return billComponents;
-    }
-
-    public void setBillComponents(List<BillComponent> billComponents) {
-        this.billComponents = billComponents;
-    }
-
-    public boolean checkActiveForwardReference() {
-        for (Bill b : getForwardReferenceBills()) {
-            if (b.getCreater() != null && !b.isCancelled() && !b.isRetired()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean checkActiveBackwardReference() {
-        for (Bill b : getBackwardReferenceBills()) {
-            if (b.getCreater() != null && !b.isCancelled() && !b.isRetired()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public Field getField(String name) {
@@ -601,17 +479,6 @@ public class Bill implements Serializable {
         this.balance = balance;
     }
 
-    public List<Bill> getListOfBill() {
-        if (listOfBill == null) {
-            listOfBill = new ArrayList<>();
-        }
-        return listOfBill;
-    }
-
-    public void setListOfBill(List<Bill> listOfBill) {
-        this.listOfBill = listOfBill;
-    }
-
     public int getIntInvoiceNumber() {
         return intInvoiceNumber;
     }
@@ -635,14 +502,6 @@ public class Bill implements Serializable {
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
-    }
-
-    public Item getBillPackege() {
-        return billPackege;
-    }
-
-    public void setBillPackege(Item billPackege) {
-        this.billPackege = billPackege;
     }
 
     public String getBillClass() {
@@ -748,14 +607,6 @@ public class Bill implements Serializable {
         this.department = department;
     }
 
-    public Staff getStaff() {
-        return staff;
-    }
-
-    public void setStaff(Staff staff) {
-        this.staff = staff;
-    }
-
     public Institution getFromInstitution() {
         return fromInstitution;
     }
@@ -786,22 +637,6 @@ public class Bill implements Serializable {
 
     public void setToDepartment(Department toDepartment) {
         this.toDepartment = toDepartment;
-    }
-
-    public Staff getFromStaff() {
-        return fromStaff;
-    }
-
-    public void setFromStaff(Staff fromStaff) {
-        this.fromStaff = fromStaff;
-    }
-
-    public Staff getToStaff() {
-        return toStaff;
-    }
-
-    public void setToStaff(Staff toStaff) {
-        this.toStaff = toStaff;
     }
 
     public BillType getBillType() {
@@ -912,14 +747,6 @@ public class Bill implements Serializable {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
-    }
-
-    public Doctor getReferredBy() {
-        return referredBy;
-    }
-
-    public void setReferredBy(Doctor referredBy) {
-        this.referredBy = referredBy;
     }
 
     public Department getReferringDepartment() {
@@ -1192,14 +1019,6 @@ public class Bill implements Serializable {
         this.chequeDate = chequeDate;
     }
 
-    public List<BillFee> getBillFees() {
-        return billFees;
-    }
-
-    public void setBillFees(List<BillFee> billFees) {
-        this.billFees = billFees;
-    }
-
     public double getHospitalFee() {
         return hospitalFee;
     }
@@ -1275,163 +1094,6 @@ public class Bill implements Serializable {
         this.backwardReferenceBill = backwardReferenceBill;
     }
 
-//    public List<BillItem> getTransActiveBillItem() {
-//        if (billItems != null) {
-//            transActiveBillItem = new ArrayList<>();
-//            for (BillItem b : billItems) {
-//                if (!b.isRetired()) {
-//                    transActiveBillItem.add(b);
-//                }
-//            }
-//        } else {
-//            transActiveBillItem = new ArrayList<>();
-//        }
-//        return transActiveBillItem;
-//    }call me internet is dead slow
-//
-//    public void setTransActiveBillItem(List<BillItem> transActiveBillItem) {
-//        this.transActiveBillItem = transActiveBillItem;
-//    }
-    public List<Bill> getForwardReferenceBills() {
-        if (forwardReferenceBills == null) {
-            forwardReferenceBills = new ArrayList<>();
-        }
-        return forwardReferenceBills;
-    }
-
-    public void setForwardReferenceBills(List<Bill> forwardReferenceBills) {
-        this.forwardReferenceBills = forwardReferenceBills;
-    }
-
-    public List<Bill> getBackwardReferenceBills() {
-        if (backwardReferenceBills == null) {
-            backwardReferenceBills = new ArrayList<>();
-        }
-        return backwardReferenceBills;
-    }
-
-    public void setBackwardReferenceBills(List<Bill> backwardReferenceBills) {
-        this.backwardReferenceBills = backwardReferenceBills;
-    }
-
-    public List<BillItem> getTransActiveBillItem() {
-        return transActiveBillItem;
-    }
-
-    public void setTransActiveBillItem(List<BillItem> transActiveBillItem) {
-        this.transActiveBillItem = transActiveBillItem;
-    }
-
-    public List<Bill> getReturnPreBills() {
-        List<Bill> bills = new ArrayList<>();
-
-        for (Bill b : returnPreBills) {
-            if (b instanceof RefundBill && b.getBillType() == BillType.PharmacyPre) {
-
-                bills.add(b);
-            }
-        }
-        returnPreBills = bills;
-
-        return returnPreBills;
-    }
-
-    public List<Bill> getReturnBhtIssueBills() {
-        List<Bill> bills = new ArrayList<>();
-//        System.err.println("Size " + returnBhtIssueBills.size());
-        for (Bill b : returnBhtIssueBills) {
-//            System.err.println("1 " + b);
-//            System.err.println("2 " + b.getBillClass());
-//            System.err.println("3 " + b.getBillType());
-            if (b instanceof RefundBill && (b.getBillType() == BillType.PharmacyBhtPre || b.getBillType() == BillType.StoreBhtPre)) {
-                bills.add(b);
-            }
-        }
-        returnBhtIssueBills = bills;
-
-        return returnBhtIssueBills;
-    }
-
-    public void setReturnPreBills(List<Bill> returnBills) {
-        this.returnPreBills = returnBills;
-    }
-
-    public List<Bill> getReturnCashBills() {
-        List<Bill> bills = new ArrayList<>();
-        for (Bill b : returnCashBills) {
-            if (b instanceof RefundBill
-                    && b.getBillType() == BillType.PharmacySale
-                    && b.getBilledBill() == null) {
-                bills.add(b);
-            }
-        }
-        returnCashBills = bills;
-
-        return returnCashBills;
-    }
-
-    public boolean checkActiveReturnBhtIssueBills() {
-        for (Bill b : getReturnBhtIssueBills()) {
-            if (!b.isCancelled() && !b.isRetired()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean checkActiveReturnCashBill() {
-        for (Bill b : getReturnCashBills()) {
-            if (!b.isCancelled() && !b.isRetired()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void setReturnCashBills(List<Bill> returnCashBills) {
-        this.returnCashBills = returnCashBills;
-    }
-
-    public List<Bill> getCashBillsPre() {
-        List<Bill> bills = new ArrayList<>();
-        for (Bill b : cashBillsPre) {
-            if (b instanceof BilledBill && b.getBillType() == BillType.PharmacySale) {
-                bills.add(b);
-            }
-        }
-        cashBillsPre = bills;
-
-        return cashBillsPre;
-    }
-
-    public List<Bill> getCashBillsOpdPre() {
-        List<Bill> bills = new ArrayList<>();
-        for (Bill b : cashBillsOpdPre) {
-            if (b instanceof BilledBill && b.getBillType() == BillType.OpdBill) {
-                bills.add(b);
-            }
-        }
-        cashBillsOpdPre = bills;
-        return cashBillsOpdPre;
-    }
-
-    public boolean checkActiveCashPreBill() {
-        for (Bill b : getCashBillsPre()) {
-            if (!b.isCancelled() && !b.isRetired()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void setCashBillsPre(List<Bill> cashBillsPre) {
-        this.cashBillsPre = cashBillsPre;
-    }
-
-    public void setReturnBhtIssueBills(List<Bill> returnBhtIssueBills) {
-        this.returnBhtIssueBills = returnBhtIssueBills;
-    }
-
     public Category getCategory() {
         return category;
     }
@@ -1454,14 +1116,6 @@ public class Bill implements Serializable {
 
     public void setEditedAt(Date editedAt) {
         this.editedAt = editedAt;
-    }
-
-    public List<StockVarientBillItem> getStockVarientBillItems() {
-        return stockVarientBillItems;
-    }
-
-    public void setStockVarientBillItems(List<StockVarientBillItem> stockVarientBillItems) {
-        this.stockVarientBillItems = stockVarientBillItems;
     }
 
     public boolean isTransBoolean() {
@@ -1492,14 +1146,6 @@ public class Bill implements Serializable {
         this.fromWebUser = fromWebUser;
     }
 
-    public CashTransaction getCashTransaction() {
-        return cashTransaction;
-    }
-
-    public void setCashTransaction(CashTransaction cashTransaction) {
-        this.cashTransaction = cashTransaction;
-
-    }
 
     public WebUser getToWebUser() {
         return toWebUser;
@@ -1525,13 +1171,6 @@ public class Bill implements Serializable {
         this.referenceInstitution = referenceInstitution;
     }
 
-    public Date getAppointmentAt() {
-        return appointmentAt;
-    }
-
-    public void setAppointmentAt(Date appointmentAt) {
-        this.appointmentAt = appointmentAt;
-    }
 
     public Date getPaidAt() {
         return paidAt;
@@ -1557,22 +1196,6 @@ public class Bill implements Serializable {
         this.paid = paid;
     }
 
-    public Institution getReferredByInstitution() {
-        return referredByInstitution;
-    }
-
-    public void setReferredByInstitution(Institution referredByInstitution) {
-        this.referredByInstitution = referredByInstitution;
-    }
-
-    public String getReferralNumber() {
-        return referralNumber;
-    }
-
-    public void setReferralNumber(String referralNumber) {
-        this.referralNumber = referralNumber;
-    }
-
     public boolean isTransError() {
         return transError;
     }
@@ -1581,61 +1204,6 @@ public class Bill implements Serializable {
         this.transError = transError;
     }
 
-    public List<Sms> getSentSmses() {
-        return sentSmses;
-    }
-
-    public void setSentSmses(List<Sms> sentSmses) {
-        this.sentSmses = sentSmses;
-    }
-
-    public Boolean getSmsed() {
-        return smsed;
-    }
-
-    public void setSmsed(Boolean smsed) {
-        this.smsed = smsed;
-    }
-
-    public WebUser getSmsedUser() {
-        return smsedUser;
-    }
-
-    public void setSmsedUser(WebUser smsedUser) {
-        this.smsedUser = smsedUser;
-    }
-
-    public Date getSmsedAt() {
-        return smsedAt;
-    }
-
-    public void setSmsedAt(Date smsedAt) {
-        this.smsedAt = smsedAt;
-    }
-
-    public double getTransTotalCCFee() {
-        return transTotalCCFee;
-    }
-
-    public void setTransTotalCCFee(double transTotalCCFee) {
-        this.transTotalCCFee = transTotalCCFee;
-    }
-
-    public double getTransTotalWithOutCCFee() {
-        return transTotalWithOutCCFee;
-    }
-
-    public void setTransTotalWithOutCCFee(double transTotalWithOutCCFee) {
-        this.transTotalWithOutCCFee = transTotalWithOutCCFee;
-    }
-
-    public double getTransCurrentCCBalance() {
-        return transCurrentCCBalance;
-    }
-
-    public void setTransCurrentCCBalance(double transCurrentCCBalance) {
-        this.transCurrentCCBalance = transCurrentCCBalance;
-    }
 
     public double getVatPlusNetTotal() {
         return vatPlusNetTotal;
@@ -1645,84 +1213,12 @@ public class Bill implements Serializable {
         this.vatPlusNetTotal = vatPlusNetTotal;
     }
 
-    public double getVatCalulatedAmount() {
-        return vatCalulatedAmount;
-    }
-
-    public void setVatCalulatedAmount(double vatCalulatedAmount) {
-        this.vatCalulatedAmount = vatCalulatedAmount;
-    }
-
-    public List<Bill> getRefundBills() {
-        return refundBills;
-    }
-
-    public void setRefundBills(List<Bill> refundBills) {
-        this.refundBills = refundBills;
-    }
-
-    public AgentHistory getAgentHistory() {
-        return agentHistory;
-    }
-
-    public void setAgentHistory(AgentHistory agentHistory) {
-        this.agentHistory = agentHistory;
-    }
-
-    public double getVatPlusStaffFee() {
-        return vatPlusStaffFee;
-    }
-
-    public void setVatPlusStaffFee(double vatPlusStaffFee) {
-        this.vatPlusStaffFee = vatPlusStaffFee;
-    }
-
-    public double getVatPlusHosFee() {
-        return vatPlusHosFee;
-    }
-
-    public void setVatPlusHosFee(double vatPlusHosFee) {
-        this.vatPlusHosFee = vatPlusHosFee;
-    }
-
     public boolean isPrinted() {
         return printed;
     }
 
     public void setPrinted(boolean printed) {
         this.printed = printed;
-    }
-
-//    public WebUser getPrintedUser() {
-//        return printedUser;
-//    }
-//
-//    public void setPrintedUser(WebUser printedUser) {
-//        this.printedUser = printedUser;
-//    }
-//
-//    public Date getPrintedAt() {
-//        return printedAt;
-//    }
-//
-//    public void setPrintedAt(Date printedAt) {
-//        this.printedAt = printedAt;
-//    }
-    public boolean isApprovedAnyTest() {
-        return approvedAnyTest;
-    }
-
-    public void setApprovedAnyTest(boolean approvedAnyTest) {
-        this.approvedAnyTest = approvedAnyTest;
-    }
-
-    public IdentifiableWithNameOrCode getReferredInstituteOrDoctor() {
-        if (referenceInstitution != null) {
-            referredInstituteOrDoctor = referenceInstitution;
-        } else {
-            referredInstituteOrDoctor = referredBy;
-        }
-        return referredInstituteOrDoctor;
     }
 
     public double getAbsoluteNetTotal() {

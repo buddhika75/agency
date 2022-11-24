@@ -11,9 +11,9 @@
             <ui:define name="content">
                 <p:panelGrid columns="2"  
                              class="w-100"
-                             rendered="#{sessionController.loggedUser.webUserRole eq 'Company_Administrator'}" >
+                             rendered="#{sessionController.loggedUser.role eq 'Company_Administrator'}" >
                     <f:facet name="header" >
-                        Manage Users
+                        Manage Items
                     </f:facet>
                     <h:form>
                         <p:panelGrid columns="1" class="align-top"  >

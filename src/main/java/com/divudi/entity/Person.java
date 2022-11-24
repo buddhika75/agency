@@ -82,8 +82,6 @@ public class Person implements Serializable {
     Date retiredAt;
     String retireComments;
     @ManyToOne
-    Area area;
-    @ManyToOne
     Institution institution;
     @ManyToOne
     Department department;
@@ -370,14 +368,6 @@ public class Person implements Serializable {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
-    }
-
-    public Area getArea() {
-        return area;
-    }
-
-    public void setArea(Area area) {
-        this.area = area;
     }
 
     public Institution getInstitution() {

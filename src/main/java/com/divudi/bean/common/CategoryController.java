@@ -10,10 +10,6 @@ package com.divudi.bean.common;
 
 import com.divudi.entity.Category;
 import com.divudi.entity.Item;
-import com.divudi.entity.Nationality;
-import com.divudi.entity.Religion;
-import com.divudi.entity.ServiceCategory;
-import com.divudi.entity.ServiceSubCategory;
 import com.divudi.entity.pharmacy.AssetCategory;
 import com.divudi.entity.pharmacy.ConsumableCategory;
 import com.divudi.entity.pharmacy.PharmaceuticalCategory;
@@ -112,23 +108,6 @@ public class CategoryController implements Serializable {
         return suggestions;
     }
 
-    public List<Category> completeServiceCategory(String query) {
-        List<Category> suggestions;
-        String sql;
-        HashMap tmpMap = new HashMap();
-        if (query == null) {
-            suggestions = new ArrayList<>();
-        } else {
-
-            sql = "select c from Category c where c.retired=false and (type(c)= :sup or type(c)= :sub) and upper(c.name) like '%" + query.toUpperCase() + "%' order by c.name";
-            //////// // System.out.println(sql);
-            tmpMap.put("sup", ServiceCategory.class);
-            tmpMap.put("sub", ServiceSubCategory.class);
-            suggestions = getFacade().findBySQL(sql, tmpMap, TemporalType.TIMESTAMP);
-        }
-        return suggestions;
-    }
-
     public List<Category> completeInvestigationCategory(String query) {
         List<Category> suggestions;
         String sql;
@@ -144,161 +123,6 @@ public class CategoryController implements Serializable {
         return suggestions;
     }
     
-    public List<Category> completeServiceInvestigationCategory(String query) {
-        List<Category> suggestions;
-        String sql;
-        HashMap tmpMap = new HashMap();
-        if (query == null) {
-            suggestions = new ArrayList<>();
-        } else {
-
-            sql = "select c from Category c where c.retired=false and (type(c)= :sup or type(c)= :sub or type(c)= :inv) and upper(c.name) like '%" + query.toUpperCase() + "%' order by c.name";
-            //////// // System.out.println(sql);
-            tmpMap.put("sup", ServiceCategory.class);
-            tmpMap.put("sub", ServiceSubCategory.class);
-
-            suggestions = getFacade().findBySQL(sql, tmpMap, TemporalType.TIMESTAMP);
-        }
-        return suggestions;
-    }
-
-    public List<Category> completeCategoryMatrix(String qry) {
-        List<Category> c;
-        String sql;
-        Map temMap = new HashMap();
-
-        sql = "select c from Category c where c.retired=false"
-                + " and (type(c)= :service or type(c)= :sub or type(c)= :invest or "
-                + "type(c)= :time or type(c)= :parm or type(c)= :con  ) and upper(c.name)"
-                + " like :q order by c.name";
-
-        temMap.put("service", ServiceCategory.class);
-        temMap.put("sub", ServiceSubCategory.class);
-
-        temMap.put("parm", PharmaceuticalItemCategory.class);
-        temMap.put("con", ConsumableCategory.class);
-        temMap.put("q", "%" + qry.toUpperCase() + "%");
-
-        c = getFacade().findBySQL(sql, temMap, TemporalType.DATE);
-
-        if (c == null) {
-            c = new ArrayList<>();
-        }
-        return c;
-    }
-
-    public  List<Category> fetchCategoryList() {
-        List<Category> c;
-        String sql;
-        Map temMap = new HashMap();
-
-        sql = "select c from Category c where c.retired=false"
-                + " and (type(c)= :service or type(c)= :sub or type(c)= :invest or "
-                + " like :q order by c.name";
-
-        temMap.put("service", ServiceCategory.class);
-        temMap.put("sub", ServiceSubCategory.class);
-
-
-        c = getFacade().findBySQL(sql, temMap, TemporalType.TIMESTAMP);
-
-        if (c == null) {
-            c = new ArrayList<>();
-        }
-        return c;
-    }
-
-    public List<Category> completeCategoryService(String qry) {
-        List<Category> c;
-        String sql;
-        Map temMap = new HashMap();
-
-        sql = "select c from Category c where c.retired=false"
-                + " and (type(c)= :service or type(c)= :sub  )"
-                + " and upper(c.name)"
-                + " like :q order by c.name";
-
-        temMap.put("service", ServiceCategory.class);
-        temMap.put("sub", ServiceSubCategory.class);
-        temMap.put("q", "%" + qry.toUpperCase() + "%");
-
-        c = getFacade().findBySQL(sql, temMap, TemporalType.DATE);
-
-        if (c == null) {
-            c = new ArrayList<>();
-        }
-        return c;
-    }
-
-    public List<Category> completeCategoryServiceInvestigation(String qry) {
-        List<Category> c;
-        String sql;
-        Map temMap = new HashMap();
-
-        sql = "select c from Category c "
-                + " where c.retired=false"
-                + " and (type(c)= :service "
-                + " or type(c)= :sub "
-                + " or type(c)=:invest )"
-                + " and upper(c.name)"
-                + " like :q order by c.name";
-
-        temMap.put("service", ServiceCategory.class);
-        temMap.put("sub", ServiceSubCategory.class);
-
-        temMap.put("q", "%" + qry.toUpperCase() + "%");
-
-        c = getFacade().findBySQL(sql, temMap, TemporalType.DATE);
-
-        if (c == null) {
-            c = new ArrayList<>();
-        }
-        return c;
-    }
-
-    public List<Category> getServiceCategory() {
-        List<Category> c;
-        String sql;
-        Map temMap = new HashMap();
-
-        sql = "select c from Category c "
-                + " where c.retired=false"
-                + " and (type(c)= :service "
-                + " or type(c)= :sub  )"
-                + "order by c.name";
-
-        temMap.put("service", ServiceCategory.class);
-        temMap.put("sub", ServiceSubCategory.class);
-
-        c = getFacade().findBySQL(sql, temMap, TemporalType.DATE);
-
-        return c;
-    }
-
-    public List<Category> completeCategoryServicePharmacy(String qry) {
-        List<Category> c;
-        String sql;
-        Map temMap = new HashMap();
-
-        sql = "select c from Category c where c.retired=false"
-                + " and (type(c)= :service or type(c)= :sub or type(c)= :ph  )"
-                + " and upper(c.name)"
-                + " like :q order by c.name";
-
-        temMap.put("service", ServiceCategory.class);
-        temMap.put("sub", ServiceSubCategory.class);
-        temMap.put("ph", PharmaceuticalItemCategory.class);
-
-        temMap.put("q", "%" + qry.toUpperCase() + "%");
-
-        c = getFacade().findBySQL(sql, temMap, TemporalType.DATE);
-
-        if (c == null) {
-            c = new ArrayList<>();
-        }
-        return c;
-    }
-
     public List<Category> completeCategoryInvestigation(String qry) {
         List<Category> c;
         String sql;
@@ -519,54 +343,6 @@ public class CategoryController implements Serializable {
             religions = getFacade().findBySQL(jpql);
         }
         return religions;
-    }
-
-    public void addReligion() {
-        if (selectText == null || selectText.trim().equals("")) {
-            JsfUtil.addErrorMessage("Enter a name");
-            return;
-        }
-        Religion r = new Religion();
-        r.setName(selectText);
-        r.setCreatedAt(new Date());
-        r.setCreater(getSessionController().getLoggedUser());
-        getFacade().create(r);
-        religions = null;
-        selectText = "";
-        getReligions();
-    }
-
-    public void addNationality() {
-        if (selectText == null || selectText.trim().equals("")) {
-            JsfUtil.addErrorMessage("Enter a name");
-            return;
-        }
-        Nationality r = new Nationality();
-        r.setName(selectText);
-        r.setCreatedAt(new Date());
-        r.setCreater(getSessionController().getLoggedUser());
-        getFacade().create(r);
-        nationalities = null;
-        selectText = "";
-        getNationalities();
-    }
-
-    public void updateCategory(Category cat) {
-        if (cat == null) {
-            ////// // System.out.println("cat = " + cat);
-            return;
-        }
-        getFacade().edit(cat);
-        if (cat instanceof Religion) {
-            religions = null;
-            getReligions();
-        } else if (cat instanceof Nationality) {
-            nationalities = null;
-            getNationalities();
-        } else {
-            items = null;
-            getItems();
-        }
     }
 
     /**

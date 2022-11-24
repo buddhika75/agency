@@ -224,21 +224,21 @@ public class PharmaceuticalBillItem implements Serializable {
         stringValue = ph.getStringValue();
         //  remainingQty=ph.getRemainingQty();
 
-        make= ph.getMake();
-        model=ph.getModel();
-        code=ph.getCode();
-        description=ph.getDescription();
-        barcode=ph.getBarcode();
-        serialNo=ph.getSerialNo();
-        registrationNo=ph.getRegistrationNo();
-        chassisNo=ph.getChassisNo();
-        engineNo=ph.getEngineNo();
-        colour=ph.getColour();
-        warrentyCertificateNumber=ph.getWarrentyCertificateNumber();
-        warrentyDuration=ph.getWarrentyDuration();
-        deprecitionRate=ph.getDeprecitionRate();
-        manufacturer=ph.getManufacturer();
-        otherNotes=ph.getOtherNotes();
+        make = ph.getMake();
+        model = ph.getModel();
+        code = ph.getCode();
+        description = ph.getDescription();
+        barcode = ph.getBarcode();
+        serialNo = ph.getSerialNo();
+        registrationNo = ph.getRegistrationNo();
+        chassisNo = ph.getChassisNo();
+        engineNo = ph.getEngineNo();
+        colour = ph.getColour();
+        warrentyCertificateNumber = ph.getWarrentyCertificateNumber();
+        warrentyDuration = ph.getWarrentyDuration();
+        deprecitionRate = ph.getDeprecitionRate();
+        manufacturer = ph.getManufacturer();
+        otherNotes = ph.getOtherNotes();
 
     }
 
@@ -309,22 +309,11 @@ public class PharmaceuticalBillItem implements Serializable {
     }
 
     public double getQty() {
-        if (getBillItem() != null && getBillItem().getItem() instanceof Ampp
-                || getBillItem() != null && getBillItem().getItem() instanceof Vmpp) {
-            return qty / getBillItem().getItem().getDblValue();
-        } else {
-            return qty;
-        }
-
+        return qty;
     }
 
     public void setQty(double qty) {
-        if (getBillItem() != null && getBillItem().getItem() instanceof Ampp
-                || getBillItem() != null && getBillItem().getItem() instanceof Vmpp) {
-            this.qty = qty * getBillItem().getItem().getDblValue();
-        } else {
-            this.qty = qty;
-        }
+        this.qty = qty;
     }
 
     public double getQtyInUnit() {
@@ -344,31 +333,15 @@ public class PharmaceuticalBillItem implements Serializable {
     }
 
     public double getFreeQty() {
-        if (getBillItem() != null && getBillItem().getItem() instanceof Ampp
-                || getBillItem() != null && getBillItem().getItem() instanceof Vmpp) {
-            return freeQty / getBillItem().getItem().getDblValue();
-        } else {
-            return freeQty;
-        }
+        return freeQty;
     }
 
     public void setFreeQty(double freeQty) {
-        if (getBillItem() != null && getBillItem().getItem() instanceof Ampp
-                || getBillItem() != null && getBillItem().getItem() instanceof Vmpp) {
-            this.freeQty = freeQty * getBillItem().getItem().getDblValue();
-        } else {
-            this.freeQty = freeQty;
-        }
+        this.freeQty = freeQty;
     }
 
     public double getPurchaseRate() {
-        if (getBillItem() != null && getBillItem().getItem() instanceof Ampp
-                || getBillItem() != null && getBillItem().getItem() instanceof Vmpp) {
-            return purchaseRate * getBillItem().getItem().getDblValue();
-        } else {
-            return purchaseRate;
-        }
-
+        return purchaseRate;
     }
 
     public double getPurchaseRateInUnit() {
@@ -380,12 +353,7 @@ public class PharmaceuticalBillItem implements Serializable {
     }
 
     public void setPurchaseRate(double purchaseRate) {
-        if (getBillItem() != null && getBillItem().getItem() instanceof Ampp
-                || getBillItem() != null && getBillItem().getItem() instanceof Vmpp) {
-            this.purchaseRate = purchaseRate / getBillItem().getItem().getDblValue();
-        } else {
-            this.purchaseRate = purchaseRate;
-        }
+        this.purchaseRate = purchaseRate;
     }
 
     public double getRetailRateInUnit() {
@@ -397,21 +365,11 @@ public class PharmaceuticalBillItem implements Serializable {
     }
 
     public double getRetailRate() {
-        if (getBillItem() != null && getBillItem().getItem() instanceof Ampp
-                || getBillItem() != null && getBillItem().getItem() instanceof Vmpp) {
-            return retailRate * getBillItem().getItem().getDblValue();
-        } else {
-            return retailRate;
-        }
+        return retailRate;
     }
 
     public void setRetailRate(double retailRate) {
-        if (getBillItem() != null && getBillItem().getItem() instanceof Ampp
-                || getBillItem() != null && getBillItem().getItem() instanceof Vmpp) {
-            this.retailRate = retailRate / getBillItem().getItem().getDblValue();
-        } else {
-            this.retailRate = retailRate;
-        }
+        this.retailRate = retailRate;
     }
 
     public double getWholesaleRate() {
@@ -468,22 +426,11 @@ public class PharmaceuticalBillItem implements Serializable {
     }
 
     public double getLastPurchaseRate() {
-        if (getBillItem() != null && getBillItem().getItem() instanceof Ampp
-                || getBillItem() != null && getBillItem().getItem() instanceof Vmpp) {
-            return lastPurchaseRate * getBillItem().getItem().getDblValue();
-        } else {
-            return lastPurchaseRate;
-        }
+        return lastPurchaseRate;
     }
 
     public void setLastPurchaseRate(double lastPurchaseRate) {
-        if (getBillItem() != null && getBillItem().getItem() instanceof Ampp
-                || getBillItem() != null && getBillItem().getItem() instanceof Vmpp) {
-            this.lastPurchaseRate = lastPurchaseRate / getBillItem().getItem().getDblValue();
-        } else {
-            this.lastPurchaseRate = lastPurchaseRate;
-        }
-
+        this.lastPurchaseRate = lastPurchaseRate;
     }
 
     public Stock getStaffStock() {

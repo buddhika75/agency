@@ -13,18 +13,11 @@ import com.divudi.data.Privileges;
 import com.divudi.entity.Department;
 import com.divudi.entity.Institution;
 import com.divudi.entity.Person;
-import com.divudi.entity.Speciality;
-import com.divudi.entity.Staff;
 import com.divudi.entity.WebUser;
-import com.divudi.entity.WebUserDashboard;
-import com.divudi.entity.WebUserPrivilege;
 import com.divudi.facade.DepartmentFacade;
 import com.divudi.facade.InstitutionFacade;
 import com.divudi.facade.PersonFacade;
-import com.divudi.facade.StaffFacade;
-import com.divudi.facade.WebUserDashboardFacade;
 import com.divudi.facade.WebUserFacade;
-import com.divudi.facade.WebUserPrivilegeFacade;
 import com.divudi.facade.util.JsfUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -59,12 +52,6 @@ public class WebUserController implements Serializable {
     private WebUserFacade ejbFacade;
     @EJB
     private PersonFacade personFacade;
-    @EJB
-    private WebUserPrivilegeFacade webUserPrevilageFacade;
-    @EJB
-    private StaffFacade staffFacade;
-    @EJB
-    private WebUserDashboardFacade webUserDashboardFacade;
     /**
      * Controllers
      */
@@ -73,11 +60,6 @@ public class WebUserController implements Serializable {
     @Inject
     SecurityController securityController;
 
-    @Inject
-    private UserDepartmentController userDepartmentController;
-
-    @Inject
-    private UserPrivilageController userPrivilageController;
     /**
      * Class Variables
      */
@@ -95,20 +77,12 @@ public class WebUserController implements Serializable {
     private Institution institution;
     private Department department;
     private Privileges[] currentPrivilegeses;
-    Speciality speciality;
-    List<WebUserPrivilege> userPrivileges;
     private List<WebUser> webUsers;
     List<WebUser> itemsToRemove;
 
-    Staff staff;
-    boolean createOnlyUser = false;
-    boolean createOnlyUserForExsistingUser = false;
     private String newPassword;
     private String newPasswordConfirm;
 
-    private Dashboard dashboard;
-    private WebUserDashboard webUserDashboard;
-    private List<WebUserDashboard> webUserDashboards;
 
     public void removeSelectedItems() {
         for (WebUser s : itemsToRemove) {
@@ -126,7 +100,6 @@ public class WebUserController implements Serializable {
 
     public void updateWebUser(WebUser webUser) {
         personFacade.edit(webUser.getWebUserPerson());
-        staffFacade.edit(webUser.getStaff());
     }
 
     public void updateWebUserForCompanyAdmin() {
@@ -143,7 +116,6 @@ public class WebUserController implements Serializable {
                 + " where c.retired=false "
                 + " c.drawer is not null "
                 + " order by c.drawer.name,c.webUserPerson.name";
-
         webUsers = getFacade().findBySQL(sql);
     }
 
@@ -155,7 +127,6 @@ public class WebUserController implements Serializable {
             String sql = "Select d From Department d where d.retired=false and d.institution.id=" + getInstitution().getId();
             d = getDepartmentFacade().findBySQL(sql);
         }
-
         return d;
     }
 
@@ -201,53 +172,6 @@ public class WebUserController implements Serializable {
             a = new ArrayList<>();
         }
         return a;
-    }
-
-    public void setUserPrivileges(List<WebUserPrivilege> userPrivileges) {
-        this.userPrivileges = userPrivileges;
-    }
-
-    public StaffFacade getStaffFacade() {
-        return staffFacade;
-    }
-
-    public void setStaffFacade(StaffFacade staffFacade) {
-        this.staffFacade = staffFacade;
-    }
-
-    public boolean hasPrivilege(String privilege) {
-        boolean hasPri = false;
-        if (getSessionController().getLoggedUser() == null) {
-            return hasPri;
-        }
-
-        if (getSessionController().getLoggedUser().getId() == null) {
-            return hasPri;
-        }
-
-        for (WebUserPrivilege w : getSessionController().getUserPrivileges()) {
-            Privileges p = null;
-            try {
-                p = Privileges.valueOf(privilege);
-            } catch (Exception e) {
-                hasPri = false;
-                return hasPri;
-            }
-            if (w.getPrivilege() != null && w.getPrivilege().equals(p)) {
-
-                hasPri = true;
-                return hasPri;
-            }
-        }
-        return hasPri;
-    }
-
-    public Speciality getSpeciality() {
-        return speciality;
-    }
-
-    public void setSpeciality(Speciality speciality) {
-        this.speciality = speciality;
     }
 
     public List<Department> getDepartments() {
@@ -359,21 +283,15 @@ public class WebUserController implements Serializable {
         setCurrent(new WebUser());
         Person p = new Person();
         getCurrent().setWebUserPerson(p);
-        setSpeciality(null);
         currentPrivilegeses = null;
-        createOnlyUser = false;
-        createOnlyUserForExsistingUser = false;
-        staff = null;
         department = null;
         institution = null;
-
     }
 
     public void prepairAddNewUserForCompanyAdmin() {
         setCurrent(new WebUser());
         Person p = new Person();
         getCurrent().setWebUserPerson(p);
-        setSpeciality(null);
         department = null;
         institution = sessionController.getInstitution();
     }
@@ -421,10 +339,6 @@ public class WebUserController implements Serializable {
         getCurrent().getWebUserPerson().setCreater(getSessionController().getLoggedUser());
         getPersonFacade().create(getCurrent().getWebUserPerson());
 
-        getCurrent().setActivated(true);
-        getCurrent().setActivatedAt(new Date());
-        getCurrent().setActivator(getSessionController().getLoggedUser());
-
         getCurrent().setInstitution(sessionController.getInstitution());
 
         getCurrent().setDepartment(getDepartment());
@@ -456,10 +370,6 @@ public class WebUserController implements Serializable {
         getCurrent().getWebUserPerson().setCreater(getSessionController().getLoggedUser());
         getPersonFacade().create(getCurrent().getWebUserPerson());
 
-        getCurrent().setActivated(true);
-        getCurrent().setActivatedAt(new Date());
-        getCurrent().setActivator(getSessionController().getLoggedUser());
-
         getCurrent().setInstitution(sessionController.getInstitution());
         getCurrent().setDepartment(getDepartment());
 
@@ -468,14 +378,6 @@ public class WebUserController implements Serializable {
         getCurrent().setCreater(sessionController.loggedUser);
         getCurrent().setWebUserPassword(getSecurityController().hash(getCurrent().getWebUserPassword()));
         getFacade().create(getCurrent());
-    }
-
-    public void onlyAddStaffListner() {
-        createOnlyUserForExsistingUser = false;
-    }
-
-    public void onlyAddStaffForExsistingUserListner() {
-        createOnlyUser = false;
     }
 
     public List<WebUser> getToApproveUsers() {
@@ -611,21 +513,6 @@ public class WebUserController implements Serializable {
         this.personFacade = personFacade;
     }
 
-//    public List<Privileges> getCurrentPrivilegeses() {
-//        return currentPrivilegeses;
-//    }
-//
-//    public void setCurrentPrivilegeses(List<Privileges> currentPrivilegeses) {
-//        this.currentPrivilegeses = currentPrivilegeses;
-//    }
-    public WebUserPrivilegeFacade getWebUserPrevilageFacade() {
-        return webUserPrevilageFacade;
-    }
-
-    public void setWebUserPrevilageFacade(WebUserPrivilegeFacade webUserPrevilageFacade) {
-        this.webUserPrevilageFacade = webUserPrevilageFacade;
-    }
-
     public Privileges[] getCurrentPrivilegeses() {
         return currentPrivilegeses;
     }
@@ -648,30 +535,6 @@ public class WebUserController implements Serializable {
 
     public void setItemsToRemove(List<WebUser> itemsToRemove) {
         this.itemsToRemove = itemsToRemove;
-    }
-
-    public boolean isCreateOnlyUser() {
-        return createOnlyUser;
-    }
-
-    public void setCreateOnlyUser(boolean createOnlyUser) {
-        this.createOnlyUser = createOnlyUser;
-    }
-
-    public boolean isCreateOnlyUserForExsistingUser() {
-        return createOnlyUserForExsistingUser;
-    }
-
-    public void setCreateOnlyUserForExsistingUser(boolean createOnlyUserForExsistingUser) {
-        this.createOnlyUserForExsistingUser = createOnlyUserForExsistingUser;
-    }
-
-    public Staff getStaff() {
-        return staff;
-    }
-
-    public void setStaff(Staff staff) {
-        this.staff = staff;
     }
 
     public WebUser getSelected() {
@@ -700,16 +563,6 @@ public class WebUserController implements Serializable {
         return "/admin_change_password";
     }
 
-    public String toManagePrivileges() {
-        if (selected == null) {
-            JsfUtil.addErrorMessage("Please select a user");
-            return "";
-        }
-        getUserPrivilageController().setCurrentWebUser(selected);
-        getUserPrivilageController().createSelectedPrivilegesForUser();
-        return "/admin_user_privilages";
-    }
-
     public String toManageSignature() {
         if (selected == null) {
             JsfUtil.addErrorMessage("Please select a user");
@@ -718,79 +571,8 @@ public class WebUserController implements Serializable {
         return "/admin_staff_signature";
     }
 
-    public String toManageDepartments() {
-        if (selected == null) {
-            JsfUtil.addErrorMessage("Please select a user");
-            return "";
-        }
-        getUserDepartmentController().setSelectedUser(selected);
-        return "/admin_user_department";
-    }
-
-    public String toManageDashboards() {
-        if (selected == null) {
-            JsfUtil.addErrorMessage("Please select a user");
-            return "";
-        }
-        current = selected;
-        listWebUserDashboards();
-        return "/admin_manage_dashboards";
-    }
-
     public String BackToAdminManageUsers() {
         return "/admin_manage_users";
-    }
-
-    public void addWebUserDashboard() {
-        if (current == null) {
-            JsfUtil.addErrorMessage("User ?");
-            return;
-        }
-        if (current == null) {
-            JsfUtil.addErrorMessage("Dashboard ?");
-            return;
-        }
-        WebUserDashboard d = new WebUserDashboard();
-        d.setWebUser(selected);
-        d.setDashboard(dashboard);
-        d.setCreatedAt(new Date());
-        d.setCreater(sessionController.getLoggedUser());
-        getWebUserDashboardFacade().create(d);
-        JsfUtil.addSuccessMessage("Added");
-        listWebUserDashboards();
-    }
-
-    public void removeWebUserDashboard() {
-        if (webUserDashboard == null) {
-            JsfUtil.addErrorMessage("Dashboard ?");
-            return;
-        }
-        WebUserDashboard d = webUserDashboard;
-        d.setRetired(true);
-        d.setRetiredAt(new Date());
-        d.setRetirer(sessionController.getLoggedUser());
-        getWebUserDashboardFacade().edit(d);
-        JsfUtil.addSuccessMessage("Removed");
-        listWebUserDashboards();
-    }
-
-    public List<WebUserDashboard> listWebUserDashboards(WebUser wu) {
-        List<WebUserDashboard> wuds = new ArrayList<>();
-        if (wu == null) {
-            return wuds;
-        }
-        String j = "Select d from WebUserDashboard d "
-                + " where d.retired=false "
-                + " and d.webUser=:u "
-                + " order by d.id";
-        Map m = new HashMap();
-        m.put("u", wu);
-        wuds = getWebUserDashboardFacade().findBySQL(j, m);
-        return wuds;
-    }
-
-    public void listWebUserDashboards() {
-        webUserDashboards = listWebUserDashboards(current);
     }
 
     public String backToViewUsers() {
@@ -822,10 +604,6 @@ public class WebUserController implements Serializable {
         getFacade().edit(current);
     }
 
-    public UserDepartmentController getUserDepartmentController() {
-        return userDepartmentController;
-    }
-
     public String getNewPassword() {
         return newPassword;
     }
@@ -840,38 +618,6 @@ public class WebUserController implements Serializable {
 
     public void setNewPasswordConfirm(String newPasswordConfirm) {
         this.newPasswordConfirm = newPasswordConfirm;
-    }
-
-    public UserPrivilageController getUserPrivilageController() {
-        return userPrivilageController;
-    }
-
-    public Dashboard getDashboard() {
-        return dashboard;
-    }
-
-    public void setDashboard(Dashboard dashboard) {
-        this.dashboard = dashboard;
-    }
-
-    public WebUserDashboard getWebUserDashboard() {
-        return webUserDashboard;
-    }
-
-    public void setWebUserDashboard(WebUserDashboard webUserDashboard) {
-        this.webUserDashboard = webUserDashboard;
-    }
-
-    public List<WebUserDashboard> getWebUserDashboards() {
-        return webUserDashboards;
-    }
-
-    public void setWebUserDashboards(List<WebUserDashboard> webUserDashboards) {
-        this.webUserDashboards = webUserDashboards;
-    }
-
-    public WebUserDashboardFacade getWebUserDashboardFacade() {
-        return webUserDashboardFacade;
     }
 
     @FacesConverter("webUs")

@@ -10,6 +10,7 @@ package com.divudi.entity;
 import com.divudi.data.WebUserRole;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -23,8 +24,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Dr. M. H. B. Ariyaratne, MBBS, MSc, MD(Health Informatics)
- * Acting Consultant (Health Informatics)
+ * @author Dr. M. H. B. Ariyaratne, MBBS, MSc, MD(Health Informatics) Acting
+ * Consultant (Health Informatics)
  */
 @Entity
 @XmlRootElement
@@ -34,24 +35,14 @@ public class WebUser implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    Drawer drawer;
-//
-//    public Drawer getDrawer() {
-//        return drawer;
-//    }
-//
-//    public void setDrawer(Drawer drawer) {
-//        this.drawer = drawer;
-//    }
+
     @ManyToOne
     WebTheme userWebTheme;
     String webUserPassword;
-    
+
     @OneToOne
     Person webUserPerson;
-    //Main Properties
-//    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false,length = 56)
     String name;
     String description;
     //Created Properties
@@ -66,15 +57,8 @@ public class WebUser implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     Date retiredAt;
     String retireComments;
-    //Activation properties
-    boolean activated;
-    @ManyToOne
-    WebUser activator;
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    Date activatedAt;
-    String activateComments;
     @Enumerated(EnumType.STRING)
-    WebUserRole role;
+    WebUserRole webUserRole;
     String primeTheme;
     String defLocale;
     String email;
@@ -83,24 +67,13 @@ public class WebUser implements Serializable {
     Institution institution;
     @ManyToOne
     Department department;
-    @ManyToOne
-    Staff staff;
 
     String code;
-
-    public Staff getStaff() {
-        return staff;
-    }
-
-    public void setStaff(Staff staff) {
-        this.staff = staff;
-    }
 
     public WebUser() {
     }
 
     public Institution getInstitution() {
-        //////// // System.out.println("Getting Institution");
         return institution;
     }
 
@@ -244,44 +217,12 @@ public class WebUser implements Serializable {
         this.userWebTheme = userWebTheme;
     }
 
-    public String getActivateComments() {
-        return activateComments;
+    public WebUserRole getWebUserRole() {
+        return webUserRole;
     }
 
-    public void setActivateComments(String activateComments) {
-        this.activateComments = activateComments;
-    }
-
-    public boolean isActivated() {
-        return activated;
-    }
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    public Date getActivatedAt() {
-        return activatedAt;
-    }
-
-    public void setActivatedAt(Date activatedAt) {
-        this.activatedAt = activatedAt;
-    }
-
-    public WebUser getActivator() {
-        return activator;
-    }
-
-    public void setActivator(WebUser activator) {
-        this.activator = activator;
-    }
-
-    public WebUserRole getRole() {
-        return role;
-    }
-
-    public void setRole(WebUserRole role) {
-        this.role = role;
+    public void setWebUserRole(WebUserRole webUserRole) {
+        this.webUserRole = webUserRole;
     }
 
     @Override
