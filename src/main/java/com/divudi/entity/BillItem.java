@@ -4,18 +4,13 @@
  */
 package com.divudi.entity;
 
-import com.divudi.entity.pharmacy.Ampp;
 import com.divudi.entity.pharmacy.PharmaceuticalBillItem;
 import com.divudi.entity.pharmacy.UserStock;
-import com.divudi.entity.pharmacy.Vmpp;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,7 +19,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
 
@@ -104,8 +98,6 @@ public class BillItem implements Serializable {
     Date toTime;
     @OneToOne
     BillItem referanceBillItem;
-    @OneToOne
-    BillFee paidForBillFee;
 
     @Temporal(javax.persistence.TemporalType.DATE)
     Date sessionDate;
@@ -127,11 +119,6 @@ public class BillItem implements Serializable {
     private UserStock transUserStock;
     @Transient
     private BillItem transBillItem;
-    @OneToMany(mappedBy = "billItem", fetch = FetchType.LAZY)
-    private List<BillFee> billFees = new ArrayList<>();
-    @OneToMany(mappedBy = "referenceBillItem", fetch = FetchType.LAZY)
-    @OrderBy("feeAdjusted")
-    private List<BillFee> proFees = new ArrayList<>();
     @OneToMany(mappedBy = "parentBillItem")
     private List<BillItem> chiledBillItems;
 
@@ -505,14 +492,6 @@ public class BillItem implements Serializable {
         this.referanceBillItem = referanceBillItem;
     }
 
-    public BillFee getPaidForBillFee() {
-        return paidForBillFee;
-    }
-
-    public void setPaidForBillFee(BillFee paidForBillFee) {
-        this.paidForBillFee = paidForBillFee;
-    }
-
     public Date getSessionDate() {
         return sessionDate;
     }
@@ -595,52 +574,12 @@ public class BillItem implements Serializable {
         this.tmpSuggession = tmpSuggession;
     }
 
-    public double getTmpQty() {
-        if (getItem() instanceof Ampp || getItem() instanceof Vmpp) {
-            return tmpQty / getItem().getDblValue();
-        } else {
-            return tmpQty;
-        }
-    }
-
-    public void setTmpQty(double tmpQty) {
-        qty = tmpQty;
-        if (getItem() instanceof Ampp || getItem() instanceof Vmpp) {
-            this.tmpQty = tmpQty * getItem().getDblValue();
-        } else {
-            this.tmpQty = tmpQty;
-        }
-
-        if (getPharmaceuticalBillItem() != null) {
-            getPharmaceuticalBillItem().setQty((double) this.tmpQty);
-        }
-    }
-
     public UserStock getTransUserStock() {
         return transUserStock;
     }
 
     public void setTransUserStock(UserStock transUserStock) {
         this.transUserStock = transUserStock;
-    }
-
-    public List<BillFee> getBillFees() {
-        List<BillFee> tmp = new ArrayList<>();
-        if (billFees == null) {
-            return new ArrayList<>();
-        } else {
-            for (BillFee bf : billFees) {
-                if (!bf.isRetired()) {
-                    tmp.add(bf);
-                }
-            }
-        }
-
-        return tmp;
-    }
-
-    public void setBillFees(List<BillFee> billFees) {
-        this.billFees = billFees;
     }
 
     public double getAdjustedValue() {
@@ -673,14 +612,6 @@ public class BillItem implements Serializable {
 
     public void setEditedAt(Date editedAt) {
         this.editedAt = editedAt;
-    }
-
-    public List<BillFee> getProFees() {
-        return proFees;
-    }
-
-    public void setProFees(List<BillFee> proFees) {
-        this.proFees = proFees;
     }
 
     public String getDescreption() {

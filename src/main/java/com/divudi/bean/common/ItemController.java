@@ -2,20 +2,15 @@ package com.divudi.bean.common;
 
 import com.divudi.data.DepartmentType;
 import com.divudi.data.FeeType;
-import com.divudi.entity.BillExpense;
 import com.divudi.entity.Category;
 import com.divudi.entity.Department;
 import com.divudi.entity.Institution;
 import com.divudi.entity.Item;
-import com.divudi.entity.ItemFee;
-import com.divudi.entity.Packege;
-import com.divudi.entity.Service;
 import com.divudi.entity.pharmacy.Amp;
 import com.divudi.entity.pharmacy.Ampp;
 import com.divudi.entity.pharmacy.Vmp;
 import com.divudi.entity.pharmacy.Vmpp;
 import com.divudi.facade.ItemFacade;
-import com.divudi.facade.ItemFeeFacade;
 import com.divudi.facade.util.JsfUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,15 +43,12 @@ public class ItemController implements Serializable {
     private static final long serialVersionUID = 1L;
     @EJB
     private ItemFacade ejbFacade;
-    @EJB
-    private ItemFeeFacade itemFeeFacade;
+
     /**
      * Managed Beans
      */
     @Inject
     SessionController sessionController;
-    @Inject
-    ItemFeeManager itemFeeManager;
     @Inject
     DepartmentController departmentController;
 
@@ -69,9 +61,7 @@ public class ItemController implements Serializable {
     private List<Item> investigationsAndServices = null;
     private List<Item> itemlist;
     List<Item> allItems;
-    List<ItemFee> allItemFees;
     List<Item> selectedList;
-    List<ItemFee> selectedItemFeeList;
     private Institution instituion;
     Department department;
     FeeType feeType;
@@ -85,6 +75,11 @@ public class ItemController implements Serializable {
     
     public String toManageItemCategories(){
         
+        return "/item/index";
+    }
+    
+     public String toManageItemIndex(){
+        return "/item/index";
     }
     
     public List<Department> getDepartments() {
@@ -341,28 +336,6 @@ public class ItemController implements Serializable {
 //
     }
 
-    public List<Item> completeExpenseItem(String query) {
-        Class[] classes = new Class[]{BillExpense.class};
-        return completeItem(query, classes, null, 0);
-//        String sql;
-//        HashMap tmpMap = new HashMap();
-//        if (query == null) {
-//            suggestions = new ArrayList<>();
-//        } else {
-//            sql = "select c from Item c "
-//                    + "where c.retired=false and "
-//                    + "(type(c)= :amp) "
-//                    + "and (upper(c.name) like :str or "
-//                    + "upper(c.code) like :str or "
-//                    + "upper(c.barcode) like :str) "
-//                    + "order by c.name";
-//            //////// // System.out.println(sql);
-//            tmpMap.put("amp", BillExpense.class);
-//            tmpMap.put("str", "%" + query.toUpperCase() + "%");
-//            suggestions = getFacade().findBySQL(sql, tmpMap, TemporalType.TIMESTAMP, 30);
-//        }
-//        return suggestions;
-    }
 
     public List<Item> fetchStoreItem() {
         List<Item> suggestions;
@@ -423,21 +396,7 @@ public class ItemController implements Serializable {
 
     }
 
-    public List<Item> completeService(String query) {
-        List<Item> suggestions;
-        String sql;
-        HashMap hm = new HashMap();
-
-        sql = "select c from Item c where c.retired=false and type(c)=:cls"
-                + " and upper(c.name) like :q order by c.name";
-
-        hm.put("cls", Service.class);
-        hm.put("q", "%" + query.toUpperCase() + "%");
-        suggestions = getFacade().findBySQL(sql, hm, 20);
-
-        return suggestions;
-
-    }
+   
 
     Category category;
 
@@ -449,233 +408,7 @@ public class ItemController implements Serializable {
         this.category = category;
     }
 
-    private List<Item> fetchInwardItems(String query, Department department) {
-        HashMap m = new HashMap();
-        String sql;
-        sql = "select c from Item c "
-                + " where c.retired=false "
-                + " and type(c)!=:pac "
-                + " and (type(c)=:ser "
-                + " or type(c)=:inward "
-                + " or type(c)=:inv) "
-                + " and (c.inactive=false or c.inactive is null) "
-                + " and upper(c.name) like :q";
-        if (department != null) {
-            sql += " and c.department=:dep ";
-            m.put("dep", department);
-        }
-        sql += " order by c.name";
-        m.put("pac", Packege.class);
-        m.put("ser", Service.class);
-        m.put("q", "%" + query.toUpperCase() + "%");
-
-        return getFacade().findBySQL(sql, m, 20);
-
-    }
-
-    private List<Item> fetchInwardItems(String query, Category cat, Department department) {
-        HashMap m = new HashMap();
-        String sql;
-        sql = "select c from Item c "
-                + " where c.retired=false "
-                + " and c.category=:ct"
-                + " and type(c)!=:pac "
-                + " and (type(c)=:ser "
-                + " or type(c)=:inward "
-                + " or type(c)=:inv) "
-                + " and (c.inactive=false or c.inactive is null) "
-                + " and upper(c.name) like :q";
-        if (department != null) {
-            sql += " and c.department=:dep ";
-            m.put("dep", department);
-        }
-        sql += " order by c.name";
-        m.put("ct", cat);
-        m.put("pac", Packege.class);
-        m.put("ser", Service.class);
-        m.put("q", "%" + query.toUpperCase() + "%");
-        return getFacade().findBySQL(sql, m, 20);
-
-    }
-
-    public void makeItemsAsActiveOrInactiveByRetiredStatus() {
-        String j = "select i from Item i";
-        List<Item> tis = getFacade().findBySQL(j);
-        for (Item i : tis) {
-            if (i.isRetired()) {
-                i.setInactive(true);
-            } else {
-                i.setInactive(false);
-            }
-            getFacade().edit(i);
-        }
-    }
-
-    public void toggleItemIctiveInactiveState() {
-        String j = "select i from Item i";
-        List<Item> tis = getFacade().findBySQL(j);
-        for (Item i : tis) {
-            if (i.isInactive()) {
-                i.setInactive(false);
-            } else {
-                i.setInactive(true);
-            }
-            getFacade().edit(i);
-        }
-    }
-
-    public List<Item> completeOpdItemsByNamesAndCodeInstitutionSpecificOrNotSpecific(String query, boolean spcific) {
-        if (query == null || query.trim().equals("")) {
-            return new ArrayList<>();
-        }
-        List<Item> mySuggestions;
-        HashMap m = new HashMap();
-        String sql;
-
-        sql = "select c from Item c "
-                + " where c.retired<>true "
-                + " and (c.inactive<>true) "
-                + " and type(c)!=:pac "
-                + " and type(c)!=:inw "
-                + " and (type(c)=:ser "
-                + " or type(c)=:inv)  "
-                + " and (upper(c.name) like :q or upper(c.fullName) like :q or "
-                + " upper(c.code) like :q or upper(c.printName) like :q ) ";
-        if (spcific) {
-            sql += " and c.institution=:ins";
-            m.put("ins", getSessionController().getInstitution());
-        }
-
-        sql += " order by c.name";
-        m.put("pac", Packege.class);
-        m.put("ser", Service.class);
-        m.put("q", "%" + query.toUpperCase() + "%");
-        mySuggestions = getFacade().findBySQL(sql, m, 20);
-        return mySuggestions;
-    }
-
-    public List<Item> completeOpdItems(String query) {
-        List<Item> mySuggestions;
-        HashMap m = new HashMap();
-        String sql;
-        if (query == null) {
-            mySuggestions = new ArrayList<>();
-        } else {
-            sql = "select c from Item c "
-                    + " where c.retired=false "
-                    + " and type(c)!=:pac "
-                    + " and type(c)!=:inw "
-                    + " and (type(c)=:ser "
-                    + " or type(c)=:inv)  "
-                    + " and upper(c.name) like :q"
-                    + " order by c.name";
-            m.put("pac", Packege.class);
-            m.put("ser", Service.class);
-            m.put("q", "%" + query.toUpperCase() + "%");
-            //    //////// // System.out.println(sql);
-            mySuggestions = getFacade().findBySQL(sql, m, 20);
-        }
-        return mySuggestions;
-    }
-
-    public List<Item> completeItemWithoutPackOwn(String query) {
-        List<Item> suggestions;
-        String sql;
-        if (query == null) {
-            suggestions = new ArrayList<Item>();
-        } else {
-            sql = "select c from Item c where c.institution.id = " + getSessionController().getInstitution().getId() + " and c.retired=false and type(c)!=Packege and type(c)!=TimedItem and upper(c.name) like '%" + query.toUpperCase() + "%' order by c.name";
-            //////// // System.out.println(sql);
-            suggestions = getFacade().findBySQL(sql);
-        }
-        return suggestions;
-    }
-
-    public void makeSelectedAsMasterItems() {
-        for (Item i : selectedList) {
-            ////// // System.out.println("i = " + i.getInstitution());
-            if (i.getInstitution() != null) {
-                ////// // System.out.println("i = " + i.getInstitution().getName());
-                i.setInstitution(null);
-                getFacade().edit(i);
-            }
-        }
-    }
-
-    public List<Item> fetchOPDItemList(boolean ins) {
-        List<Item> items = new ArrayList<>();
-        HashMap m = new HashMap();
-        String sql;
-
-        sql = "select c from Item c "
-                + " where c.retired=false "
-                + " and type(c)!=:pac "
-                + " and type(c)!=:inw "
-                + " and (type(c)=:ser "
-                + " or type(c)=:inv)  ";
-
-        if (ins) {
-            sql += " and c.institution is null ";
-        }
-
-        sql += " order by c.name";
-
-        m.put("pac", Packege.class);
-        m.put("ser", Service.class);
-        ////// // System.out.println(sql);
-        items = getFacade().findBySQL(sql, m);
-        return items;
-    }
-
-    public List<ItemFee> fetchOPDItemFeeList(boolean ins, FeeType ftype) {
-        List<ItemFee> itemFees = new ArrayList<>();
-        HashMap m = new HashMap();
-        String sql;
-
-        sql = "select c from ItemFee c "
-                + " where c.retired=false "
-                + " and type(c.item)!=:pac "
-                + " and type(c.item)!=:inw "
-                + " and (type(c.item)=:ser "
-                + " or type(c.item)=:inv)  ";
-
-        if (ftype != null) {
-            sql += " and c.feeType=:fee ";
-            m.put("fee", ftype);
-        }
-
-        if (ins) {
-            sql += " and c.institution is null ";
-        }
-
-        sql += " order by c.name";
-
-        m.put("pac", Packege.class);
-        m.put("ser", Service.class);
-        ////// // System.out.println(sql);
-        itemFees = getItemFeeFacade().findBySQL(sql, m);
-        return itemFees;
-    }
-
-    public void createMasterItemsList() {
-        allItems = new ArrayList<>();
-        allItems = fetchOPDItemList(false);
-    }
-
-    public void createAllItemsList() {
-        allItems = new ArrayList<>();
-        allItems = fetchOPDItemList(true);
-    }
-
-    public void createAllItemsFeeList() {
-        allItemFees = new ArrayList<>();
-        allItemFees = fetchOPDItemFeeList(false, feeType);
-    }
-
-    public void updateSelectedOPDItemList() {
-
-    }
-
+  
     /**
      *
      */
@@ -850,22 +583,6 @@ public class ItemController implements Serializable {
         this.allItems = allItems;
     }
 
-    public List<ItemFee> getAllItemFees() {
-        return allItemFees;
-    }
-
-    public void setAllItemFees(List<ItemFee> allItemFees) {
-        this.allItemFees = allItemFees;
-    }
-
-    public List<ItemFee> getSelectedItemFeeList() {
-        return selectedItemFeeList;
-    }
-
-    public void setSelectedItemFeeList(List<ItemFee> selectedItemFeeList) {
-        this.selectedItemFeeList = selectedItemFeeList;
-    }
-
     public Department getDepartment() {
         if (department == null) {
             department = getSessionController().getDepartment();
@@ -893,21 +610,6 @@ public class ItemController implements Serializable {
         this.suggestions = suggestions;
     }
 
-    public ItemFeeFacade getItemFeeFacade() {
-        return itemFeeFacade;
-    }
-
-    public void setItemFeeFacade(ItemFeeFacade itemFeeFacade) {
-        this.itemFeeFacade = itemFeeFacade;
-    }
-
-    public ItemFeeManager getItemFeeManager() {
-        return itemFeeManager;
-    }
-
-    public void setItemFeeManager(ItemFeeManager itemFeeManager) {
-        this.itemFeeManager = itemFeeManager;
-    }
 
     public List<Item> getItemlist() {
         return itemlist;

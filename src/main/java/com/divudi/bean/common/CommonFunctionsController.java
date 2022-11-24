@@ -2,8 +2,6 @@ package com.divudi.bean.common;
 
 import com.divudi.data.Sex;
 import com.divudi.data.Title;
-import com.divudi.data.dataStructure.DateRange;
-import com.divudi.data.dataStructure.YearMonthDay;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -18,40 +16,6 @@ import javax.inject.Named;
 @ApplicationScoped
 public class CommonFunctionsController {
 
-    public DateRange getDateRangeForOT(Date date) {
-        DateRange dateRange = new DateRange();
-        Date startOfThisMonth = getStartOfMonth(date);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(startOfThisMonth);
-        cal.add(Calendar.DAY_OF_WEEK, -1);
-        Date startOfPrevMonth = getStartOfMonth(cal.getTime());
-        Date from = getFirstDayOfWeek(startOfPrevMonth);
-        Date endOfPrevMonth = getEndOfMonth(cal.getTime());
-        Date to = getFirstDayOfWeek(endOfPrevMonth);
-        cal.setTime(endOfPrevMonth);
-        if (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
-            cal.setTime(to);
-            cal.add(Calendar.DAY_OF_WEEK, -1);
-        }
-
-        to = cal.getTime();
-
-        dateRange.setFromDate(from);
-        dateRange.setToDate(to);
-
-        return dateRange;
-    }
-
-    public DateRange getDateRange(Date from, int range) {
-        DateRange dateRange = new DateRange();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(from);
-        cal.add(Calendar.DATE, range);
-        Date to = cal.getTime();
-        dateRange.setFromDate(from);
-        dateRange.setToDate(to);
-        return dateRange;
-    }
 
     public boolean checkToDateAreInSameDay(Date firstDate, Date secondDate) {
         Date startOfDay = getStartOfDay(firstDate);
@@ -104,33 +68,6 @@ public class CommonFunctionsController {
             int years = Integer.valueOf(docStr);
             Calendar now = Calendar.getInstance(TimeZone.getTimeZone("IST"));
             now.add(Calendar.YEAR, -years);
-            return now.getTime();
-        } catch (Exception e) {
-            return new Date();
-        }
-    }
-
-    public Date guessDob(YearMonthDay yearMonthDay) {
-        int years = 0;
-        int month = 0;
-        int day = 0;
-        Calendar now = Calendar.getInstance(TimeZone.getTimeZone("IST"));
-        try {
-            if (yearMonthDay.getYear() != null && !yearMonthDay.getYear().isEmpty()) {
-                years = Integer.valueOf(yearMonthDay.getYear());
-                now.add(Calendar.YEAR, -years);
-            }
-
-            if (yearMonthDay.getMonth() != null && !yearMonthDay.getMonth().isEmpty()) {
-                month = Integer.valueOf(yearMonthDay.getMonth());
-                now.add(Calendar.MONTH, -month);
-            }
-
-            if (yearMonthDay.getDay() != null && !yearMonthDay.getDay().isEmpty()) {
-                day = Integer.valueOf(yearMonthDay.getDay());
-                now.add(Calendar.DATE, -day);
-            }
-
             return now.getTime();
         } catch (Exception e) {
             return new Date();

@@ -18,10 +18,10 @@
         <ui:composition template="/resources/template/template.xhtml">
             <ui:define name="content">
                 <div class="w-100"  style="border: 1px solid red;">
-                    <h:panelGroup rendered="#{sessionController.loggedUser.role eq 'System_Administrator'}" >
+                    <h:panelGroup rendered="#{sessionController.loggedUser.webUserRole eq 'System_Administrator'}" >
                         <ez:system_administrator_dashboard/>
                     </h:panelGroup>
-                    <h:panelGroup rendered="#{sessionController.loggedUser.role eq 'Company_Administrator'}" >
+                    <h:panelGroup rendered="#{sessionController.loggedUser.webUserRole eq 'Company_Administrator'}" >
                         <ez:company_administrator_dashboard></ez:company_administrator_dashboard>
                     </h:panelGroup>
                 </div>

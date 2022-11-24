@@ -5,7 +5,7 @@
 package com.divudi.entity.pharmacy;
 
 import com.divudi.entity.Department;
-import com.divudi.entity.Staff;
+import com.divudi.entity.WebUser;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -38,7 +38,7 @@ public class Stock implements Serializable {
     @ManyToOne
     private Department department;
     @ManyToOne
-    Staff staff;
+    WebUser staff;
     String code;
     
     @ManyToOne
@@ -78,11 +78,11 @@ public class Stock implements Serializable {
     
     
 
-    public Staff getStaff() {
+    public WebUser getStaff() {
         return staff;
     }
 
-    public void setStaff(Staff staff) {
+    public void setStaff(WebUser staff) {
         this.staff = staff;
     }
 

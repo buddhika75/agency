@@ -8,7 +8,6 @@ import com.divudi.data.HistoryType;
 import com.divudi.entity.Department;
 import com.divudi.entity.Institution;
 import com.divudi.entity.Item;
-import com.divudi.entity.Staff;
 import com.divudi.entity.WebUser;
 import java.io.Serializable;
 import java.util.Date;
@@ -50,7 +49,7 @@ public class StockHistory implements Serializable {
     @ManyToOne
     Department department;
     @ManyToOne
-    Staff staff;
+    WebUser staff;
 
     double stockSaleValue;
     double stockPurchaseValue;
@@ -153,11 +152,11 @@ public class StockHistory implements Serializable {
         this.department = department;
     }
 
-    public Staff getStaff() {
+    public WebUser getStaff() {
         return staff;
     }
 
-    public void setStaff(Staff staff) {
+    public void setStaff(WebUser staff) {
         this.staff = staff;
     }
 
