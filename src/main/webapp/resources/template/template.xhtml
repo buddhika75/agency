@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:ui="http://java.sun.com/jsf/facelets"
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
@@ -15,7 +16,7 @@
                     <h:outputText value="#{sessionController.loggedUser.webUserPerson.name}" ></h:outputText>
                 </h:panelGroup>
                 <h:panelGroup rendered="#{!sessionController.logged}" >
-                    <h:outputText value="Hospital Information Management System" ></h:outputText>
+                    <h:outputText value="Agency Management System" ></h:outputText>
                 </h:panelGroup>
             </title>
         </ui:insert>
@@ -37,24 +38,26 @@
     </h:head>
 
     <h:body>
-        <p:growl id="publicGrowl"/>
+        <h:form>
+            <p:growl id="publicGrowl"/>
+        </h:form>
+
 
         <h:panelGroup rendered ="#{not sessionController.logged}"  >
-            <ui:insert name="login">
+            <ui:insert id="insertLogin" name="login">
                 <ez:login/>
             </ui:insert>
         </h:panelGroup>
-        <h:panelGroup rendered ="#{sessionController.logged}"  >
-            <ez:menu/>
-            <ui:insert name="content">
+        <h:panelGroup id="gpLogged" rendered ="#{sessionController.logged}"  >
+            <ez:menu id="mnu"/>
+            <ui:insert id="insertLogin" name="content">
             </ui:insert>
-            <ez:footer/>
         </h:panelGroup>
-        <h:panelGroup rendered ="#{sessionController.firstLogin}"  >
+        <h:panelGroup id="gpFirst" rendered ="#{sessionController.firstLogin}"  >
             <ez:menu_first_login ></ez:menu_first_login>
             <ui:insert name="content">
             </ui:insert>
-            <ez:footer/>
         </h:panelGroup>
+        <ez:footer id="footer"/>
     </h:body>
 </html>
