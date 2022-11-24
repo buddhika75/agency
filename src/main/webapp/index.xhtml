@@ -16,7 +16,8 @@
     <h:body class="w-100">
         <ui:composition template="/resources/template/template.xhtml">
             <ui:define name="content">
-                #{sessionController.loggedUser.webUserRole}sdf
+                #{sessionController.loggedUser.webUserRole}
+                <ez:company_administrator_dashboard></ez:company_administrator_dashboard>
                 <div class="w-100"  style="border: 1px solid red;">
                     <h:panelGroup rendered="#{sessionController.loggedUser.webUserRole eq 'System_Administrator'}" >
                         <ez:system_administrator_dashboard/>
